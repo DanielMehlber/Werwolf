@@ -3,6 +3,7 @@ package net;
 /**
  * Ein Anschluss für einen Client-Socket, zum Austausch von Informationen zwischen Server und Client
  * @author Daniel Mehlber
+ * @version 1
  * */
 public class Anschluss extends NetzwerkKomponente implements Runnable{
 
