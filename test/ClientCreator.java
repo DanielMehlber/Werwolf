@@ -17,8 +17,14 @@ public class ClientCreator {
 		client.set_ziel_ip_addresse(ip);
 		client.set_ziel_port(port);
 		Thread ct = new Thread(client);
+		ct.setName("Client");
 		ct.start();
-
+		while(true) {
+			System.out.println("Zahl");
+			int i = Integer.parseInt(s.nextLine());
+			byte[] data = {0, (byte)i};
+			client.schreiben(data);
+		}
 	}
 
 }

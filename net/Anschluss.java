@@ -18,6 +18,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	@Override
 	public void run() {
 		anschlussErstellen();
+		kommunikationBereitstellen();
 		auffassen();
 	}
 
@@ -25,7 +26,9 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	protected void verarbeiten(byte[] data) {
 		switch(data[0]) {
 		case -1: {destroy();} //Exit
-		case 0: {} //UserData
+		case 0: { //Zahl
+			System.out.println(data[1]);
+		}
 		case 1: {} //ChatMessage
 		case 2: {}
 		}

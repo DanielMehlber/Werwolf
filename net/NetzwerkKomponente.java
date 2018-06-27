@@ -98,7 +98,11 @@ public abstract class NetzwerkKomponente {
 	 * Greift addressierte Nachrichten auf. 
 	 * */
 	protected void auffassen() {
+		byte[] in = new byte[64];
 		while(is_listening && (!socket.isClosed())) {
+			if(byte_input.available()!=0) {
+				System.out.println(true);
+			}
 			
 		}
 	}
@@ -115,7 +119,9 @@ public abstract class NetzwerkKomponente {
 	public void schreiben(byte[] data) {
 
 		try {
-			output.write(data, 0, data.length);
+			byte_output.write(data, 0, data.length);
+			byte_output.flush();
+			
 		} catch (IOException e) {
 			System.err.println("Fehler beim schreiben einer Bytenachricht.");
 			e.printStackTrace();

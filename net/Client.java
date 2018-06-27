@@ -32,6 +32,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 					"\nip="+get_ziel_ip_addresse(), e.getMessage());
 			et.show();
 			et.setVisible(true);
+			et.revalidate();
 			e.printStackTrace();
 		}
 		
