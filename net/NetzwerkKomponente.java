@@ -29,7 +29,7 @@ public abstract class NetzwerkKomponente {
 	/**Der Port der Komponente*/
 	private int self_port;
 	/**Der Socket auf diesem PC, für diese Komponente*/
-	private Socket socket;
+	protected Socket socket;
 	/**Ein Grundlegender Output-Stream als Outbox*/
 	private OutputStream output;
 	/**Ein Grundlegender Input-Stream als Inbox*/
@@ -48,7 +48,7 @@ public abstract class NetzwerkKomponente {
 	private byte[] inbox_nachricht;
 	
 	public NetzwerkKomponente() {
-		
+		is_listening = true;
 	}
 	
 	/**
@@ -75,14 +75,19 @@ public abstract class NetzwerkKomponente {
 	}
 	
 	public int generatePort() {
-		while(!available(self_port)) {
-			self_port = new Random().nextInt(0xFFFF)+1;
+		while(!available(get_self_port())) {
+			set_self_port(new Random().nextInt(0xFFFF)+1);
 		}
-		return self_port;
+		System.out.println("Port generiert:"+get_self_port());
+		return get_self_port();
 	}
 	
-	public static boolean available(int port) {
-		try (Socket ignored = new Socket("localhost", port)) {
+	public static boolean available(int _port) {
+		if(_port <= 0) {
+			return false;
+		}
+		
+		try (Socket ignored = new Socket("localhost", _port)) {
 	        return false;
 	    } catch (IOException ignored) {
 	        return true;
@@ -94,7 +99,7 @@ public abstract class NetzwerkKomponente {
 	 * */
 	protected void auffassen() {
 		while(is_listening && (!socket.isClosed())) {
-				
+			
 		}
 	}
 	/**
@@ -108,6 +113,7 @@ public abstract class NetzwerkKomponente {
 	 * @param data Der Byte-Array der gesendet werden soll.
 	 * */
 	public void schreiben(byte[] data) {
+
 		try {
 			output.write(data, 0, data.length);
 		} catch (IOException e) {
@@ -115,12 +121,26 @@ public abstract class NetzwerkKomponente {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Zerstört den Anschluss und versucht den Client auszuloggen
+	 * */
+	public void destroy() {
+		try {
+			//nachricht({-1})
+			socket.close();
+			
+		} catch (IOException e) {
+			System.err.println("Fehler beim Schließen des Anschlusses");
+			e.printStackTrace();
+		}
+	}
+	
 	protected int get_ziel_port() {
 		return ziel_port;
 	}
 
-	protected void set_ziel_port(int ziel_port) {
+	public void set_ziel_port(int ziel_port) {
 		this.ziel_port = ziel_port;
 	}
 
@@ -132,23 +152,23 @@ public abstract class NetzwerkKomponente {
 		this.is_listening = is_listening;
 	}
 
-	protected Socket getSocket() {
+	public Socket getSocket() {
 		return socket;
 	}
 
-	protected OutputStream getOutputStream() {
+	public OutputStream getOutputStream() {
 		return output;
 	}
 
-	protected InputStream getInputStream() {
+	public InputStream getInputStream() {
 		return input;
 	}
 
-	protected PrintWriter getWriter() {
+	public PrintWriter getWriter() {
 		return writer;
 	}
 
-	protected BufferedReader getReader() {
+	public BufferedReader getReader() {
 		return reader;
 	}
 
@@ -159,7 +179,7 @@ public abstract class NetzwerkKomponente {
 	/**
 	 * Setzt die IP Adresse des Ziels und gibt sie an die InetAddress weiter
 	 * */
-	protected void set_ziel_ip_addresse(String ziel_ip_addresse) {
+	public void set_ziel_ip_addresse(String ziel_ip_addresse) {
 		this.ziel_ip_addresse = ziel_ip_addresse;
 		try {
 			this.ziel_inet_address = ziel_inet_address.getByName(this.ziel_ip_addresse);
@@ -171,24 +191,24 @@ public abstract class NetzwerkKomponente {
 	/**
 	 * Setzt die InetAddresse und die IP Adresse des Ziels
 	 * */
-	protected void set_ziel_inet_address(InetAddress ziel_address) {
+	public void set_ziel_inet_address(InetAddress ziel_address) {
 		this.ziel_inet_address = ziel_address;
 		this.ziel_ip_addresse = ziel_address.getHostAddress();
 	}
 
-	protected String get_ziel_ip_addresse() {
+	public String get_ziel_ip_addresse() {
 		return ziel_ip_addresse;
 	}
 
-	protected InetAddress get_ziel_inet_addresse() {
+	public InetAddress get_ziel_inet_addresse() {
 		return ziel_inet_address;
 	}
 
-	protected ByteArrayInputStream get_byte_input() {
+	public ByteArrayInputStream get_byte_input() {
 		return byte_input;
 	}
 
-	protected ByteArrayOutputStream get_byte_output() {
+	public ByteArrayOutputStream get_byte_output() {
 		return byte_output;
 	}
 

@@ -1,25 +1,44 @@
 package net;
 
+import java.io.IOException;
+
+import ui.ErrorThrow;
+
 /**
  * Ein Anschluss für einen Client-Socket, zum Austausch von Informationen zwischen Server und Client
  * @author Daniel Mehlber
  * */
 public class Anschluss extends NetzwerkKomponente implements Runnable{
-
-	public Anschluss() {
-		
+	
+	private Server server;
+	public Anschluss(Server server) {
+		this.server = server;
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		anschlussErstellen();
+		auffassen();
 	}
 
 	@Override
 	protected void verarbeiten(byte[] data) {
-		// TODO Auto-generated method stub
+		switch(data[0]) {
+		case -1: {destroy();} //Exit
+		case 0: {} //UserData
+		case 1: {} //ChatMessage
+		case 2: {}
+		}
 		
+	}
+	
+	private void anschlussErstellen() {
+		try {
+			socket = server.getServerSocket().accept();
+		} catch (IOException e) {
+			ErrorThrow err = new ErrorThrow("Fehler beim öffnen eines Anschlusses", e.getMessage());
+		}
+		System.out.println("Ein Client hat sich verbunden!");
 	}
 
 }
