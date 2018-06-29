@@ -23,7 +23,7 @@ public class ClientCreator {
 			System.out.println("Zahl");
 			int i = Integer.parseInt(s.nextLine());
 			byte[] data = {0, (byte)i};
-			client.schreiben(data);
+			client.nachricht(data, "Hallo");
 		}
 	}
 

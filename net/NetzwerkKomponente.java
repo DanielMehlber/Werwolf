@@ -1,12 +1,16 @@
 package net;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -45,7 +49,8 @@ public abstract class NetzwerkKomponente {
 	/**Der Thread in dem die Komponente laufen wird*/
 	private Thread thread_listen;
 	private boolean is_listening;
-	private byte[] inbox_nachricht;
+	private byte[] byte_nachricht;
+	private DataInputStream din;
 	
 	public NetzwerkKomponente() {
 		is_listening = true;
@@ -67,6 +72,7 @@ public abstract class NetzwerkKomponente {
 			reader = new BufferedReader(new InputStreamReader(input));
 			byte_output = new ByteArrayOutputStream();
 			byte_input = new ByteArrayInputStream(byte_output.toByteArray());
+			din = new DataInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			System.err.println("Fehler beim erstellen der Kommunikations-Systeme");
 			e.printStackTrace();
@@ -98,11 +104,31 @@ public abstract class NetzwerkKomponente {
 	 * Greift addressierte Nachrichten auf. 
 	 * */
 	protected void auffassen() {
-		byte[] in = new byte[64];
-		while(is_listening && (!socket.isClosed())) {
-			if(byte_input.available()!=0) {
-				System.out.println(true);
+		System.out.println("Auffassen aktiviert!");
+		is_listening = true;
+		while(is_listening) {
+			InputStream is = null;
+			try {
+				is = socket.getInputStream();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+
+			InputStreamReader isr = new InputStreamReader(is);
+
+			BufferedReader br = new BufferedReader(isr);
+
+			String message = null;
+			try {
+				message = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			System.out.println("Message received from the server : " +message);
+			
 			
 		}
 	}
@@ -112,18 +138,39 @@ public abstract class NetzwerkKomponente {
 	 * @see auffassen
 	 * */
 	protected abstract void verarbeiten(byte[] data);
-	/**
-	 * Schreibt eine Nachricht in Form eines Byte-Arrays an die definierte ip-addresse und port
-	 * @param data Der Byte-Array der gesendet werden soll.
-	 * */
-	public void schreiben(byte[] data) {
+	
+	
+	public void nachricht(byte[] data, String message) {
+		OutputStream os = null;
+		try {
+			os = socket.getOutputStream();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		OutputStreamWriter osw = new OutputStreamWriter(os);
+
+		BufferedWriter bw = new BufferedWriter(osw);
 
 		try {
-			byte_output.write(data, 0, data.length);
-			byte_output.flush();
-			
+			bw.write(message);
+		} catch (IOException e1) {
+			System.err.println("Cannot send text");
+			e1.printStackTrace();
+		}
+
+		try {
+			os.write(data);
 		} catch (IOException e) {
-			System.err.println("Fehler beim schreiben einer Bytenachricht.");
+			System.err.println("Connot send bytearray");
+			e.printStackTrace();
+		}
+
+		try {
+			bw.flush();
+		} catch (IOException e) {
+			System.err.println("Cannot flush");
 			e.printStackTrace();
 		}
 	}
