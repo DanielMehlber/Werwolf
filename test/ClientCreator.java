@@ -19,11 +19,17 @@ public class ClientCreator {
 		Thread ct = new Thread(client);
 		ct.setName("Client");
 		ct.start();
+		
 		while(true) {
-			System.out.println("Zahl");
+			System.out.println("Byte:");
 			int i = Integer.parseInt(s.nextLine());
-			byte[] data = {0, (byte)i};
-			client.nachricht(data, "Hallo");
+			byte[] data = new byte[2];
+			data[0] = 1;
+			data[1] = (byte)i;
+			client.schreiben(data);
+			System.out.println("Text:");
+			String m = s.nextLine();
+			client.schreiben(m);
 		}
 	}
 

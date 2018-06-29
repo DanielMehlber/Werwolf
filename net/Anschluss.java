@@ -2,7 +2,9 @@ package net;
 
 import java.io.IOException;
 
-import ui.ErrorThrow;
+import javax.swing.JOptionPane;
+
+
 
 /**
  * Ein Anschluss für einen Client-Socket, zum Austausch von Informationen zwischen Server und Client
@@ -23,25 +25,24 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	}
 
 	@Override
-	protected void verarbeiten(byte[] data) {
-		switch(data[0]) {
-		case -1: {destroy();} //Exit
-		case 0: { //Zahl
-			System.out.println(data[1]);
-		}
-		case 1: {} //ChatMessage
-		case 2: {}
-		}
-		
-	}
+	protected void verarbeiten(byte[] data) {}
 	
+	@Override
+	protected void verarbeiten(String data) {}
+	
+	/**
+	 * Öffnet einen Anschluss für einen Client und wartet auf diesen
+	 * */
 	private void anschlussErstellen() {
 		try {
 			socket = server.getServerSocket().accept();
 		} catch (IOException e) {
-			ErrorThrow err = new ErrorThrow("Fehler beim öffnen eines Anschlusses", e.getMessage());
+			JOptionPane.showMessageDialog(null, "Fehler beim Erstellen eines Anschlusses!");
+			System.exit(-1);
 		}
 		System.out.println("Ein Client hat sich verbunden!");
 	}
+
+	
 
 }

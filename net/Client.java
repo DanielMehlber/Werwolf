@@ -1,10 +1,15 @@
 package net;
 
-import java.io.IOException;
 import java.net.Socket;
 
-import ui.ErrorThrow;
+import javax.swing.JOptionPane;
 
+
+
+/**
+ * Ein Client, der sich mit einem Serveranschluss verbinden und kommunizieren kann
+ * @author Daniel Mehlber
+ * */
 public class Client extends NetzwerkKomponente implements Runnable{
 
 	public Client() {
@@ -24,18 +29,25 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		
 	}
 	
+	@Override
+	protected void verarbeiten(String data) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * Verbindet sich mit einem Anschluss
+	 * */
 	private void verbinden() {
 		try {
 			socket = new Socket(get_ziel_inet_addresse(), get_ziel_port());
 		} catch (Exception e) {
-			ErrorThrow et = new ErrorThrow("Kann sich nicht mit der gegebenen InetAddress oder Port verbinden\nport="+get_ziel_port()+
-					"\nip="+get_ziel_ip_addresse(), e.getMessage());
-			et.show();
-			et.setVisible(true);
-			et.revalidate();
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Fehler bim Verbinden mit Anschluss. bitte prüfe die eingegebenen Daten (IP, PORT)",
+					"Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
+
+	
 
 }

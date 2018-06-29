@@ -1,21 +1,19 @@
 package net;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 /**
  * Fasst die Kernelemente jedes Sockets in einer Oberklasse zusammen
@@ -38,6 +36,8 @@ public abstract class NetzwerkKomponente {
 	private OutputStream output;
 	/**Ein Grundlegender Input-Stream als Inbox*/
 	private InputStream input;
+	/**Ein Leser für die Inbox*/
+	private InputStreamReader input_reader;
 	/**Eine Byte-Inbox*/
 	private ByteArrayInputStream byte_input;
 	/**Eine Byte-Outbox*/
@@ -49,8 +49,7 @@ public abstract class NetzwerkKomponente {
 	/**Der Thread in dem die Komponente laufen wird*/
 	private Thread thread_listen;
 	private boolean is_listening;
-	private byte[] byte_nachricht;
-	private DataInputStream din;
+	
 	
 	public NetzwerkKomponente() {
 		is_listening = true;
@@ -67,19 +66,24 @@ public abstract class NetzwerkKomponente {
 		
 		try {
 			input = socket.getInputStream();
+			input_reader = new InputStreamReader(input);
 			output = socket.getOutputStream();
-			writer = new PrintWriter(output);
-			reader = new BufferedReader(new InputStreamReader(input));
+			writer = new PrintWriter(output, true);
+			reader = new BufferedReader(input_reader);
 			byte_output = new ByteArrayOutputStream();
 			byte_input = new ByteArrayInputStream(byte_output.toByteArray());
-			din = new DataInputStream(socket.getInputStream());
 		} catch (IOException e) {
-			System.err.println("Fehler beim erstellen der Kommunikations-Systeme");
+			JOptionPane.showMessageDialog(null, "Fehler beim erstellen der Kommunikations Systeme",
+					"Setup Fehler", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 		
 	}
 	
+	/**
+	 * Sucht nach verfügbaren Port
+	 * @return port
+	 * */
 	public int generatePort() {
 		while(!available(get_self_port())) {
 			set_self_port(new Random().nextInt(0xFFFF)+1);
@@ -88,6 +92,12 @@ public abstract class NetzwerkKomponente {
 		return get_self_port();
 	}
 	
+	/**
+	 * Überprüft, ob ein Port auf dem PC verfügbar ist
+	 * @return (true=verfügbar/false=besetzt)
+	 * @see #generatePort()
+	 * @param _port Port zum prüfen
+	 * */
 	public static boolean available(int _port) {
 		if(_port <= 0) {
 			return false;
@@ -101,78 +111,63 @@ public abstract class NetzwerkKomponente {
 	}
 	
 	/**
-	 * Greift addressierte Nachrichten auf. 
+	 * Greift addressierte Nachrichten vom typ String und byte[] auf 
 	 * */
 	protected void auffassen() {
-		System.out.println("Auffassen aktiviert!");
+		String nachricht = null;
+		byte[] data = new byte[64];
 		is_listening = true;
 		while(is_listening) {
-			InputStream is = null;
+			
 			try {
-				is = socket.getInputStream();
+				input.read(data);
+				nachricht = reader.readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Fehler beim Lesen der Inbox", 
+						"Kommunikations Fehler", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
-
-			InputStreamReader isr = new InputStreamReader(is);
-
-			BufferedReader br = new BufferedReader(isr);
-
-			String message = null;
-			try {
-				message = br.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			System.out.println("Message received from the server : " +message);
-			
-			
+			verarbeiten(nachricht);
+			verarbeiten(data);
 		}
 	}
 	/**
-	 * Definiert, wie mit den Empfangenen Daten umgegangen wird.
+	 * Definiert, wie mit den Empfangenen Daten (byte[]) umgegangen wird.
 	 * @param data Der Byte-Array der Verarbeitet werden soll
 	 * @see auffassen
 	 * */
 	protected abstract void verarbeiten(byte[] data);
+	/**
+	 * Definiert, wie mit den Empfangenen Daten (String) umgegangen wird.
+	 * @param data Der String der Verarbeitet werden soll
+	 * @see auffassen
+	 * */
+	protected abstract void verarbeiten(String data);
 	
+	/**
+	 * Verschickt einen String
+	 * @param nachricht Die Nachricht (String) die verschickt werden soll
+	 * */
+	public void schreiben(String nachricht) {
+		writer.println(nachricht);
+		writer.flush();
+	}
 	
-	public void nachricht(byte[] data, String message) {
-		OutputStream os = null;
+	/**
+	 * Verschickt Daten in Form eines Byte-Arrays
+	 * @param data Die Daten die verschickt werden sollen.
+	 * */
+	public void schreiben(byte[] data) {
 		try {
-			os = socket.getOutputStream();
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-
-		OutputStreamWriter osw = new OutputStreamWriter(os);
-
-		BufferedWriter bw = new BufferedWriter(osw);
-
-		try {
-			bw.write(message);
-		} catch (IOException e1) {
-			System.err.println("Cannot send text");
-			e1.printStackTrace();
-		}
-
-		try {
-			os.write(data);
+			output.write(data);
+			output.flush();
 		} catch (IOException e) {
-			System.err.println("Connot send bytearray");
+			JOptionPane.showMessageDialog(null, "Fehler beim schreiben (versenden) eines byte[]",
+					"Kommunikations Fehler", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
-
-		try {
-			bw.flush();
-		} catch (IOException e) {
-			System.err.println("Cannot flush");
-			e.printStackTrace();
-		}
+		
+		
 	}
 	
 	/**
@@ -184,7 +179,8 @@ public abstract class NetzwerkKomponente {
 			socket.close();
 			
 		} catch (IOException e) {
-			System.err.println("Fehler beim Schließen des Anschlusses");
+			JOptionPane.showMessageDialog(null, "Fehler bim schließen des Clients", "Exit Error",
+					JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}
@@ -231,18 +227,21 @@ public abstract class NetzwerkKomponente {
 	
 	/**
 	 * Setzt die IP Adresse des Ziels und gibt sie an die InetAddress weiter
+	 * @param ziel_ip_addresse Die IP Addresse zum setzen
 	 * */
 	public void set_ziel_ip_addresse(String ziel_ip_addresse) {
 		this.ziel_ip_addresse = ziel_ip_addresse;
 		try {
-			this.ziel_inet_address = ziel_inet_address.getByName(this.ziel_ip_addresse);
+			this.ziel_inet_address = InetAddress.getByName(this.ziel_ip_addresse);
 		} catch (UnknownHostException e) {
-			System.err.println("Fehler beim Setzen der InetAddress aus '"+this.ziel_ip_addresse+"' !");
+			JOptionPane.showMessageDialog(null, "IP-Addresse ungültig oder Internetfehler!", "Host unerreichbar", 
+					JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}
 	/**
 	 * Setzt die InetAddresse und die IP Adresse des Ziels
+	 * @param ziel_address Zeil InetAddress
 	 * */
 	public void set_ziel_inet_address(InetAddress ziel_address) {
 		this.ziel_inet_address = ziel_address;

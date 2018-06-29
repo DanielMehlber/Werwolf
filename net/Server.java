@@ -1,13 +1,14 @@
 package net;
 
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import ui.ErrorThrow;
+import javax.swing.JOptionPane;
+
+
+
 
 /**
  * Ein Server, der mehrere Anschlüsse bereitstellen kann.
@@ -28,7 +29,6 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		generatePort();
 		verbindungEinrichten();
 		anschluesseErstellen();
-		//Ein Server an sich hat keine Kommunikation
 		System.out.println("Abgeschlossen...");
 		try {
 			server.getInetAddress();
@@ -46,9 +46,8 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		try {
 			server = new ServerSocket(super.get_self_port());
 		} catch (Exception e) {
-			System.err.println("Fehler, bei der Erstellung des ServerSockets mit Port"+super.get_self_port());
-			new ErrorThrow("Server kann nicht auf gefundenen Port generiert werden!",
-					"port="+get_self_port());
+			JOptionPane.showMessageDialog(null, "Server an Port"+get_self_port()+" nicht erstellbar",
+					"Fehler bei der Servererstellung", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}
@@ -58,8 +57,8 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	  * */
 	private void anschluesseErstellen() {
 		if(max_anschluesse <= 0) {
-			System.err.println("Fehler, keine maximalen Anschlüsse definiert");
-			new ErrorThrow("Maximalen Anschlüsse nicht definiert!", "anschlusse="+max_anschluesse).show();
+			JOptionPane.showMessageDialog(null, "Die Anzahl der Anschlüsse ist ungültig!",
+					"Anschlusszahl <= 0", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		anschluss_liste = new ArrayList<Anschluss>();
@@ -70,9 +69,21 @@ public class Server extends NetzwerkKomponente implements Runnable{
 			at.start();
 		}
 	}
+	
+	/**
+	 * Eine Nachricht an alle verfügbaren Clients
+	 * @param nachricht Nachricht zum verschicken
+	 * */
+	public void rufen(String nachricht) {
+		for(int i = 0; i < anschluss_liste.size(); i++) {
+			anschluss_liste.get(i).schreiben(nachricht);
+		}
+	}
 
 	@Override //Server is not listening
 	protected void verarbeiten(byte[] data) {return;}
+	@Override
+	protected void verarbeiten(String data) {return;}
 	
 	public ServerSocket getServerSocket() {
 		return server;
@@ -85,5 +96,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	public int get_max_anschluesse() {
 		return max_anschluesse;
 	}
+
+	
 
 }
