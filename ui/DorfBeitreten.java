@@ -13,16 +13,26 @@ import javax.swing.JButton;
 public class DorfBeitreten extends JPanel {
 	private JTextField txtIP;
 	private JTextField txtPort;
+	private JLabel loading;
+	private JProgressBar progressBar;
+	private JButton btnDorfAufsuchen;
+	private JLabel lblPlayerConnected;
+	private LauncherWindow window;
+	public static enum Status{
+		BEREIT, VERBINDEN, WARTEN_AUF_SPIELER, FERTIG
+	}
 
 	/**
 	 * Create the panel.
 	 */
-	public DorfBeitreten() {
+	public DorfBeitreten(LauncherWindow window) {
+		this.window = window;
 		setBackground(Color.BLACK);
 		setBounds(0,0,800,600);
 		setLayout(null);
 		
-		JProgressBar progressBar = new JProgressBar();
+		progressBar = new JProgressBar();
+		progressBar.setBackground(Color.BLACK);
 		progressBar.setStringPainted(true);
 		progressBar.setForeground(Color.RED);
 		progressBar.setEnabled(false);
@@ -47,7 +57,7 @@ public class DorfBeitreten extends JPanel {
 		
 		txtPort = new JTextField();
 		txtPort.setHorizontalAlignment(SwingConstants.CENTER);
-		txtPort.setToolTipText("IP Adresse");
+		txtPort.setToolTipText("Dorfnummer");
 		txtPort.setText("Port");
 		txtPort.setForeground(Color.RED);
 		txtPort.setFont(new Font("DialogInput", Font.BOLD, 43));
@@ -56,19 +66,64 @@ public class DorfBeitreten extends JPanel {
 		txtPort.setBounds(71, 184, 208, 55);
 		add(txtPort);
 		
-		JButton btnDorfAufsuchen = new JButton("Dorf aufsuchen");
+		btnDorfAufsuchen = new JButton("Dorf aufsuchen");
 		btnDorfAufsuchen.setForeground(Color.RED);
 		btnDorfAufsuchen.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnDorfAufsuchen.setBackground(Color.BLACK);
-		btnDorfAufsuchen.setBounds(53, 475, 243, 42);
+		btnDorfAufsuchen.setBounds(58, 274, 243, 42);
 		add(btnDorfAufsuchen);
 		
-		JLabel label_1 = new JLabel("7 / 24");
-		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setFont(new Font("Felix Titling", Font.BOLD, 29));
-		label_1.setForeground(Color.BLUE);
-		label_1.setBounds(95, 414, 150, 50);
-		add(label_1);
+		lblPlayerConnected = new JLabel("7 / 24");
+		lblPlayerConnected.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPlayerConnected.setFont(new Font("Felix Titling", Font.BOLD, 29));
+		lblPlayerConnected.setForeground(Color.BLUE);
+		lblPlayerConnected.setBounds(101, 429, 150, 50);
+		add(lblPlayerConnected);
 		
+		loading = new JLabel("");
+		loading.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/loading.gif")));
+		loading.setBounds(101, 490, 145, 58);
+		add(loading);
+		loading.setVisible(false);
+		setStatus(Status.WARTEN_AUF_SPIELER);
+		//setStatus(Status.VERBINDEN);
+		//setStatus(Status.WARTEN_AUF_SPIELER);
+		set_player_connected(24, 12);
 	}
+	
+	public void setStatus(Status status) {
+		switch(status) {
+		case BEREIT: {
+			loading.setVisible(false);
+			progressBar.setVisible(false);
+			lblPlayerConnected.setVisible(false);
+			break;}
+		case VERBINDEN:{
+			txtIP.setEditable(false);
+			txtPort.setEditable(false);
+			progressBar.setVisible(true);
+			progressBar.setIndeterminate(true);
+			btnDorfAufsuchen.setText("Verbinden...");
+			btnDorfAufsuchen.setEnabled(false);
+			break;}
+		case WARTEN_AUF_SPIELER: {
+			btnDorfAufsuchen.setText("Warten auf Spieler");
+			loading.setVisible(true);
+			progressBar.setIndeterminate(false);
+			lblPlayerConnected.setVisible(true);
+			break;}
+		case FERTIG: {
+			//Spiel laden
+			break;}
+		}
+	}
+	
+	public void set_player_connected(int ges, int connected) {
+		lblPlayerConnected.setVisible(true);
+		lblPlayerConnected.setText(""+ges+" / "+connected);
+		progressBar.setValue(connected*100/ges);
+		lblPlayerConnected.setToolTipText("Es fehlen noch "+(ges-connected)+" Spieler");
+	}
+	
+	
 }

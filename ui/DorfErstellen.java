@@ -35,7 +35,7 @@ public class DorfErstellen extends JPanel {
 	private JLabel loading;
 	
 	public static enum Status{
-		WAITING, GEN_SERVERS, WAITING_FOR_PLAYERS, FINISHED
+		BEREIT, GEN_SERVER, WARTEN_AUF_SPIELER, FERTIG
 	}
 	/**
 	 * Create the panel.
@@ -68,7 +68,7 @@ public class DorfErstellen extends JPanel {
 		button = new JButton("Dorf erstellen");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				status(Status.GEN_SERVERS);
+				status(Status.GEN_SERVER);
 				
 				
 			}
@@ -125,6 +125,7 @@ public class DorfErstellen extends JPanel {
 		lblPlayerConnected.setVisible(false);
 		
 		lblCode = new JLabel("Code");
+		lblCode.setToolTipText("Die Dorfnummer");
 		lblCode.setVisible(false);
 		lblCode.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCode.setForeground(Color.RED);
@@ -133,6 +134,7 @@ public class DorfErstellen extends JPanel {
 		add(lblCode);
 		
 		lblIp = new JLabel("IP");
+		lblIp.setToolTipText("Die IP Addresse");
 		lblIp.setVisible(false);
 		lblIp.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIp.setForeground(Color.BLUE);
@@ -150,7 +152,8 @@ public class DorfErstellen extends JPanel {
 		loading.setBounds(316, 490, 145, 58);
 		add(loading);
 		loading.setVisible(false);
-		status(Status.WAITING);
+		status(Status.WARTEN_AUF_SPIELER);
+		set_player_connected(24, 5);
 		
 	}
 	
@@ -169,12 +172,12 @@ public class DorfErstellen extends JPanel {
 	
 	public void status(Status s) {
 		switch(s) {
-		case WAITING:{
+		case BEREIT:{
 			progressBar.setVisible(false);
 			loading.setVisible(false);
 			break;
 		}
-		case GEN_SERVERS: {
+		case GEN_SERVER: {
 			progressBar.setVisible(true);
 			progressBar.setIndeterminate(true);
 			progressBar.setStringPainted(true);
@@ -185,14 +188,14 @@ public class DorfErstellen extends JPanel {
 			spinner.setEnabled(false);
 			spinner_1.setEnabled(false);
 			break;}
-		case WAITING_FOR_PLAYERS: {
+		case WARTEN_AUF_SPIELER: {
 			loading.setVisible(true);
 			progressBar.setIndeterminate(true);
 			progressBar.setStringPainted(true);
 			progressBar.setIndeterminate(false);
 			button.setText("Waiting for Players");
 			break;}
-		case FINISHED: {
+		case FERTIG: {
 			//window.change();
 			break;}
 		}

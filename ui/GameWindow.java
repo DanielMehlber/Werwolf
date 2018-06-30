@@ -6,11 +6,15 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import java.awt.BorderLayout;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 public class GameWindow {
 
-	private JFrame frmWerwolfVersion;
+	public JFrame frame;
 
 	/**
 	 * Launch the application.
@@ -20,14 +24,16 @@ public class GameWindow {
 			public void run() {
 				try {
 					GameWindow window = new GameWindow();
-					window.frmWerwolfVersion.setVisible(true);
+					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
+	
+	private JPanel current_panel;
+	private InfoPanel infoPanel;
 	/**
 	 * Create the application.
 	 */
@@ -39,12 +45,36 @@ public class GameWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmWerwolfVersion = new JFrame();
-		frmWerwolfVersion.getContentPane().setBackground(Color.BLACK);
-		frmWerwolfVersion.getContentPane().setLayout(new BorderLayout(0, 0));
-		frmWerwolfVersion.setTitle("Werwolf Version");
-		frmWerwolfVersion.setBounds(100, 100, 1100, 800);
-		frmWerwolfVersion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setBackground(Color.BLACK);
+		frame.getContentPane().setLayout(null);
+		frame.setTitle("Werwolf");
+		frame.setBounds(0, 0, 1100, 800);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		infoPanel = new InfoPanel(this);
+		infoPanel.setBounds(60, 11, 500, 771);
+		frame.getContentPane().add(infoPanel);
+		infoPanel.setVisible(true);
+		change(new MainGame(this));
 	}
-
+	
+	public void change(JPanel panel) {
+		if(current_panel != null)
+			frame.remove(current_panel);
+		current_panel = panel;
+		frame.getContentPane().add(panel);
+	}
+	
+	public void showInfoBoard() {
+		infoPanel.setVisible(true);
+	}
+	
+	public JPanel getCurrentPanel() {
+		return current_panel;
+	}
+	
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
+	}
 }

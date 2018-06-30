@@ -16,7 +16,7 @@ import java.awt.Window.Type;
  * */
 public class LauncherWindow {
 
-	private JFrame frmWerwolf;
+	private JFrame frame;
 
 	/**
 	 * Launch the application.
@@ -26,7 +26,7 @@ public class LauncherWindow {
 			public void run() {
 				try {
 					LauncherWindow window = new LauncherWindow(null);
-					window.frmWerwolf.setVisible(true);
+					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -37,7 +37,8 @@ public class LauncherWindow {
 	/**
 	 * Create the application.
 	 */
-	public Game game;
+	private JPanel current_panel;
+	private Game game;
 	public LauncherWindow(Game game) {
 		this.game = game;
 		initialize();
@@ -47,17 +48,20 @@ public class LauncherWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmWerwolf = new JFrame();
-		frmWerwolf.setResizable(false);
-		frmWerwolf.setTitle("Werwolf");
-		frmWerwolf.setBounds(100, 100, 800, 600);
-		frmWerwolf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		change(new DorfErstellen(this));
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setTitle("Werwolf");
+		frame.setBounds(100, 100, 800, 600);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		change(new DorfBeitreten(this));
 	}
 	
 	public void change(JPanel jframe) {
-		frmWerwolf.getContentPane().add(jframe);
-		frmWerwolf.getContentPane().setBounds(jframe.getBounds());
+		if(current_panel != null)
+			frame.remove(current_panel);
+		current_panel = jframe;
+		frame.getContentPane().add(jframe);
+		frame.getContentPane().setBounds(jframe.getBounds());
 		
 	}
 
