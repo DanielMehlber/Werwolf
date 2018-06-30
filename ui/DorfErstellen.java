@@ -16,6 +16,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 /**
  * @author Daniel Mehlber
@@ -31,22 +32,25 @@ public class DorfErstellen extends JPanel {
 	private JLabel lblPlayerConnected;
 	private JLabel lblCode;
 	private JLabel lblIp;
+	private JLabel loading;
 	
 	public static enum Status{
-		GEN_SERVERS, WAITING_FOR_PLAYERS, FINISHED
+		WAITING, GEN_SERVERS, WAITING_FOR_PLAYERS, FINISHED
 	}
 	/**
 	 * Create the panel.
 	 */
 	public DorfErstellen(LauncherWindow window) {
+		setBackground(Color.BLACK);
 		this.window = window;
 		setLayout(null);
 		setBounds(0,0,800,600);
 		
 		progressBar = new JProgressBar();
+		progressBar.setBackground(Color.BLACK);
 		progressBar.setForeground(Color.RED);
-		progressBar.setIndeterminate(true);
 		progressBar.setBounds(0, 549, 800, 22);
+		progressBar.setEnabled(false);
 		add(progressBar);
 		
 		cl = new ChangeListener() {
@@ -64,13 +68,15 @@ public class DorfErstellen extends JPanel {
 		button = new JButton("Dorf erstellen");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				status(Status.GEN_SERVERS);
+				
 				
 			}
 		});
 		button.setForeground(Color.RED);
 		button.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		button.setBackground(Color.BLACK);
-		button.setBounds(266, 475, 243, 42);
+		button.setBounds(266, 430, 243, 42);
 		add(button);
 		
 		JSeparator separator = new JSeparator();
@@ -114,7 +120,7 @@ public class DorfErstellen extends JPanel {
 		lblPlayerConnected.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPlayerConnected.setForeground(Color.RED);
 		lblPlayerConnected.setFont(new Font("Felix Titling", Font.BOLD, 16));
-		lblPlayerConnected.setBounds(334, 433, 115, 31);
+		lblPlayerConnected.setBounds(334, 399, 115, 31);
 		add(lblPlayerConnected);
 		lblPlayerConnected.setVisible(false);
 		
@@ -133,14 +139,19 @@ public class DorfErstellen extends JPanel {
 		lblIp.setFont(new Font("DialogInput", Font.BOLD, 22));
 		lblIp.setBounds(242, 344, 289, 31);
 		add(lblIp);
-		JLabel bg = new JLabel("");
-		bg.setFont(new Font("Tahoma", Font.BOLD, 11));
-		bg.setBounds(getBounds());
-		add(bg);
 		
-		status(Status.WAITING_FOR_PLAYERS);
-		activate_connection_info("24.6435.1234.65", 23425);
-		set_player_connected(23, 7);
+		JLabel ww_image = new JLabel("");
+		ww_image.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/WerewolfImage.png")));
+		ww_image.setBounds(557, 0, 243, 600);
+		add(ww_image);
+		
+		loading = new JLabel("");
+		loading.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/loading.gif")));
+		loading.setBounds(316, 490, 145, 58);
+		add(loading);
+		loading.setVisible(false);
+		status(Status.WAITING);
+		
 	}
 	
 	public void set_player_connected(int ges, int connected) {
@@ -158,14 +169,24 @@ public class DorfErstellen extends JPanel {
 	
 	public void status(Status s) {
 		switch(s) {
+		case WAITING:{
+			progressBar.setVisible(false);
+			loading.setVisible(false);
+			break;
+		}
 		case GEN_SERVERS: {
+			progressBar.setVisible(true);
 			progressBar.setIndeterminate(true);
 			progressBar.setStringPainted(true);
-			
+			loading.setVisible(true);
 			button.setEnabled(false);
 			button.setText("Generating Server...");
+			
+			spinner.setEnabled(false);
+			spinner_1.setEnabled(false);
 			break;}
 		case WAITING_FOR_PLAYERS: {
+			loading.setVisible(true);
 			progressBar.setIndeterminate(true);
 			progressBar.setStringPainted(true);
 			progressBar.setIndeterminate(false);

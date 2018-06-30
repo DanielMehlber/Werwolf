@@ -24,12 +24,10 @@ public class ClientCreator {
 			System.out.println("Byte:");
 			int i = Integer.parseInt(s.nextLine());
 			byte[] data = new byte[2];
-			data[0] = 1;
-			data[1] = (byte)i;
+			data[0] = (byte)i;
+			data[1] = 2;
 			client.schreiben(data);
-			System.out.println("Text:");
-			String m = s.nextLine();
-			client.schreiben(m);
+			client.schreiben("");
 		}
 	}
 

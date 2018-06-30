@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import game.Game;
+
 import java.awt.BorderLayout;
 import java.awt.Window.Type;
 
@@ -22,7 +25,7 @@ public class LauncherWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LauncherWindow window = new LauncherWindow();
+					LauncherWindow window = new LauncherWindow(null);
 					window.frmWerwolf.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -34,7 +37,9 @@ public class LauncherWindow {
 	/**
 	 * Create the application.
 	 */
-	public LauncherWindow() {
+	public Game game;
+	public LauncherWindow(Game game) {
+		this.game = game;
 		initialize();
 	}
 

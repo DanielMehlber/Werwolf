@@ -22,10 +22,19 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 		anschlussErstellen();
 		kommunikationBereitstellen();
 		auffassen();
+		destroy();
 	}
 
 	@Override
-	protected void verarbeiten(byte[] data) {}
+	protected void verarbeiten(byte[] data) {
+		System.out.println("Bytes vom Client erhalten!");
+		System.out.println("->"+data[0]);
+		switch(data[0]) {
+		//Other one logged out
+		case -1: {destroy(); break;}
+		case 0: {System.out.println("ZERO");break;}
+		}
+	}
 	
 	@Override
 	protected void verarbeiten(String data) {}

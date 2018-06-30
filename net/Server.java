@@ -34,7 +34,6 @@ public class Server extends NetzwerkKomponente implements Runnable{
 			server.getInetAddress();
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -78,6 +77,29 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		for(int i = 0; i < anschluss_liste.size(); i++) {
 			anschluss_liste.get(i).schreiben(nachricht);
 		}
+	}
+	
+	public void rufen(byte[] data) {
+		for(int i = 0; i < anschluss_liste.size(); i++) {
+			anschluss_liste.get(i).schreiben(data);
+		}
+	}
+	
+	
+	
+	
+	public Anschluss getAnschlussByName(String name) {
+		//TODO Implement
+		return null;
+	} 
+	
+	public void nachricht(Anschluss a, byte[] data) {
+		//TODO Implement
+	}
+	
+	public Anschluss[] getLebendeSpieler() {
+		//TODO Implement
+		return null;
 	}
 
 	@Override //Server is not listening

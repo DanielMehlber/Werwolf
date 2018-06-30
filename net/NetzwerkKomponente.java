@@ -174,15 +174,26 @@ public abstract class NetzwerkKomponente {
 	 * Zerstört den Anschluss und versucht den Client auszuloggen
 	 * */
 	public void destroy() {
+		int dest = -1;
+		byte[] data = new byte[1];
+		data[0] = (byte)dest;
+		schreiben(data);
 		try {
 			//nachricht({-1})
-			socket.close();
+			if(socket!=null) 
+				socket.close();
+			Thread.currentThread().join();
 			
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Fehler bim schließen des Clients", "Exit Error",
 					JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		System.out.println("Logged out!");
+		is_listening = false;
 	}
 	
 	protected int get_ziel_port() {

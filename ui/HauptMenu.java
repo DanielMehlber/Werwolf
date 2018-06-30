@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Font;
+import javax.swing.ImageIcon;
 
 /**
  * @author Daniel Mehlber
@@ -29,25 +30,25 @@ public class HauptMenu extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnDorfErstellen.setBounds(407, 96, 179, 42);
+		btnDorfErstellen.setBounds(453, 88, 179, 42);
 		add(btnDorfErstellen);
 		
 		JButton btnDorfBeitreten = new JButton("Dorf beitreten");
 		btnDorfBeitreten.setForeground(Color.RED);
 		btnDorfBeitreten.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnDorfBeitreten.setBackground(Color.BLACK);
-		btnDorfBeitreten.setBounds(407, 170, 179, 42);
+		btnDorfBeitreten.setBounds(453, 162, 179, 42);
 		add(btnDorfBeitreten);
 		
 		JButton btnVerlassen = new JButton("Verlassen");
 		btnVerlassen.setForeground(Color.RED);
 		btnVerlassen.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnVerlassen.setBackground(Color.BLACK);
-		btnVerlassen.setBounds(407, 246, 179, 42);
+		btnVerlassen.setBounds(453, 238, 179, 42);
 		add(btnVerlassen);
 		
 		JLabel bg = new JLabel("");
-		bg.setIcon(null);
+		bg.setIcon(new ImageIcon(HauptMenu.class.getResource("/res/WerwolfMainMenu2_edit.jpg")));
 		bg.setBackground(Color.GREEN);
 		bg.setBounds(getBounds());
 		add(bg);

@@ -21,17 +21,22 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		verbinden();
 		kommunikationBereitstellen();
 		auffassen();
+		destroy();
 	}
 
 	@Override
 	protected void verarbeiten(byte[] data) {
-		// TODO Auto-generated method stub
+		System.out.println("Bytes vom Server erhalten!");
+		System.out.println("->"+(int)data[0]);
+		switch((int)data[0]) {
+		case -1: {destroy(); break;}
+		}
 		
 	}
 	
 	@Override
 	protected void verarbeiten(String data) {
-		// TODO Auto-generated method stub
+		System.out.println("String vom Server erhalten!");
 		
 	}
 	
