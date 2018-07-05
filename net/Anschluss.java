@@ -46,7 +46,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 		try {
 			socket = server.getServerSocket().accept();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Fehler beim Erstellen eines Anschlusses!");
+			out.SpielAusgabe.error("Anschluss fehler", "Fehler beim akzeptieren eines Anschlusses von Seiten des Servers");
 			System.exit(-1);
 		}
 		System.out.println("Ein Client hat sich verbunden!");

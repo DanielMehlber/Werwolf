@@ -1,0 +1,11 @@
+Anschluss Eingehende Nachrichten:
+[-1] Verbindung beendet
+[0-String name] Registrieren mit Namen
+[1-String befehl] Befehl oder Mitteilung an den Server
+
+Client Eingehende Nachrichten:
+[-1] Server geschlossen
+[0-String zeit-String tage] Uhrzeit aktualisieren
+[1-String befehl] Befehl oder Mitteilung an den Client
+[2-SpielDaten daten] Daten aktualisieren
+[3-enum art] Du bist tot durch enum

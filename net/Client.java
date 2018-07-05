@@ -4,6 +4,8 @@ import java.net.Socket;
 
 import javax.swing.JOptionPane;
 
+import game.Spieler;
+
 
 
 /**
@@ -11,9 +13,14 @@ import javax.swing.JOptionPane;
  * @author Daniel Mehlber
  * */
 public class Client extends NetzwerkKomponente implements Runnable{
-
+	
+	private Spieler spieler;
 	public Client() {
 		
+	}
+	
+	public Client(Spieler spieler) {
+		this.spieler = spieler;
 	}
 
 	@Override
@@ -47,11 +54,20 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		try {
 			socket = new Socket(get_ziel_inet_addresse(), get_ziel_port());
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Fehler bim Verbinden mit Anschluss. bitte prüfe die eingegebenen Daten (IP, PORT)",
-					"Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
+			out.SpielAusgabe.error("Verbindungsfehler", "Bitte überpüfe Die IP_Addresse und den Port des Zielservers oder deine Internetverbindung!");
 		}
 		
 	}
+
+	protected Spieler getSpieler() {
+		return spieler;
+	}
+
+	protected void setSpieler(Spieler spieler) {
+		this.spieler = spieler;
+	}
+	
+	
 
 	
 

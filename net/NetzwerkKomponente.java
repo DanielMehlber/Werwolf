@@ -73,8 +73,7 @@ public abstract class NetzwerkKomponente {
 			byte_output = new ByteArrayOutputStream();
 			byte_input = new ByteArrayInputStream(byte_output.toByteArray());
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Fehler beim erstellen der Kommunikations Systeme",
-					"Setup Fehler", JOptionPane.ERROR_MESSAGE);
+			out.SpielAusgabe.error("Setupfehler", "Fehler beim erstellen der Kommunikationssysteme!");
 			e.printStackTrace();
 		}
 		
@@ -123,8 +122,7 @@ public abstract class NetzwerkKomponente {
 				input.read(data);
 				nachricht = reader.readLine();
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Fehler beim Lesen der Inbox", 
-						"Kommunikations Fehler", JOptionPane.ERROR_MESSAGE);
+				out.SpielAusgabe.error("Lesefehler (Internet)", "Fehler beim lesen der Netzwerk-inbox!");
 				e.printStackTrace();
 			}
 			verarbeiten(nachricht);
@@ -162,8 +160,7 @@ public abstract class NetzwerkKomponente {
 			output.write(data);
 			output.flush();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Fehler beim schreiben (versenden) eines byte[]",
-					"Kommunikations Fehler", JOptionPane.ERROR_MESSAGE);
+			out.SpielAusgabe.error("Outboxfehler", "Fehler beim verschicken von byte[]");
 			e.printStackTrace();
 		}
 		
@@ -185,8 +182,7 @@ public abstract class NetzwerkKomponente {
 			Thread.currentThread().join();
 			
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Fehler bim schließen des Clients", "Exit Error",
-					JOptionPane.ERROR_MESSAGE);
+			out.SpielAusgabe.error("Exit Fehler", "Ein Fehler ist beim schließen der Netzwerkkomponente aufgetreten!");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -245,8 +241,7 @@ public abstract class NetzwerkKomponente {
 		try {
 			this.ziel_inet_address = InetAddress.getByName(this.ziel_ip_addresse);
 		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "IP-Addresse ungültig oder Internetfehler!", "Host unerreichbar", 
-					JOptionPane.ERROR_MESSAGE);
+			out.SpielAusgabe.error("Host unerreichbar", "Die Ziel IP-Addresse "+ziel_ip_addresse+" ist unerrichbar!");
 			e.printStackTrace();
 		}
 	}
