@@ -30,7 +30,7 @@ public class SpielDaten {
 	
 	public Spieler getSpieler(String name) {
 		for(int i = 0; i < spieler_liste.size(); i++) {
-			if(spieler_liste.get(i).getName()==name) {
+			if(spieler_liste.get(i).getSpielerDaten().getName()==name) {
 				return spieler_liste.get(i);
 			}
 		}
