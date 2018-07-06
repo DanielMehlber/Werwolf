@@ -1,5 +1,6 @@
 package karten;
 
-public class Buerger {
-	public Buerger() {}
+public class Buerger{
+	public Buerger() {
+	}
 }

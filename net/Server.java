@@ -22,6 +22,14 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	public Server() {
 		max_anschluesse = -1;
 	}
+	
+	/**
+	 * Ermöglicht anderen Objekten den Server, ohne sich um Threading kümmern zu müssen, zu starten
+	 * */
+	public void server_starten() {
+		Thread th = new Thread(this);
+		th.start();
+	}
 
 	@Override
 	public void run() {

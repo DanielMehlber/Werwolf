@@ -1,6 +1,8 @@
 package net;
 
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
@@ -21,6 +23,12 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	
 	public Client(Spieler spieler) {
 		this.spieler = spieler;
+	}
+	
+	public Client(Spieler spieler, String ziel_ip_addresse, int ziel_port) {
+		this.spieler = spieler;
+		super.set_ziel_ip_addresse(ziel_ip_addresse);
+		super.set_ziel_port(ziel_port);
 	}
 
 	@Override
@@ -53,8 +61,9 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	private void verbinden() {
 		try {
 			socket = new Socket(get_ziel_inet_addresse(), get_ziel_port());
-		} catch (Exception e) {
+		} catch (IOException e) {
 			out.SpielAusgabe.error("Verbindungsfehler", "Bitte überpüfe Die IP_Addresse und den Port des Zielservers oder deine Internetverbindung!");
+			e.printStackTrace();
 		}
 		
 	}
