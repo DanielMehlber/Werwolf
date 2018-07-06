@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Random;
 
@@ -123,7 +124,7 @@ public abstract class NetzwerkKomponente {
 				nachricht = reader.readLine();
 			} catch (IOException e) {
 				out.SpielAusgabe.error("Lesefehler (Internet)", "Fehler beim lesen der Netzwerk-inbox!");
-				e.printStackTrace();
+				return;
 			}
 			verarbeiten(nachricht);
 			verarbeiten(data);
@@ -147,6 +148,10 @@ public abstract class NetzwerkKomponente {
 	 * @param nachricht Die Nachricht (String) die verschickt werden soll
 	 * */
 	public void schreiben(String nachricht) {
+		if(writer == null) {
+			out.SpielAusgabe.error("Kommunikationssysteme offline", "Kommunikationssysteme sind offline / wurden noch nicht erstellt");
+			return;
+		}
 		writer.println(nachricht);
 		writer.flush();
 	}
@@ -156,12 +161,17 @@ public abstract class NetzwerkKomponente {
 	 * @param data Die Daten die verschickt werden sollen.
 	 * */
 	public void schreiben(byte[] data) {
+		if(output == null) {
+			out.SpielAusgabe.error("Kommunikationssysteme offline", "Kommunikationssysteme sind offline / wurden noch nicht erstellt");
+			return;
+		}
 		try {
 			output.write(data);
 			output.flush();
+			schreiben(""); //Warum auch immer, aber man muss den PrintWriter besetzen und flushen
 		} catch (IOException e) {
 			out.SpielAusgabe.error("Outboxfehler", "Fehler beim verschicken von byte[]");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		

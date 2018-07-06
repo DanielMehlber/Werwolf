@@ -5,15 +5,14 @@ import net.Client;
 
 public class Spieler{
 	
-	private String name;
-	private boolean alive;
+
 	private Client client;
-	private SpielDaten daten;
-	private Kreatur kreatur;
+	private SpielDaten spielData;
+	private SpielerDaten data;
 	
 	public Spieler(String name) {
-		this.name = name;
-		alive = true;
+		data = new SpielerDaten();
+		data.setName(name);
 	}
 	
 	public void verbinden(String ziel_ip_addresse, int ziel_port) {
@@ -22,24 +21,9 @@ public class Spieler{
 		th.start();
 	}
 	
-	public void setKreatur(Kreatur kreatur) {
-		this.kreatur = kreatur;
-	}
-	
-	public Kreatur getKreatur() {
-		return this.kreatur;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public boolean isAlive() {
-		return alive;
-	}
 	
 	public void kill() {
-		alive = false;
+		data.setAlive(false);
 	}
 
 	public Client getClient() {
@@ -50,7 +34,16 @@ public class Spieler{
 		this.client = client;
 	}
 	
+	public SpielDaten getSpielDaten() {
+		return spielData;
+	}
 	
+	public void setSpielDaten(SpielDaten data) {
+		this.spielData = data;
+	}
 	
-
+	public SpielerDaten getSpielerDaten() {
+		return data;
+	}
+	
 }

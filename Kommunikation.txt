@@ -1,11 +1,10 @@
-Anschluss Eingehende Nachrichten:
-[-1] Verbindung beendet
-[0-String name] Registrieren mit Namen
-[1-String befehl] Befehl oder Mitteilung an den Server
+Nachrichten an Client:
+[-1]=Client, logge dich aus!
+[0, boolean allowed]=Login Antwort [true=Platz für dich / false=Kein Platz mehr für dich, Spielermaximum erreicht]
+[1, int stunden, int minuten, int tage, int wochen]=Zeit aktualisieren
+[2, SpielDaten]=Spieldaten aktualisieren
 
-Client Eingehende Nachrichten:
-[-1] Server geschlossen
-[0-String zeit-String tage] Uhrzeit aktualisieren
-[1-String befehl] Befehl oder Mitteilung an den Client
-[2-SpielDaten daten] Daten aktualisieren
-[3-enum art] Du bist tot durch enum
+Nachrichten an Server:
+[-1]=ausloggen
+[0, String name]=Anfrage zum mitspielen mit Name
+[1, String name]=Abstimmung

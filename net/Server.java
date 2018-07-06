@@ -19,8 +19,10 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	private ServerSocket server;
 	private int max_anschluesse;
 	private ArrayList<Anschluss> anschluss_liste;	
+	private boolean isCreated;
 	public Server() {
 		max_anschluesse = -1;
+		isCreated = false;
 	}
 	
 	/**
@@ -74,6 +76,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 			anschluss_liste.add(a);
 			Thread at = new Thread(a);
 			at.start();
+			isCreated = true;
 		}
 	}
 	
@@ -97,12 +100,15 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	
 	
 	public Anschluss getAnschlussByName(String name) {
-		//TODO Implement
+		for(int i = 0; i < anschluss_liste.size(); i++) {
+			Anschluss anschluss = anschluss_liste.get(i);
+			//TODO: Anschluss SpielerDaten
+		}
 		return null;
 	} 
 	
 	public void nachricht(Anschluss a, byte[] data) {
-		//TODO Implement
+		a.schreiben(data);
 	}
 	
 	public Anschluss[] getLebendeSpieler() {
@@ -125,6 +131,14 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	
 	public int get_max_anschluesse() {
 		return max_anschluesse;
+	}
+	
+	public boolean getServerCreated() {
+		return this.isCreated;
+	}
+	
+	public ArrayList<Anschluss> getAnschlussListe() {
+		return anschluss_liste;
 	}
 
 	

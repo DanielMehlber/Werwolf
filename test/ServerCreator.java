@@ -14,10 +14,17 @@ public class ServerCreator {
 		Thread sth = new Thread(server);
 		sth.setName("Server");
 		sth.start();
+		while(!server.getServerCreated()) {
+			System.out.print("");
+		}
 		while(true) {
+			System.out.println("BYTE:");
 			String m = s.nextLine();
-			server.rufen(m);
-			
+			byte[] data = new byte[2];
+			data[0] = 0;
+			data[1] = (byte)Integer.parseInt(m);
+			server.rufen(data);
+			//server.rufen("");
 			
 		}
 	}
