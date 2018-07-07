@@ -1,8 +1,10 @@
 package game;
 
+import java.io.Serializable;
+
 import karten.Kreatur;
 
-public class SpielerDaten {
+public class SpielerDaten implements Serializable{
 	
 	private String name;
 	private boolean alive;
