@@ -1,9 +1,11 @@
 package game;
 
+import java.io.Serializable;
+
 import karten.Kreatur;
 import net.Client;
 
-public class Spieler{
+public class Spieler implements Serializable{
 	
 
 	private Client client;
