@@ -41,7 +41,7 @@ public class Game {
 		dorf_beitreten_ui = ui;
 		ui.setStatus(DorfBeitreten.Status.VERBINDEN);
 		spieler = new Spieler(ui.getName());
-		Client spielerClient = new Client(spieler);
+		Client spielerClient = new Client(this, spieler);
 		spielerClient.set_ziel_ip_addresse(ui.getIP());
 		spielerClient.set_ziel_port(ui.getPort());
 		Thread th_client = new Thread(spielerClient);

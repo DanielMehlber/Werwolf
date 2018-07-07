@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
+import game.Game;
 import game.SpielDaten;
 import game.Spieler;
 
@@ -19,18 +20,23 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	
 	private boolean verbunden;
 	private Spieler spieler;
-	public Client() {
+	public Client(Game game) {
+		verbunden = false;
+		setGame(game);
+	}
+	
+	public Client(Game game, Spieler spieler) {
+		this.spieler = spieler;
+		setGame(game);
 		verbunden = false;
 	}
 	
-	public Client(Spieler spieler) {
-		this.spieler = spieler;
-	}
-	
-	public Client(Spieler spieler, String ziel_ip_addresse, int ziel_port) {
+	public Client(Game game, Spieler spieler, String ziel_ip_addresse, int ziel_port) {
 		this.spieler = spieler;
 		super.set_ziel_ip_addresse(ziel_ip_addresse);
 		super.set_ziel_port(ziel_port);
+		setGame(game);
+		verbunden = false;
 	}
 
 	@Override
