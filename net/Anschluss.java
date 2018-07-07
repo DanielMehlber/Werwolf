@@ -74,7 +74,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 			System.exit(-1);
 		}
 		System.out.println("Ein Client hat sich verbunden!");
-		
+		server.rufen(dataConverter.format((byte)2, dataConverter.ObjectToByteArray(getGame().getSpielDaten())));
 	}
 
 	

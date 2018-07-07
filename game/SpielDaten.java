@@ -9,8 +9,9 @@ public class SpielDaten implements Serializable{
 	
 	private ArrayList<Spieler> spieler_liste = new ArrayList<Spieler>();
 	private int max_spieler;
+	private boolean waiting_for_players;
 	public SpielDaten() {
-		
+		set_waiting_for_players(true);
 	}
 	
 	public void addSpieler(Spieler spieler) {
@@ -58,4 +59,14 @@ public class SpielDaten implements Serializable{
 		} 
 		return false;
 	}
+
+	public boolean is_waiting_for_players() {
+		return waiting_for_players;
+	}
+
+	public void set_waiting_for_players(boolean waiting_for_players) {
+		this.waiting_for_players = waiting_for_players;
+	}
+	
+	
 }

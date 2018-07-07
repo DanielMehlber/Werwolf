@@ -71,6 +71,10 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		case 2: {
 			getGame().refreshSpielData((SpielDaten)dataConverter.ByteArrayToObject(content));
 			System.out.println("SpielDaten aktualisiert!");
+			if(getGame().getSpielDaten().is_waiting_for_players()) {
+				getGame().getDorfBeitretenUI().set_player_connected(getGame().getSpielDaten().getMax_spieler(),
+						getGame().getSpielDaten().getSpielerAnzahl());
+			}
 			break;
 			}
 		}

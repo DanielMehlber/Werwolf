@@ -56,6 +56,10 @@ public class Game {
 		return this.dorf_erstellen_ui;
 	}
 	
+	public DorfBeitreten getDorfBeitretenUI() {
+		return this.dorf_beitreten_ui;
+	}
+	
 	public SpielDaten getSpielDaten() {
 		return daten;
 	}

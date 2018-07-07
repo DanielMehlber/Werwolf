@@ -186,7 +186,7 @@ public class DorfBeitreten extends JPanel {
 	
 	public void set_player_connected(int ges, int connected) {
 		lblPlayerConnected.setVisible(true);
-		lblPlayerConnected.setText(""+ges+" / "+connected);
+		lblPlayerConnected.setText(""+connected+" / "+ges);
 		progressBar.setValue(connected*100/ges);
 		lblPlayerConnected.setToolTipText("Es fehlen noch "+(ges-connected)+" Spieler");
 	}
