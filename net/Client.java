@@ -16,6 +16,7 @@ import game.Spieler;
  * */
 public class Client extends NetzwerkKomponente implements Runnable{
 	
+	
 	private Spieler spieler;
 	public Client() {
 		
@@ -42,8 +43,13 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	@Override
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Server erhalten!");
-		System.out.println("->"+(int)data[0]);
 		switch((int)data[0]) {
+		case 1: {
+			byte[] c = dataConverter.getContent(data);
+			Object o = dataConverter.ByteArrayToObject(c);
+			System.out.println(o.getClass());
+			break;
+		}
 		case -1: {destroy(); break;}
 		}
 		

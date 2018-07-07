@@ -2,3 +2,5 @@
 /Server.class
 /Anschluss.class
 /Client.class
+/DatenPaketTool.class
+/InetDataConverter.class

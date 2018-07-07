@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -15,6 +17,8 @@ import java.net.UnknownHostException;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
+
+import com.sun.org.apache.xml.internal.dtm.ref.DTMAxisIterNodeList;
 
 /**
  * Fasst die Kernelemente jedes Sockets in einer Oberklasse zusammen
@@ -51,9 +55,11 @@ public abstract class NetzwerkKomponente {
 	private Thread thread_listen;
 	private boolean is_listening;
 	
+	public InetDataConverter dataConverter;
 	
 	public NetzwerkKomponente() {
 		is_listening = true;
+		dataConverter = new InetDataConverter();
 	}
 	
 	/**
@@ -73,6 +79,7 @@ public abstract class NetzwerkKomponente {
 			reader = new BufferedReader(input_reader);
 			byte_output = new ByteArrayOutputStream();
 			byte_input = new ByteArrayInputStream(byte_output.toByteArray());
+			
 		} catch (IOException e) {
 			out.SpielAusgabe.error("Setupfehler", "Fehler beim erstellen der Kommunikationssysteme!");
 			e.printStackTrace();
@@ -115,7 +122,7 @@ public abstract class NetzwerkKomponente {
 	 * */
 	protected void auffassen() {
 		String nachricht = null;
-		byte[] data = new byte[64];
+		byte[] data = new byte[2048 * 2];
 		is_listening = true;
 		while(is_listening) {
 			
@@ -201,6 +208,7 @@ public abstract class NetzwerkKomponente {
 		System.out.println("Logged out!");
 		is_listening = false;
 	}
+	
 	
 	protected int get_ziel_port() {
 		return ziel_port;

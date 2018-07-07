@@ -3,6 +3,7 @@ package test;
 import java.util.Scanner;
 
 import net.Client;
+import net.InetDataConverter;
 
 public class ClientCreator {
 
@@ -19,16 +20,15 @@ public class ClientCreator {
 		Thread ct = new Thread(client);
 		ct.setName("Client");
 		ct.start();
-		
+		InetDataConverter tool = new InetDataConverter();
 		while(true) {
-			System.out.println("Byte:");
-			int i = Integer.parseInt(s.nextLine());
-			byte[] data = new byte[2];
-			data[0] = (byte)i;
-			data[1] = 2;
+			System.out.println("Zahl:");
+			String u = s.nextLine();
+			Integer m = Integer.parseInt(u);
+			byte[] data = tool.ObjectToByteArray(m);
 			client.schreiben(data);
-			client.schreiben("");
 		}
+		
 	}
 
 }

@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
  * */
 public class Anschluss extends NetzwerkKomponente implements Runnable{
 	
+	
 	private Server server;
 	public Anschluss(Server server) {
 		this.server = server;
@@ -28,7 +29,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	@Override
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Client erhalten!");
-		System.out.println("->"+data[0]);
+		System.out.println(dataConverter.ByteArrayToObject(data));
 		switch(data[0]) {
 		//Other one logged out
 		case -1: {destroy(); break;}

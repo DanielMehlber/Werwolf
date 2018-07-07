@@ -1,10 +1,11 @@
 package game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-public class SpielDaten {
+public class SpielDaten implements Serializable{
 	
 	private ArrayList<Spieler> spieler_liste = new ArrayList<Spieler>();
 	public SpielDaten() {

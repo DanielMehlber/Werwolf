@@ -2,6 +2,8 @@ package test;
 
 import java.util.Scanner;
 
+import game.SpielDaten;
+import net.InetDataConverter;
 import net.Server;
 
 public class ServerCreator {
@@ -17,14 +19,13 @@ public class ServerCreator {
 		while(!server.getServerCreated()) {
 			System.out.print("");
 		}
+		InetDataConverter tool = new InetDataConverter();
 		while(true) {
-			System.out.println("BYTE:");
+			System.out.println("String:");
 			String m = s.nextLine();
-			byte[] data = new byte[2];
-			data[0] = 0;
-			data[1] = (byte)Integer.parseInt(m);
+			SpielDaten daten = new SpielDaten();
+			byte[] data = tool.format((byte)1, tool.ObjectToByteArray(daten));
 			server.rufen(data);
-			//server.rufen("");
 			
 		}
 	}
