@@ -1,3 +1,4 @@
+/*
 package test;
 
 import java.util.Scanner;
@@ -32,3 +33,4 @@ public class ClientCreator {
 	}
 
 }
+*/

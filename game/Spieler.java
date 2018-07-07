@@ -16,7 +16,10 @@ public class Spieler{
 	}
 	
 	public void verbinden(String ziel_ip_addresse, int ziel_port) {
-		client = new Client(this, ziel_ip_addresse, ziel_port);
+		if(client == null) {
+			out.SpielAusgabe.error("Spieler: Kein Client", "Der Client muss erstellt und gesetzt werden!");
+			return;
+		}
 		Thread th = new Thread(client);
 		th.start();
 	}
