@@ -57,13 +57,13 @@ public abstract class NetzwerkKomponente {
 	private Thread thread_listen;
 	private boolean is_listening;
 	
-	public InetDataConverter dataConverter;
+	public InetDataFormatter formatter;
 	
 	private Game game;
 	
 	public NetzwerkKomponente() {
 		is_listening = true;
-		dataConverter = new InetDataConverter();
+		formatter = new InetDataFormatter();
 	}
 	
 	/**

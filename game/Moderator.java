@@ -7,16 +7,16 @@ import net.Server;
  * */
 public class Moderator extends Server implements Runnable{
 
-	private SpielDaten daten;
+	private SpielDaten spiel_daten;
 	
 	public Moderator(Game game) {
-		daten = new SpielDaten();
+		spiel_daten = new SpielDaten();
 		setGame(game);
 	}
 	
 	
 	public SpielDaten getDaten() {
-		return daten;
+		return spiel_daten;
 	}
 	
 	

@@ -21,11 +21,11 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	private ServerSocket server;
 	private int max_anschluesse;
 	private ArrayList<Anschluss> anschluss_liste;	
-	private boolean isCreated;
+	private boolean bereit;
 	
 	public Server() {
 		max_anschluesse = -1;
-		isCreated = false;
+		bereit = false;
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 			anschluss_liste.add(a);
 			Thread at = new Thread(a);
 			at.start();
-			isCreated = true;
+			bereit = true;
 		}
 	}
 	
@@ -136,8 +136,8 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		return max_anschluesse;
 	}
 	
-	public boolean getServerCreated() {
-		return this.isCreated;
+	public boolean getServerBereit() {
+		return this.bereit;
 	}
 	
 	public ArrayList<Anschluss> getAnschlussListe() {

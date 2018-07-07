@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class InetDataConverter {
+public class InetDataFormatter {
 	
 	ByteArrayOutputStream out;
 	ByteArrayInputStream in;
 	ObjectOutputStream os;
-	public InetDataConverter() {
+	public InetDataFormatter() {
 		out = new ByteArrayOutputStream();
 		try {
 			os = new ObjectOutputStream(out);
@@ -48,7 +48,7 @@ public class InetDataConverter {
 	    return obj;
 	}
 	
-	public byte[] format(byte b, byte[] content) {
+	public byte[] formatieren(byte b, byte[] content) {
 		int length = 1 + content.length;
 		byte[] format = new byte[length];
 		for(int i = 0; i<length; i++) {
@@ -61,7 +61,7 @@ public class InetDataConverter {
 		return format;
 	}
 	
-	public byte[] getContent(byte[] data) {
+	public byte[] getInhalt(byte[] data) {
 		byte[] content = new byte[data.length - 1];
 		for(int i = 0; i < data.length; i++) {
 			if(i != 0) {

@@ -7,11 +7,11 @@ import karten.Kreatur;
 public class SpielerDaten implements Serializable{
 	
 	private String name;
-	private boolean alive;
+	private boolean amLeben;
 	private Kreatur kreatur;
 	
 	public SpielerDaten() {
-		alive = true;
+		amLeben = true;
 	}
 
 	protected String getName() {
@@ -22,12 +22,12 @@ public class SpielerDaten implements Serializable{
 		this.name = name;
 	}
 
-	protected boolean isAlive() {
-		return alive;
+	protected boolean isLebendig() {
+		return amLeben;
 	}
 
-	protected void setAlive(boolean alive) {
-		this.alive = alive;
+	protected void setLebendig(boolean alive) {
+		this.amLeben = alive;
 	}
 
 	protected Kreatur getKreatur() {

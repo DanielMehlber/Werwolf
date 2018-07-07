@@ -33,30 +33,9 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	@Override
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Client erhalten!");
-		byte[] content = dataConverter.getContent(data);
+		byte[] inhalt = formatter.getInhalt(data);
 		switch(data[0]) {
-		//Other one logged out
-		case -1: {destroy(); break;}
-		case 0: {
-			schreiben(dataConverter.format((byte)2, dataConverter.ObjectToByteArray(getGame().getSpielDaten())));
-			String name = (String)dataConverter.ByteArrayToObject(content);
-			//Spielername bereits vergeben --> Kann nicht einloggen!
-			if (!getGame().getSpielDaten().spielerNameFrei(name)) {
-				Boolean b = false;
-				byte[] message = dataConverter.format((byte)0, dataConverter.ObjectToByteArray(b));
-				schreiben(message);
-				return;
-			}
-			Spieler spieler = new Spieler(name);
-			getGame().getSpielDaten().addSpieler(spieler);
-			getGame().getDotfErstellenUI().set_player_connected(
-					getGame().getSpielDaten().getMax_spieler()
-					,getGame().getSpielDaten().getSpielerAnzahl());
-			System.out.println("Spieler "+name+" hat sich registriert");
-			Boolean b = true;
-			byte[] message = dataConverter.format((byte)0, dataConverter.ObjectToByteArray(b));
-			schreiben(message);
-			break;}
+		
 		}
 	}
 	
@@ -74,7 +53,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 			System.exit(-1);
 		}
 		System.out.println("Ein Client hat sich verbunden!");
-		server.rufen(dataConverter.format((byte)2, dataConverter.ObjectToByteArray(getGame().getSpielDaten())));
+		server.rufen(formatter.formatieren((byte)2, formatter.ObjectToByteArray(getGame().getSpielDaten())));
 	}
 
 	

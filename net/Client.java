@@ -50,33 +50,8 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	@Override
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Server erhalten!");
-		byte[] content = dataConverter.getContent(data);
+		byte[] inhalt = formatter.getInhalt(data);
 		switch((int)data[0]) {
-		case 0: {
-			Boolean erfolg = (Boolean) dataConverter.ByteArrayToObject(content);
-			if(erfolg) {
-				System.out.println("Erfolgreich eingeloggt");
-			}else {
-				System.err.println("Kann nicht einloggen, Name bereits vergeben!");
-			}
-			break;
-		}
-		case 1: {
-			byte[] c = dataConverter.getContent(data);
-			Object o = dataConverter.ByteArrayToObject(c);
-			System.out.println(o.getClass());
-			break;
-		}
-		case -1: {destroy(); break;}
-		case 2: {
-			getGame().refreshSpielData((SpielDaten)dataConverter.ByteArrayToObject(content));
-			System.out.println("SpielDaten aktualisiert!");
-			if(getGame().getSpielDaten().is_waiting_for_players()) {
-				getGame().getDorfBeitretenUI().set_player_connected(getGame().getSpielDaten().getMax_spieler(),
-						getGame().getSpielDaten().getSpielerAnzahl());
-			}
-			break;
-			}
 		}
 		
 		

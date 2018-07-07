@@ -9,12 +9,12 @@ public class Spieler implements Serializable{
 	
 
 	private Client client;
-	private SpielDaten spielData;
-	private SpielerDaten data;
+	private SpielDaten spiel_daten;
+	private SpielerDaten spieler_daten;
 	
 	public Spieler(String name) {
-		data = new SpielerDaten();
-		data.setName(name);
+		spieler_daten = new SpielerDaten();
+		spieler_daten.setName(name);
 	}
 	
 	public void verbinden(String ziel_ip_addresse, int ziel_port) {
@@ -28,7 +28,7 @@ public class Spieler implements Serializable{
 	
 	
 	public void kill() {
-		data.setAlive(false);
+		spieler_daten.setAlive(false);
 	}
 
 	public Client getClient() {
@@ -40,15 +40,15 @@ public class Spieler implements Serializable{
 	}
 	
 	public SpielDaten getSpielDaten() {
-		return spielData;
+		return spiel_daten;
 	}
 	
 	public void setSpielDaten(SpielDaten data) {
-		this.spielData = data;
+		this.spiel_daten = data;
 	}
 	
 	public SpielerDaten getSpielerDaten() {
-		return data;
+		return spieler_daten;
 	}
 	
 }
