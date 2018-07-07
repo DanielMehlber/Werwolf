@@ -29,11 +29,14 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	@Override
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Client erhalten!");
-		System.out.println(dataConverter.ByteArrayToObject(data));
+		byte[] content = dataConverter.getContent(data);
 		switch(data[0]) {
 		//Other one logged out
 		case -1: {destroy(); break;}
-		case 0: {System.out.println("ZERO");break;}
+		case 0: {
+			String name = (String)dataConverter.ByteArrayToObject(content);
+			//TODO: Register Name and Player
+			break;}
 		}
 	}
 	
@@ -51,6 +54,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 			System.exit(-1);
 		}
 		System.out.println("Ein Client hat sich verbunden!");
+		
 	}
 
 	

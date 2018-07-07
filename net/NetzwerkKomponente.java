@@ -20,6 +20,8 @@ import javax.swing.JOptionPane;
 
 import com.sun.org.apache.xml.internal.dtm.ref.DTMAxisIterNodeList;
 
+import game.Game;
+
 /**
  * Fasst die Kernelemente jedes Sockets in einer Oberklasse zusammen
  * @author Daniel Mehlber
@@ -56,6 +58,8 @@ public abstract class NetzwerkKomponente {
 	private boolean is_listening;
 	
 	public InetDataConverter dataConverter;
+	
+	private Game game;
 	
 	public NetzwerkKomponente() {
 		is_listening = true;
@@ -294,6 +298,24 @@ public abstract class NetzwerkKomponente {
 
 	public void set_self_port(int self_port) {
 		this.self_port = self_port;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	
+	public String get_self_ip() {
+		String ip = null;
+		try {
+			ip = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		return ip;
 	}
 	
 	

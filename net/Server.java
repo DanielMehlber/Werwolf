@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import game.Game;
+
 
 
 
@@ -20,6 +22,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	private int max_anschluesse;
 	private ArrayList<Anschluss> anschluss_liste;	
 	private boolean isCreated;
+	
 	public Server() {
 		max_anschluesse = -1;
 		isCreated = false;
@@ -140,6 +143,10 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	public ArrayList<Anschluss> getAnschlussListe() {
 		return anschluss_liste;
 	}
+	
+	
+	
+	
 
 	
 

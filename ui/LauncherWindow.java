@@ -14,34 +14,20 @@ import java.awt.Window.Type;
  * Hällt die Frames, die das Spiel steuern
  * @author Daniel Mehlber
  * */
-public class LauncherWindow {
+public class LauncherWindow implements Runnable{
 
 	private JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LauncherWindow window = new LauncherWindow(null);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 */
 	private JPanel current_panel;
 	private Game game;
+	private boolean isReady;
 	public LauncherWindow(Game game) {
 		this.game = game;
-		initialize();
+		isReady = false;
+		
 	}
 
 	/**
@@ -53,16 +39,35 @@ public class LauncherWindow {
 		frame.setTitle("Werwolf");
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		change(new DorfBeitreten(this));
+		frame.setVisible(true);
+		isReady = true;
 	}
 	
 	public void change(JPanel jframe) {
+		if(frame == null) {
+			out.SpielAusgabe.error("No Thread created", "LauncherWindow needs a new Thread and needs to be started!");
+		}
 		if(current_panel != null)
 			frame.remove(current_panel);
 		current_panel = jframe;
 		frame.getContentPane().add(jframe);
 		frame.getContentPane().setBounds(jframe.getBounds());
+		System.out.println("Changed");
+		frame.validate();
+	}
+	
+	public Game getGame() {
+		return game;
+	}
+
+	@Override
+	public void run() {
+		initialize();
 		
+	}
+	
+	public boolean isReady() {
+		return isReady;
 	}
 
 }

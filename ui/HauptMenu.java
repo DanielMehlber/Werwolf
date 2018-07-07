@@ -19,7 +19,9 @@ public class HauptMenu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public HauptMenu() {
+	LauncherWindow window;
+	public HauptMenu(LauncherWindow window) {
+		this.window = window;
 		setLayout(null);
 		setBounds(0, 0, 800, 600);
 		JButton btnDorfErstellen = new JButton("Dorf erstellen");
@@ -28,12 +30,18 @@ public class HauptMenu extends JPanel {
 		btnDorfErstellen.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnDorfErstellen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				window.change(new DorfErstellen(window));
 			}
 		});
 		btnDorfErstellen.setBounds(453, 88, 179, 42);
 		add(btnDorfErstellen);
 		
 		JButton btnDorfBeitreten = new JButton("Dorf beitreten");
+		btnDorfBeitreten.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				window.change(new DorfBeitreten(window));
+			}
+		});
 		btnDorfBeitreten.setForeground(Color.RED);
 		btnDorfBeitreten.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnDorfBeitreten.setBackground(Color.BLACK);
@@ -41,6 +49,11 @@ public class HauptMenu extends JPanel {
 		add(btnDorfBeitreten);
 		
 		JButton btnVerlassen = new JButton("Verlassen");
+		btnVerlassen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		btnVerlassen.setForeground(Color.RED);
 		btnVerlassen.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnVerlassen.setBackground(Color.BLACK);

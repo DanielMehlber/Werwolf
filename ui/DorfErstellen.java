@@ -14,6 +14,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import sun.launcher.resources.launcher;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
@@ -23,11 +26,11 @@ import javax.swing.ImageIcon;
  * */
 public class DorfErstellen extends JPanel {
 	
-	ChangeListener cl;
-	JSpinner spinner, spinner_1;
-	JLabel lblGesamt;
-	JProgressBar progressBar;
-	JButton button;
+	public ChangeListener cl;
+	public JSpinner num_werwoelfe, num_bewohner;
+	public JLabel lblGesamt;
+	public JProgressBar progressBar;
+	public JButton button;
 	LauncherWindow window;
 	private JLabel lblPlayerConnected;
 	private JLabel lblCode;
@@ -57,10 +60,7 @@ public class DorfErstellen extends JPanel {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				int wer = (int)spinner_1.getValue();
-				int bew = (int)spinner.getValue();
-				int ges = wer+bew;
-				lblGesamt.setText("Gesamt: "+ges);
+				updateGesamtLabel();
 				
 			}
 		};
@@ -68,8 +68,7 @@ public class DorfErstellen extends JPanel {
 		button = new JButton("Dorf erstellen");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				status(Status.GEN_SERVER);
-				
+				dorfErstellen();
 				
 			}
 		});
@@ -83,11 +82,11 @@ public class DorfErstellen extends JPanel {
 		separator.setBounds(187, 287, 433, 2);
 		add(separator);
 		
-		spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(new Integer(2), new Integer(2), null, new Integer(1)));
-		spinner.setBounds(266, 141, 75, 20);
-		add(spinner);
-		spinner.addChangeListener(cl);
+		num_werwoelfe = new JSpinner();
+		num_werwoelfe.setModel(new SpinnerNumberModel(new Integer(2), new Integer(2), null, new Integer(1)));
+		num_werwoelfe.setBounds(266, 141, 75, 20);
+		add(num_werwoelfe);
+		num_werwoelfe.addChangeListener(cl);
 		
 		JLabel label = new JLabel("Werw\u00F6lfe");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -103,11 +102,11 @@ public class DorfErstellen extends JPanel {
 		lblBewohner.setBounds(416, 114, 115, 31);
 		add(lblBewohner);
 		
-		spinner_1 = new JSpinner();
-		spinner_1.setModel(new SpinnerNumberModel(new Integer(5), new Integer(5), null, new Integer(1)));
-		spinner_1.setBounds(434, 141, 75, 20);
-		add(spinner_1);
-		spinner_1.addChangeListener(cl);
+		num_bewohner = new JSpinner();
+		num_bewohner.setModel(new SpinnerNumberModel(new Integer(5), new Integer(5), null, new Integer(1)));
+		num_bewohner.setBounds(434, 141, 75, 20);
+		add(num_bewohner);
+		num_bewohner.addChangeListener(cl);
 		
 		lblGesamt = new JLabel("Gesamt: ");
 		lblGesamt.setHorizontalAlignment(SwingConstants.CENTER);
@@ -130,7 +129,7 @@ public class DorfErstellen extends JPanel {
 		lblCode.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCode.setForeground(Color.RED);
 		lblCode.setFont(new Font("DialogInput", Font.BOLD, 33));
-		lblCode.setBounds(305, 300, 179, 50);
+		lblCode.setBounds(304, 330, 179, 50);
 		add(lblCode);
 		
 		lblIp = new JLabel("IP");
@@ -139,7 +138,7 @@ public class DorfErstellen extends JPanel {
 		lblIp.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIp.setForeground(Color.BLUE);
 		lblIp.setFont(new Font("DialogInput", Font.BOLD, 22));
-		lblIp.setBounds(242, 344, 289, 31);
+		lblIp.setBounds(242, 300, 289, 31);
 		add(lblIp);
 		
 		JLabel ww_image = new JLabel("");
@@ -152,9 +151,8 @@ public class DorfErstellen extends JPanel {
 		loading.setBounds(316, 490, 145, 58);
 		add(loading);
 		loading.setVisible(false);
-		status(Status.WARTEN_AUF_SPIELER);
-		set_player_connected(24, 5);
 		
+		updateGesamtLabel();
 	}
 	
 	public void set_player_connected(int ges, int connected) {
@@ -170,7 +168,7 @@ public class DorfErstellen extends JPanel {
 		lblCode.setVisible(true);
 	}
 	
-	public void status(Status s) {
+	public void setStatus(Status s) {
 		switch(s) {
 		case BEREIT:{
 			progressBar.setVisible(false);
@@ -185,8 +183,8 @@ public class DorfErstellen extends JPanel {
 			button.setEnabled(false);
 			button.setText("Generating Server...");
 			
-			spinner.setEnabled(false);
-			spinner_1.setEnabled(false);
+			num_werwoelfe.setEnabled(false);
+			num_bewohner.setEnabled(false);
 			break;}
 		case WARTEN_AUF_SPIELER: {
 			loading.setVisible(true);
@@ -199,5 +197,16 @@ public class DorfErstellen extends JPanel {
 			//window.change();
 			break;}
 		}
+	}
+	
+	private void dorfErstellen() {
+		window.getGame().dorfErstellen(this);
+	}
+	
+	private void updateGesamtLabel() {
+		int wer = (int)num_bewohner.getValue();
+		int bew = (int)num_werwoelfe.getValue();
+		int ges = wer+bew;
+		lblGesamt.setText("Gesamt: "+ges);
 	}
 }
