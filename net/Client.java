@@ -81,6 +81,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			out.SpielAusgabe.error("Verbindungsfehler", "Bitte überpüfe Die IP_Addresse und den Port des Zielservers oder deine Internetverbindung!");
 			e.printStackTrace();
 		}
+		System.out.println("Verbindung hergestellt... Erbitte erlaubnis.");
 		verbunden = true;
 	}
 

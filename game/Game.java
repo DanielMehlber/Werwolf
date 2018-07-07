@@ -46,7 +46,9 @@ public class Game {
 		Thread th_client = new Thread(spielerClient);
 		th_client.start();
 		spieler.setClient(spielerClient);
-		
+		while(!spielerClient.isVerbunden()) {System.out.print("");}
+		spieler.getClient().schreiben(spieler.getClient().dataConverter.format((byte)0, 
+				spieler.getClient().dataConverter.ObjectToByteArray(spieler.getSpielerDaten().getName())));
 	}
 	
 	public DorfErstellen getDotfErstellenUI() {
