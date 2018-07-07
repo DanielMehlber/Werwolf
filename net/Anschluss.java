@@ -18,6 +18,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	private Server server;
 	public Anschluss(Server server) {
 		this.server = server;
+		super.setGame(server.getGame());
 	}
 
 	@Override
