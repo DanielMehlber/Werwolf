@@ -16,10 +16,10 @@ import game.Spieler;
  * */
 public class Client extends NetzwerkKomponente implements Runnable{
 	
-	
+	private boolean verbunden;
 	private Spieler spieler;
 	public Client() {
-		
+		verbunden = false;
 	}
 	
 	public Client(Spieler spieler) {
@@ -43,7 +43,17 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	@Override
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Server erhalten!");
+		byte[] content = dataConverter.getContent(data);
 		switch((int)data[0]) {
+		case 0: {
+			Boolean erfolg = (Boolean) dataConverter.ByteArrayToObject(content);
+			if(erfolg) {
+				System.out.println("Erfolgreich eingeloggt");
+			}else {
+				System.err.println("Kann nicht einloggen, Name bereits vergeben!");
+			}
+			break;
+		}
 		case 1: {
 			byte[] c = dataConverter.getContent(data);
 			Object o = dataConverter.ByteArrayToObject(c);
@@ -71,7 +81,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			out.SpielAusgabe.error("Verbindungsfehler", "Bitte überpüfe Die IP_Addresse und den Port des Zielservers oder deine Internetverbindung!");
 			e.printStackTrace();
 		}
-		
+		verbunden = true;
 	}
 
 	protected Spieler getSpieler() {
@@ -80,6 +90,10 @@ public class Client extends NetzwerkKomponente implements Runnable{
 
 	protected void setSpieler(Spieler spieler) {
 		this.spieler = spieler;
+	}
+	
+	public boolean isVerbunden() {
+		return verbunden;
 	}
 	
 	

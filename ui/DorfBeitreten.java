@@ -7,8 +7,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
+import jdk.nashorn.internal.ir.SetSplitState;
+
 import javax.swing.JProgressBar;
 import javax.swing.JButton;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DorfBeitreten extends JPanel {
 	private JTextField txtIP;
@@ -18,6 +26,10 @@ public class DorfBeitreten extends JPanel {
 	private JButton btnDorfAufsuchen;
 	private JLabel lblPlayerConnected;
 	private LauncherWindow window;
+	private JTextField txtName;
+	private JLabel lblMaxZeichen;
+	private JLabel lblUngueltig;
+	private JLabel lblMussZahlSein;
 	public static enum Status{
 		BEREIT, VERBINDEN, WARTEN_AUF_SPIELER, FERTIG
 	}
@@ -30,6 +42,41 @@ public class DorfBeitreten extends JPanel {
 		setBackground(Color.BLACK);
 		setBounds(0,0,800,600);
 		setLayout(null);
+		
+		KeyListener kl = new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				setValidity(checkNameValidity(txtName.getText()),
+						checkIPValidity(txtIP.getText()), checkPortValidity(txtPort.getText()));
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {}
+		};
+		
+		lblMaxZeichen = new JLabel("Zeichenanzahl !");
+		lblMaxZeichen.setBackground(Color.RED);
+		lblMaxZeichen.setForeground(Color.RED);
+		lblMaxZeichen.setBounds(335, 92, 124, 14);
+		add(lblMaxZeichen);
+		
+		lblUngueltig = new JLabel("Ungueltig");
+		lblUngueltig.setForeground(Color.RED);
+		lblUngueltig.setBackground(Color.RED);
+		lblUngueltig.setBounds(335, 140, 124, 14);
+		add(lblUngueltig);
+		
+		lblMussZahlSein = new JLabel("Muss zahl sein!");
+		lblMussZahlSein.setForeground(Color.RED);
+		lblMussZahlSein.setBackground(Color.RED);
+		lblMussZahlSein.setBounds(335, 204, 124, 14);
+		add(lblMussZahlSein);
+		
 		
 		progressBar = new JProgressBar();
 		progressBar.setBackground(Color.BLACK);
@@ -45,9 +92,10 @@ public class DorfBeitreten extends JPanel {
 		add(label);
 		
 		txtIP = new JTextField();
+		txtIP.addKeyListener(kl);
 		txtIP.setHorizontalAlignment(SwingConstants.CENTER);
 		txtIP.setBackground(Color.DARK_GRAY);
-		txtIP.setForeground(Color.RED);
+		txtIP.setForeground(Color.BLUE);
 		txtIP.setFont(new Font("DialogInput", Font.BOLD, 20));
 		txtIP.setText("IP");
 		txtIP.setToolTipText("IP Adresse");
@@ -56,6 +104,7 @@ public class DorfBeitreten extends JPanel {
 		txtIP.setColumns(10);
 		
 		txtPort = new JTextField();
+		txtPort.addKeyListener(kl);
 		txtPort.setHorizontalAlignment(SwingConstants.CENTER);
 		txtPort.setToolTipText("Dorfnummer");
 		txtPort.setText("Port");
@@ -67,6 +116,11 @@ public class DorfBeitreten extends JPanel {
 		add(txtPort);
 		
 		btnDorfAufsuchen = new JButton("Dorf aufsuchen");
+		btnDorfAufsuchen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dorfBeitreten();
+			}
+		});
 		btnDorfAufsuchen.setForeground(Color.RED);
 		btnDorfAufsuchen.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnDorfAufsuchen.setBackground(Color.BLACK);
@@ -84,11 +138,23 @@ public class DorfBeitreten extends JPanel {
 		loading.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/loading.gif")));
 		loading.setBounds(101, 490, 145, 58);
 		add(loading);
+		
+		txtName = new JTextField();
+		txtName.addKeyListener(kl);
+		txtName.setToolTipText("IP Adresse");
+		txtName.setText("Name");
+		txtName.setHorizontalAlignment(SwingConstants.CENTER);
+		txtName.setForeground(Color.RED);
+		txtName.setFont(new Font("Bradley Hand ITC", Font.BOLD, 23));
+		txtName.setColumns(10);
+		txtName.setBackground(Color.DARK_GRAY);
+		txtName.setBounds(24, 80, 301, 35);
+		add(txtName);
 		loading.setVisible(false);
-		setStatus(Status.WARTEN_AUF_SPIELER);
-		//setStatus(Status.VERBINDEN);
-		//setStatus(Status.WARTEN_AUF_SPIELER);
-		set_player_connected(24, 12);
+		
+		setStatus(Status.BEREIT);
+		setValidity(checkNameValidity(txtName.getText()),
+				checkIPValidity(txtIP.getText()), checkPortValidity(txtPort.getText()));
 	}
 	
 	public void setStatus(Status status) {
@@ -125,5 +191,64 @@ public class DorfBeitreten extends JPanel {
 		lblPlayerConnected.setToolTipText("Es fehlen noch "+(ges-connected)+" Spieler");
 	}
 	
+	private void setValidity(boolean name , boolean ip, boolean port) {
+		setNameValid(name);
+		setIPValid(ip);
+		setPortValid(port);
+		btnDorfAufsuchen.setEnabled(name && ip && port);
+	}
 	
+	public boolean checkNameValidity(String name) {
+		if(name.length() > 8 || name.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+	
+	private void setNameValid(boolean b) {
+		lblMaxZeichen.setVisible(!b);
+	}
+	
+	public boolean checkIPValidity(String ip) {
+		if(ip.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean checkPortValidity(String port) {
+		try {
+			int p = Integer.parseInt(port);
+		}catch(NumberFormatException e){
+			return false;
+		}
+		if (Integer.parseInt(port)==0) {
+			return false;
+		}
+		return true;
+	}
+	
+	private void setIPValid(boolean b) {
+		lblUngueltig.setVisible(!b);
+	}
+	
+	private void setPortValid(boolean b) {
+		lblMussZahlSein.setVisible(!b);
+	}
+
+	public String getName() {
+		return txtName.getText();
+	}
+	
+	public int getPort() {
+		return Integer.parseInt(txtPort.getText());
+	}
+	
+	public String getIP() {
+		return txtIP.getText();
+	}
+	
+	private void dorfBeitreten() {
+		window.getGame().dorfBeitreten(this);
+	}
 }

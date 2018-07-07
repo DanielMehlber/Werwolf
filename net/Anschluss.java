@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import game.Spieler;
+
 
 
 /**
@@ -35,7 +37,22 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 		case -1: {destroy(); break;}
 		case 0: {
 			String name = (String)dataConverter.ByteArrayToObject(content);
-			//TODO: Register Name and Player
+			//Spielername bereits vergeben --> Kann nicht einloggen!
+			if (!getGame().getSpielDaten().spielerNameFrei(name)) {
+				Boolean b = false;
+				byte[] message = dataConverter.format((byte)0, dataConverter.ObjectToByteArray(b));
+				schreiben(message);
+				return;
+			}
+			Spieler spieler = new Spieler(name);
+			getGame().getSpielDaten().addSpieler(spieler);
+			getGame().getDotfErstellenUI().set_player_connected(
+					getGame().getSpielDaten().getMax_spieler()
+					,getGame().getSpielDaten().getSpielerAnzahl());
+			System.out.println("Spieler "+name+" hat sich registriert");
+			Boolean b = true;
+			byte[] message = dataConverter.format((byte)0, dataConverter.ObjectToByteArray(b));
+			schreiben(message);
 			break;}
 		}
 	}

@@ -1,14 +1,16 @@
 package game;
+import net.Client;
 import ui.*;
 
 public class Game {
 
 	private static String version = "ALPHA.07-07-18";
-	LauncherWindow launcher;
+	private LauncherWindow launcher;
 	private SpielDaten daten;
-	Moderator moderator;
-	Spieler spieler;
+	private Moderator moderator;
+	private Spieler spieler;
 	private DorfErstellen dorf_erstellen_ui;
+	private DorfBeitreten dorf_beitreten_ui;
 	public Game() {
 		daten = new SpielDaten();
 		launcher = new LauncherWindow(this);
@@ -34,8 +36,25 @@ public class Game {
 		ui.activate_connection_info(moderator.get_self_ip(), moderator.get_self_port());
 	}
 	
+	public void dorfBeitreten(DorfBeitreten ui) {
+		dorf_beitreten_ui = ui;
+		ui.setStatus(DorfBeitreten.Status.VERBINDEN);
+		spieler = new Spieler(ui.getName());
+		Client spielerClient = new Client(spieler);
+		spielerClient.set_ziel_ip_addresse(ui.getIP());
+		spielerClient.set_ziel_port(ui.getPort());
+		Thread th_client = new Thread(spielerClient);
+		th_client.start();
+		spieler.setClient(spielerClient);
+		
+	}
+	
 	public DorfErstellen getDotfErstellenUI() {
 		return this.dorf_erstellen_ui;
+	}
+	
+	public SpielDaten getSpielDaten() {
+		return daten;
 	}
 	
 

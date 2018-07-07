@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 public class SpielDaten implements Serializable{
 	
 	private ArrayList<Spieler> spieler_liste = new ArrayList<Spieler>();
+	private int max_spieler;
 	public SpielDaten() {
 		
 	}
@@ -35,8 +36,26 @@ public class SpielDaten implements Serializable{
 				return spieler_liste.get(i);
 			}
 		}
-		out.SpielAusgabe.error("Spieler nicht gefunden", "Der Spieler "+name+" ist nicht in der Spielerliste verzeichet!");
+		//out.SpielAusgabe.error("Spieler nicht gefunden", "Der Spieler "+name+" ist nicht in der Spielerliste verzeichet!");
 		return null;
 	}
 
+	public int getMax_spieler() {
+		return max_spieler;
+	}
+
+	public void setMax_spieler(int max_spieler) {
+		this.max_spieler = max_spieler;
+	}
+	
+	public int getSpielerAnzahl() {
+		return spieler_liste.size();
+	}
+	
+	public boolean spielerNameFrei(String name) {
+		if(getSpieler(name)==null) {
+			return true;
+		} 
+		return false;
+	}
 }
