@@ -31,6 +31,7 @@ public class Game {
 		int max_anschluesse = (int)ui.num_bewohner.getValue() + (int)ui.num_werwoelfe.getValue();
 		moderator.set_max_anschluesse(max_anschluesse);
 		moderator.server_starten();
+		getSpielDaten().setMax_spieler(max_anschluesse);
 		while(!moderator.getServerCreated()) {System.out.print("");}
 		ui.setStatus(DorfErstellen.Status.WARTEN_AUF_SPIELER);
 		ui.activate_connection_info(moderator.get_self_ip(), moderator.get_self_port());
@@ -57,6 +58,10 @@ public class Game {
 	
 	public SpielDaten getSpielDaten() {
 		return daten;
+	}
+	
+	public void refreshSpielData(SpielDaten data) {
+		this.daten = data;
 	}
 	
 

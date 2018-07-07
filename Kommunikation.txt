@@ -1,10 +1,12 @@
 Nachrichten an Client:
-[-1]=Client, logge dich aus!
-[0, boolean allowed]=Login Antwort [true=Platz für dich / false=Kein Platz mehr für dich, Spielermaximum erreicht]
-[1, int stunden, int minuten, int tage, int wochen]=Zeit aktualisieren
-[2, SpielDaten]=Spieldaten aktualisieren
+	[-1]=Client, logge dich aus!
+	[0, boolean allowed]=Login Antwort [true=Platz für dich / false=Kein Platz mehr für dich, Spielermaximum erreicht]
+	------------------------------------------------
+	[1, int stunden, int minuten, int tage, int wochen]=Zeit aktualisieren
+	[2, SpielDaten]=Spieldaten aktualisieren
 
 Nachrichten an Server:
-[-1]=ausloggen
-[0, String name]=Anfrage zum mitspielen mit Name
-[1, String name]=Abstimmung
+	[-1]=ausloggen
+	[0, String name]=Anfrage zum mitspielen mit Name
+	------------------------------------------------
+	[1, String name]=Abstimmung

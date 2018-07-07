@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
+import game.SpielDaten;
 import game.Spieler;
 
 
@@ -61,7 +62,13 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			break;
 		}
 		case -1: {destroy(); break;}
+		case 2: {
+			getGame().refreshSpielData((SpielDaten)dataConverter.ByteArrayToObject(content));
+			System.out.println("SpielDaten aktualisiert!");
+			break;
+			}
 		}
+		
 		
 	}
 	

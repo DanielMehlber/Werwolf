@@ -38,6 +38,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 		//Other one logged out
 		case -1: {destroy(); break;}
 		case 0: {
+			schreiben(dataConverter.format((byte)2, dataConverter.ObjectToByteArray(getGame().getSpielDaten())));
 			String name = (String)dataConverter.ByteArrayToObject(content);
 			//Spielername bereits vergeben --> Kann nicht einloggen!
 			if (!getGame().getSpielDaten().spielerNameFrei(name)) {
