@@ -6,8 +6,6 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
-import com.sun.glass.ui.Window;
-
 import javax.swing.JSeparator;
 import java.awt.Button;
 import javax.swing.ImageIcon;

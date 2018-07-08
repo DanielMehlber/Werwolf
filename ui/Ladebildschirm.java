@@ -44,7 +44,7 @@ public class Ladebildschirm extends JPanel {
 		add(btnBereit);
 		
 		loading = new JLabel("");
-		loading.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/loading.gif")));
+		loading.setIcon(new ImageIcon(DorfErstellenPanel.class.getResource("/res/loading.gif")));
 		loading.setBounds(462, 619, 145, 58);
 		add(loading);
 		

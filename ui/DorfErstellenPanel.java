@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 /**
  * @author Daniel Mehlber
  * */
-public class DorfErstellen extends JPanel {
+public class DorfErstellenPanel extends JPanel {
 	
 	public ChangeListener cl;
 	public JSpinner num_werwoelfe, num_bewohner;
@@ -43,7 +43,7 @@ public class DorfErstellen extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public DorfErstellen(LauncherWindow window) {
+	public DorfErstellenPanel(LauncherWindow window) {
 		setBackground(Color.BLACK);
 		this.window = window;
 		setLayout(null);
@@ -142,12 +142,12 @@ public class DorfErstellen extends JPanel {
 		add(lblIp);
 		
 		JLabel ww_image = new JLabel("");
-		ww_image.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/WerewolfImage.png")));
+		ww_image.setIcon(new ImageIcon(DorfErstellenPanel.class.getResource("/res/WerewolfImage.png")));
 		ww_image.setBounds(557, 0, 243, 600);
 		add(ww_image);
 		
 		loading = new JLabel("");
-		loading.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/loading.gif")));
+		loading.setIcon(new ImageIcon(DorfErstellenPanel.class.getResource("/res/loading.gif")));
 		loading.setBounds(316, 490, 145, 58);
 		add(loading);
 		loading.setVisible(false);
@@ -155,13 +155,19 @@ public class DorfErstellen extends JPanel {
 		updateGesamtLabel();
 	}
 	
-	public void set_player_connected(int ges, int connected) {
+	public void aktualisiereVerbundeneSpieler(int ges, int connected) {
 		lblPlayerConnected.setVisible(true);
 		lblPlayerConnected.setText(""+connected+" / "+ges);
 		progressBar.setValue(connected*100/ges);
 	}
 	
-	public void activate_connection_info(String ip, int code) {
+	public void aktualisiereVerbundeneSpieler() {
+		int ges = window.getGame().getSpielDaten().get_max_spieler();
+		int con = window.getGame().getSpielDaten().getSpielerAnzahl();
+		aktualisiereVerbundeneSpieler(ges, con);
+	}
+	
+	public void verbindungsInfoAnzeigen(String ip, int code) {
 		lblIp.setText(ip);
 		lblCode.setText(""+code);
 		lblIp.setVisible(true);
@@ -200,7 +206,7 @@ public class DorfErstellen extends JPanel {
 	}
 	
 	private void dorfErstellen() {
-		window.getGame().dorfErstellen(this);
+		window.getGame().dorf_erstellen(this);
 	}
 	
 	private void updateGesamtLabel() {
@@ -208,5 +214,11 @@ public class DorfErstellen extends JPanel {
 		int bew = (int)num_werwoelfe.getValue();
 		int ges = wer+bew;
 		lblGesamt.setText("Gesamt: "+ges);
+	}
+	
+	public int getGesamteSpielerAnzahl() {
+		int wer = (int)num_bewohner.getValue();
+		int bew = (int)num_werwoelfe.getValue();
+		return wer+bew;
 	}
 }

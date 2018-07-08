@@ -56,12 +56,14 @@ public abstract class NetzwerkKomponente {
 	/**Der Thread in dem die Komponente laufen wird*/
 	private Thread thread_listen;
 	private boolean is_listening;
+	private boolean fertigGeschrieben;
 	
 	public InetDataFormatter formatter;
 	
 	private Game game;
 	
 	public NetzwerkKomponente() {
+		fertigGeschrieben = true;
 		is_listening = true;
 		formatter = new InetDataFormatter();
 	}
@@ -85,7 +87,7 @@ public abstract class NetzwerkKomponente {
 			byte_input = new ByteArrayInputStream(byte_output.toByteArray());
 			
 		} catch (IOException e) {
-			out.SpielAusgabe.error("Setupfehler", "Fehler beim erstellen der Kommunikationssysteme!");
+			out.SpielAusgabe.error(null, "Setupfehler", "Fehler beim erstellen der Kommunikationssysteme!");
 			e.printStackTrace();
 		}
 		
@@ -126,19 +128,21 @@ public abstract class NetzwerkKomponente {
 	 * */
 	protected void auffassen() {
 		String nachricht = null;
-		byte[] data = new byte[2048 * 2];
+		byte[] data = null;
 		is_listening = true;
 		while(is_listening) {
 			
 			try {
+				data = new byte[1024];
 				input.read(data);
-				nachricht = reader.readLine();
+				//nachricht = reader.readLine();
 			} catch (IOException e) {
-				out.SpielAusgabe.error("Lesefehler (Internet)", "Fehler beim lesen der Netzwerk-inbox!");
+				out.SpielAusgabe.error(null, "Lesefehler (Internet)", "Fehler beim lesen der Netzwerk-inbox!");
 				return;
 			}
-			verarbeiten(nachricht);
+			//verarbeiten(nachricht)
 			verarbeiten(data);
+			
 		}
 	}
 	/**
@@ -160,7 +164,7 @@ public abstract class NetzwerkKomponente {
 	 * */
 	public void schreiben(String nachricht) {
 		if(writer == null) {
-			out.SpielAusgabe.error("Kommunikationssysteme offline", "Kommunikationssysteme sind offline / wurden noch nicht erstellt");
+			out.SpielAusgabe.error(null, "Kommunikationssysteme offline", "Kommunikationssysteme sind offline / wurden noch nicht erstellt");
 			return;
 		}
 		writer.println(nachricht);
@@ -172,19 +176,20 @@ public abstract class NetzwerkKomponente {
 	 * @param data Die Daten die verschickt werden sollen.
 	 * */
 	public void schreiben(byte[] data) {
+		fertigGeschrieben = false;
 		if(output == null) {
-			out.SpielAusgabe.error("Kommunikationssysteme offline", "Kommunikationssysteme sind offline / wurden noch nicht erstellt");
+			out.SpielAusgabe.error(null, "Kommunikationssysteme offline", "Kommunikationssysteme sind offline / wurden noch nicht erstellt");
 			return;
 		}
 		try {
 			output.write(data);
 			output.flush();
-			schreiben(""); //Warum auch immer, aber man muss den PrintWriter besetzen und flushen
+			//schreiben(" "); //Warum auch immer, aber man muss den PrintWriter besetzen und flushen
 		} catch (IOException e) {
-			out.SpielAusgabe.error("Outboxfehler", "Fehler beim verschicken von byte[]");
-			//e.printStackTrace();
+			out.SpielAusgabe.error(null, "Outboxfehler", "Fehler beim verschicken von byte[]");
+			e.printStackTrace();
 		}
-		
+		fertigGeschrieben = true;
 		
 	}
 	
@@ -203,7 +208,7 @@ public abstract class NetzwerkKomponente {
 			Thread.currentThread().join();
 			
 		} catch (IOException e) {
-			out.SpielAusgabe.error("Exit Fehler", "Ein Fehler ist beim schlieﬂen der Netzwerkkomponente aufgetreten!");
+			out.SpielAusgabe.error(null, "Exit Fehler", "Ein Fehler ist beim schlieﬂen der Netzwerkkomponente aufgetreten!");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -263,7 +268,7 @@ public abstract class NetzwerkKomponente {
 		try {
 			this.ziel_inet_address = InetAddress.getByName(this.ziel_ip_addresse);
 		} catch (UnknownHostException e) {
-			out.SpielAusgabe.error("Host unerreichbar", "Die Ziel IP-Addresse "+ziel_ip_addresse+" ist unerrichbar!");
+			out.SpielAusgabe.error(null, "Host unerreichbar", "Die Ziel IP-Addresse "+ziel_ip_addresse+" ist unerrichbar!");
 			e.printStackTrace();
 		}
 	}
@@ -318,7 +323,9 @@ public abstract class NetzwerkKomponente {
 		return ip;
 	}
 	
-	
+	public boolean isFertigGeschrieben() {
+		return this.fertigGeschrieben;
+	}
 
 
 	

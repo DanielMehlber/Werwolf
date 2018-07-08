@@ -14,13 +14,13 @@ import javax.swing.ImageIcon;
 /**
  * @author Daniel Mehlber
  * */
-public class HauptMenu extends JPanel {
+public class HauptMenuPanel extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
 	LauncherWindow window;
-	public HauptMenu(LauncherWindow window) {
+	public HauptMenuPanel(LauncherWindow window) {
 		this.window = window;
 		setLayout(null);
 		setBounds(0, 0, 800, 600);
@@ -30,7 +30,7 @@ public class HauptMenu extends JPanel {
 		btnDorfErstellen.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnDorfErstellen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				window.change(new DorfErstellen(window));
+				window.wechseln(new DorfErstellenPanel(window));
 			}
 		});
 		btnDorfErstellen.setBounds(453, 88, 179, 42);
@@ -39,7 +39,7 @@ public class HauptMenu extends JPanel {
 		JButton btnDorfBeitreten = new JButton("Dorf beitreten");
 		btnDorfBeitreten.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				window.change(new DorfBeitreten(window));
+				window.wechseln(new DorfBeitretenPanel(window));
 			}
 		});
 		btnDorfBeitreten.setForeground(Color.RED);
@@ -61,7 +61,7 @@ public class HauptMenu extends JPanel {
 		add(btnVerlassen);
 		
 		JLabel bg = new JLabel("");
-		bg.setIcon(new ImageIcon(HauptMenu.class.getResource("/res/WerwolfMainMenu2_edit.jpg")));
+		bg.setIcon(new ImageIcon(HauptMenuPanel.class.getResource("/res/WerwolfMainMenu2_edit.jpg")));
 		bg.setBackground(Color.GREEN);
 		bg.setBounds(getBounds());
 		add(bg);

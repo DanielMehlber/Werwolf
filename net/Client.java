@@ -51,7 +51,29 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Server erhalten!");
 		byte[] inhalt = formatter.getInhalt(data);
+		System.out.println("Kategorie: "+(int)data[0]);
+		System.out.println(formatter.ByteArrayToString(data));
 		switch((int)data[0]) {
+		case 0: {
+			System.out.println("Anmeldung empfangen");
+			Boolean b = (Boolean)formatter.ByteArrayToObject(inhalt);
+			if(b) {
+				System.out.println("Erfolgreich Angemeldet");
+			}else {
+				System.err.println("Abgelehnt, Name bereits in Verwendung");
+				//TODO: Aktion nach ablehnung
+			}
+			return;
+		}
+		case 1: {
+			System.out.println("SpielDaten aktualisierung empfangen");
+			System.out.println(formatter.ByteArrayToObject(inhalt));
+			SpielDaten daten = (SpielDaten)formatter.ByteArrayToObject(inhalt);
+			getGame().getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
+			return;
+			
+		}
+		default:{return;}
 		}
 		
 		
@@ -70,10 +92,10 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		try {
 			socket = new Socket(get_ziel_inet_addresse(), get_ziel_port());
 		} catch (IOException e) {
-			out.SpielAusgabe.error("Verbindungsfehler", "Bitte überpüfe Die IP_Addresse und den Port des Zielservers oder deine Internetverbindung!");
+			out.SpielAusgabe.error(null, "Verbindungsfehler", "Bitte überpüfe Die IP_Addresse und den Port des Zielservers oder deine Internetverbindung!");
 			e.printStackTrace();
 		}
-		System.out.println("Verbindung hergestellt... Erbitte erlaubnis.");
+		System.out.println("Verbindung hergestellt...");
 		verbunden = true;
 	}
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import game.Game;
+import game.SpielDaten;
 
 
 
@@ -23,7 +24,10 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	private ArrayList<Anschluss> anschluss_liste;	
 	private boolean bereit;
 	
-	public Server() {
+	private SpielDaten spiel_daten;
+	
+	public Server(SpielDaten spiel_daten) {
+		this.spiel_daten = spiel_daten;
 		max_anschluesse = -1;
 		bereit = false;
 	}
@@ -32,6 +36,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	 * Ermöglicht anderen Objekten den Server, ohne sich um Threading kümmern zu müssen, zu starten
 	 * */
 	public void server_starten() {
+		max_anschluesse = spiel_daten.get_max_spieler();
 		Thread th = new Thread(this);
 		th.start();
 	}
@@ -89,13 +94,22 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	 * */
 	public void rufen(String nachricht) {
 		for(int i = 0; i < anschluss_liste.size(); i++) {
-			anschluss_liste.get(i).schreiben(nachricht);
+			if(anschluss_liste.get(i).getOutputStream()!=null) {
+				anschluss_liste.get(i).schreiben(nachricht);
+			}
 		}
 	}
 	
 	public void rufen(byte[] data) {
+		boolean irgenteinEmpfaenger = false;
 		for(int i = 0; i < anschluss_liste.size(); i++) {
-			anschluss_liste.get(i).schreiben(data);
+			if(anschluss_liste.get(i).getOutputStream()!=null) {
+				anschluss_liste.get(i).schreiben(data);
+				irgenteinEmpfaenger = true;
+			}
+		}
+		if(!irgenteinEmpfaenger) {
+			System.err.println("Keiner zum Zuschicken da !");
 		}
 	}
 	
@@ -144,7 +158,9 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		return anschluss_liste;
 	}
 	
-	
+	public SpielDaten getSpielDaten() {
+		return spiel_daten;
+	}
 	
 	
 

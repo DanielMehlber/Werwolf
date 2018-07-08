@@ -21,9 +21,24 @@ public class InetDataFormatter {
 		}
 	}
 	
+	public String ByteArrayToString(byte[] data) {
+		String s = data.length+" [";
+		for(int i = 0; i < data.length; i++) {
+			byte d = data[i];
+			if(i == 0) {
+				s = s+""+d;
+			}else {
+				s += ", "+d;
+			}
+		}
+		s += "]";
+		return s;
+	}
+	
 	public byte[] ObjectToByteArray(Object obj) {
 		try {
 			os.writeObject(obj);
+			os.reset();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,6 +60,7 @@ public class InetDataFormatter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	    return obj;
 	}
 	

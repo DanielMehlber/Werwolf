@@ -43,16 +43,15 @@ public class LauncherWindow implements Runnable{
 		isReady = true;
 	}
 	
-	public void change(JPanel jframe) {
+	public void wechseln(JPanel jframe) {
 		if(frame == null) {
-			out.SpielAusgabe.error("No Thread created", "LauncherWindow needs a new Thread and needs to be started!");
+			out.SpielAusgabe.error(null, "No Thread created", "LauncherWindow needs a new Thread and needs to be started!");
 		}
 		if(current_panel != null)
 			frame.remove(current_panel);
 		current_panel = jframe;
 		frame.getContentPane().add(jframe);
 		frame.getContentPane().setBounds(jframe.getBounds());
-		System.out.println("Changed");
 		frame.validate();
 	}
 	
@@ -66,7 +65,7 @@ public class LauncherWindow implements Runnable{
 		
 	}
 	
-	public boolean isReady() {
+	public boolean isBereit() {
 		return isReady;
 	}
 

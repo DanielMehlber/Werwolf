@@ -18,7 +18,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class DorfBeitreten extends JPanel {
+public class DorfBeitretenPanel extends JPanel {
 	private JTextField txtIP;
 	private JTextField txtPort;
 	private JLabel loading;
@@ -37,7 +37,7 @@ public class DorfBeitreten extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public DorfBeitreten(LauncherWindow window) {
+	public DorfBeitretenPanel(LauncherWindow window) {
 		this.window = window;
 		setBackground(Color.BLACK);
 		setBounds(0,0,800,600);
@@ -87,7 +87,7 @@ public class DorfBeitreten extends JPanel {
 		add(progressBar);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(DorfBeitreten.class.getResource("/res/Village_edit.jpg")));
+		label.setIcon(new ImageIcon(DorfBeitretenPanel.class.getResource("/res/Village_edit.jpg")));
 		label.setBounds(335, -112, 465, 724);
 		add(label);
 		
@@ -118,7 +118,7 @@ public class DorfBeitreten extends JPanel {
 		btnDorfAufsuchen = new JButton("Dorf aufsuchen");
 		btnDorfAufsuchen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dorfBeitreten();
+				dorf_beitreten();
 			}
 		});
 		btnDorfAufsuchen.setForeground(Color.RED);
@@ -135,7 +135,7 @@ public class DorfBeitreten extends JPanel {
 		add(lblPlayerConnected);
 		
 		loading = new JLabel("");
-		loading.setIcon(new ImageIcon(DorfErstellen.class.getResource("/res/loading.gif")));
+		loading.setIcon(new ImageIcon(DorfErstellenPanel.class.getResource("/res/loading.gif")));
 		loading.setBounds(101, 490, 145, 58);
 		add(loading);
 		
@@ -184,11 +184,21 @@ public class DorfBeitreten extends JPanel {
 		}
 	}
 	
-	public void set_player_connected(int ges, int connected) {
+	public void dorf_beitreten() {
+		window.getGame().dorf_beitreten(this);
+	}
+	
+	public void aktualisiereVerbundeneSpieler(int ges, int connected) {
 		lblPlayerConnected.setVisible(true);
 		lblPlayerConnected.setText(""+connected+" / "+ges);
 		progressBar.setValue(connected*100/ges);
 		lblPlayerConnected.setToolTipText("Es fehlen noch "+(ges-connected)+" Spieler");
+	}
+	
+	public void aktualisiereVerbundeneSpieler() {
+		int ges = window.getGame().getSpielDaten().get_max_spieler();
+		int con = window.getGame().getSpielDaten().getSpielerAnzahl();
+		aktualisiereVerbundeneSpieler(ges, con);
 	}
 	
 	private void setValidity(boolean name , boolean ip, boolean port) {
@@ -248,7 +258,4 @@ public class DorfBeitreten extends JPanel {
 		return txtIP.getText();
 	}
 	
-	private void dorfBeitreten() {
-		window.getGame().dorfBeitreten(this);
-	}
 }

@@ -18,8 +18,9 @@ public class Spieler implements Serializable{
 	}
 	
 	public void verbinden(String ziel_ip_addresse, int ziel_port) {
+		System.out.println("Verbindung zum Server wird aufgebaut...");
 		if(client == null) {
-			out.SpielAusgabe.error("Spieler: Kein Client", "Der Client muss erstellt und gesetzt werden!");
+			out.SpielAusgabe.error(null, "Spieler: Kein Client", "Der Client muss erstellt und gesetzt werden!");
 			return;
 		}
 		Thread th = new Thread(client);
@@ -28,7 +29,7 @@ public class Spieler implements Serializable{
 	
 	
 	public void kill() {
-		spieler_daten.setAlive(false);
+		spieler_daten.setLebendig(false);
 	}
 
 	public Client getClient() {
@@ -49,6 +50,10 @@ public class Spieler implements Serializable{
 	
 	public SpielerDaten getSpielerDaten() {
 		return spieler_daten;
+	}
+	
+	public void anmelden() {
+		client.schreiben(client.formatter.formatieren((byte)0, client.formatter.ObjectToByteArray(spieler_daten)));
 	}
 	
 }

@@ -1,19 +1,23 @@
 package out;
 
+import java.awt.Component;
+
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class SpielAusgabe {
 
-	public static void error(String title, String message) {
-		Thread th = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				System.err.println("ERROR: "+message);
-				JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
-				
-			}
-		});
+	public static void error(Component parent, String title, String message) {
+		
+		
+		SwingUtilities.invokeLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	System.err.println("ERROR: "+message);
+				JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);      
+	        }
+	    });
+		
 		
 	}
 	
