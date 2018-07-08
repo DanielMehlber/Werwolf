@@ -5,11 +5,16 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Speichert allerlei Informationen über das Spiel und kann verschickt werden
+ * 
+ * */
 public class SpielDaten implements Serializable{
 	
 	private ArrayList<Spieler> spieler_liste = new ArrayList<Spieler>();
 	private int max_spieler;
 	private boolean wartet_auf_spieler;
+	
 	public SpielDaten() {
 		set_wartet_auf_spieler(true);
 	}
@@ -37,7 +42,7 @@ public class SpielDaten implements Serializable{
 				return spieler_liste.get(i);
 			}
 		}
-		//out.SpielAusgabe.error("Spieler nicht gefunden", "Der Spieler "+name+" ist nicht in der Spielerliste verzeichet!");
+		
 		return null;
 	}
 

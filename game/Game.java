@@ -1,9 +1,11 @@
 package game;
+import java.io.Serializable;
+
 import net.Client;
 import ui.*;
 import ui.DorfBeitretenPanel.Status;
 
-public class Game {
+public class Game{
 	
 	private LauncherWindow launcher;
 	private DorfErstellenPanel dorf_erstellen_panel;
@@ -36,9 +38,9 @@ public class Game {
 	
 	public void dorf_erstellen(DorfErstellenPanel ui) {
 		dorf_erstellen_panel = ui;
-		moderator = new Moderator(this, spiel_daten);
+		moderator = new Moderator(this);
 		//SpielDaten setzen
-		moderator.getSpielDaten().set_max_spieler(ui.getGesamteSpielerAnzahl());
+		spiel_daten.set_max_spieler(ui.getGesamteSpielerAnzahl());
 		
 		//Server erstellen mit Thread
 		ui.setStatus(DorfErstellenPanel.Status.GEN_SERVER);
@@ -60,13 +62,13 @@ public class Game {
 		String name = ui.getName();
 		String ip = ui.getIP();
 		int port = ui.getPort();
-		Spieler spieler = new Spieler(name);
+		Spieler spieler = new Spieler(new SpielerDaten(name), this);
 		
 		Client client = new Client(this, spieler, ip, port);
 		spieler.setClient(client);
 		
 		spieler.verbinden(ip, port);
-		while(!spieler.getClient().isVerbunden()) {System.out.print("");}
+		while(!spieler.getClient().isBereit()) {System.out.print("");}
 		spieler.anmelden();
 		ui.setStatus(Status.WARTEN_AUF_SPIELER);
 	}
@@ -74,6 +76,10 @@ public class Game {
 	
 	public SpielDaten getSpielDaten() {
 		return spiel_daten;
+	}
+	
+	public void setSpielDaten(SpielDaten daten) {
+		this.spiel_daten = daten;
 	}
 	
 }

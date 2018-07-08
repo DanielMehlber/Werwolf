@@ -8,17 +8,10 @@ import java.io.ObjectOutputStream;
 
 public class InetDataFormatter {
 	
-	ByteArrayOutputStream out;
-	ByteArrayInputStream in;
-	ObjectOutputStream os;
+	
+	
 	public InetDataFormatter() {
-		out = new ByteArrayOutputStream();
-		try {
-			os = new ObjectOutputStream(out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 	
 	public String ByteArrayToString(byte[] data) {
@@ -36,19 +29,29 @@ public class InetDataFormatter {
 	}
 	
 	public byte[] ObjectToByteArray(Object obj) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
 		try {
+			ObjectOutputStream os = new ObjectOutputStream(out);
 			os.writeObject(obj);
 			os.reset();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    return out.toByteArray();
+	    byte[] data = out.toByteArray();
+	    try {
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return data;
 	}
 	
 	public Object ByteArrayToObject(byte[] data){
 		Object obj = null;
-	    in = new ByteArrayInputStream(data);
+	   ByteArrayInputStream in = new ByteArrayInputStream(data);
 	    ObjectInputStream is;
 		try {
 			is = new ObjectInputStream(in);
@@ -60,16 +63,21 @@ public class InetDataFormatter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		try {
+			in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    return obj;
 	}
 	
-	public byte[] formatieren(byte b, byte[] content) {
+	public byte[] formatieren(int b, byte[] content) {
 		int length = 1 + content.length;
 		byte[] format = new byte[length];
 		for(int i = 0; i<length; i++) {
 			if (i == 0) {
-				format[i] = b;
+				format[i] = (byte)b;
 			}else {
 				format[i] = content[i - 1];
 			}
@@ -87,15 +95,6 @@ public class InetDataFormatter {
 		return content;
 	}
 	
-	public final void finalize() {
-		try {
-			in.close();
-			os.close();
-			out.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 
 }

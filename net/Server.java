@@ -24,10 +24,10 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	private ArrayList<Anschluss> anschluss_liste;	
 	private boolean bereit;
 	
-	private SpielDaten spiel_daten;
+	private Game game;
 	
-	public Server(SpielDaten spiel_daten) {
-		this.spiel_daten = spiel_daten;
+	public Server(Game game) {
+		this.game = game;
 		max_anschluesse = -1;
 		bereit = false;
 	}
@@ -36,7 +36,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	 * Ermöglicht anderen Objekten den Server, ohne sich um Threading kümmern zu müssen, zu starten
 	 * */
 	public void server_starten() {
-		max_anschluesse = spiel_daten.get_max_spieler();
+		max_anschluesse = game.getSpielDaten().get_max_spieler();
 		Thread th = new Thread(this);
 		th.start();
 	}
@@ -158,8 +158,8 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		return anschluss_liste;
 	}
 	
-	public SpielDaten getSpielDaten() {
-		return spiel_daten;
+	public Game getGame() {
+		return game;
 	}
 	
 	

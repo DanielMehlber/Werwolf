@@ -56,16 +56,16 @@ public abstract class NetzwerkKomponente {
 	/**Der Thread in dem die Komponente laufen wird*/
 	private Thread thread_listen;
 	private boolean is_listening;
-	private boolean fertigGeschrieben;
+	
 	
 	public InetDataFormatter formatter;
 	
-	private Game game;
+	
 	
 	public NetzwerkKomponente() {
-		fertigGeschrieben = true;
-		is_listening = true;
 		formatter = new InetDataFormatter();
+		is_listening = true;
+		
 	}
 	
 	/**
@@ -85,6 +85,7 @@ public abstract class NetzwerkKomponente {
 			reader = new BufferedReader(input_reader);
 			byte_output = new ByteArrayOutputStream();
 			byte_input = new ByteArrayInputStream(byte_output.toByteArray());
+			
 			
 		} catch (IOException e) {
 			out.SpielAusgabe.error(null, "Setupfehler", "Fehler beim erstellen der Kommunikationssysteme!");
@@ -176,7 +177,7 @@ public abstract class NetzwerkKomponente {
 	 * @param data Die Daten die verschickt werden sollen.
 	 * */
 	public void schreiben(byte[] data) {
-		fertigGeschrieben = false;
+		
 		if(output == null) {
 			out.SpielAusgabe.error(null, "Kommunikationssysteme offline", "Kommunikationssysteme sind offline / wurden noch nicht erstellt");
 			return;
@@ -189,7 +190,6 @@ public abstract class NetzwerkKomponente {
 			out.SpielAusgabe.error(null, "Outboxfehler", "Fehler beim verschicken von byte[]");
 			e.printStackTrace();
 		}
-		fertigGeschrieben = true;
 		
 	}
 	
@@ -305,13 +305,7 @@ public abstract class NetzwerkKomponente {
 		this.self_port = self_port;
 	}
 
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
-		this.game = game;
-	}
+	
 	
 	public String get_self_ip() {
 		String ip = null;
@@ -323,9 +317,7 @@ public abstract class NetzwerkKomponente {
 		return ip;
 	}
 	
-	public boolean isFertigGeschrieben() {
-		return this.fertigGeschrieben;
-	}
+	
 
 
 	

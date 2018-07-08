@@ -10,8 +10,9 @@ public class SpielerDaten implements Serializable{
 	private Boolean amLeben;
 	private Kreatur kreatur;
 	
-	public SpielerDaten() {
+	public SpielerDaten(String name) {
 		amLeben = true;
+		this.name = name;
 	}
 
 	public String getName() {

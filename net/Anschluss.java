@@ -20,7 +20,6 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	private Server server;
 	public Anschluss(Server server) {
 		this.server = server;
-		super.setGame(server.getGame());
 		
 	}
 
@@ -42,26 +41,23 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 			case 0:{
 				System.out.println("Eine Anmeldung wurde eingereicht...");
 				SpielerDaten spieler_daten = (SpielerDaten)formatter.ByteArrayToObject(inhalt);
-				SpielDaten spiel_daten = server.getSpielDaten();
+				SpielDaten spiel_daten = server.getGame().getSpielDaten();
 				
-				//Überprüfen, ob Spielername noch frei.
-				if(!spiel_daten.spielerNameFrei(spieler_daten.getName())) {
-					schreiben(formatter.formatieren((byte)0, formatter.ObjectToByteArray(new Boolean(false))));
-					System.out.println("Der Spielername ist ungültig!");
-					//TODO: Wenn Name nicht mehr frei
+				if(!server.getGame().getSpielDaten().spielerNameFrei(spieler_daten.getName())) {
+					System.err.println("Anmeldung abgelehnt. Die UserDaten sind bereits vergeben!");
+					schreiben(formatter.formatieren(0, formatter.ObjectToByteArray(new Boolean(false))));
 					return;
 				}
+				System.out.println("Anmeldung erfolgreich. "+spieler_daten.getName()+" erfolgreich eingeloggt!");
+				schreiben(formatter.formatieren(0, formatter.ObjectToByteArray(new Boolean(true))));
 				
 				//Spieler zu SpielDaten hinzufügen und die anderen Clients zukommen lassen
-				Spieler spieler = new Spieler(spieler_daten.getName());
-				server.getSpielDaten().addSpieler(spieler);
-				System.out.println("Sende Erlaubnis");
-				schreiben(formatter.formatieren((byte)0, formatter.ObjectToByteArray(new Boolean(true))));
-				System.out.println("Sende SpielDaten an alle");
-				while(!isFertigGeschrieben()) {System.out.print("");}
-				server.rufen(formatter.formatieren((byte)1, formatter.ObjectToByteArray(spiel_daten)));
+				Spieler spieler = new Spieler(spieler_daten, server.getGame());
 				
-				System.out.println("Die Anmeldung von "+spieler.getSpielerDaten().getName()+" ist abgeschlossen");
+				
+				//SpielDaten aktulisieren und weiterleiten
+				server.getGame().getSpielDaten().addSpieler(spieler);
+				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(spiel_daten)));
 				server.getGame().getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 				break;
 			}

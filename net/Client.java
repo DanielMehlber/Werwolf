@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import game.Game;
 import game.SpielDaten;
 import game.Spieler;
+import ui.DorfBeitretenPanel.Status;
 
 
 
@@ -18,31 +19,33 @@ import game.Spieler;
  * */
 public class Client extends NetzwerkKomponente implements Runnable{
 	
-	private boolean verbunden;
+	private boolean bereit;
 	private Spieler spieler;
+	private Game game;
 	public Client(Game game) {
-		verbunden = false;
-		setGame(game);
+		this.game = game;
+		bereit = false;
+		
 	}
 	
 	public Client(Game game, Spieler spieler) {
 		this.spieler = spieler;
-		setGame(game);
-		verbunden = false;
+		bereit = false;
 	}
 	
 	public Client(Game game, Spieler spieler, String ziel_ip_addresse, int ziel_port) {
 		this.spieler = spieler;
 		super.set_ziel_ip_addresse(ziel_ip_addresse);
 		super.set_ziel_port(ziel_port);
-		setGame(game);
-		verbunden = false;
+		bereit = false;
+		this.game = game;
 	}
 
 	@Override
 	public void run() {
 		verbinden();
 		kommunikationBereitstellen();
+		bereit = true;
 		auffassen();
 		destroy();
 	}
@@ -61,15 +64,16 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				System.out.println("Erfolgreich Angemeldet");
 			}else {
 				System.err.println("Abgelehnt, Name bereits in Verwendung");
-				//TODO: Aktion nach ablehnung
+				out.SpielAusgabe.error(null, "Anmeldung verweigert", "Dein Name ist bereits in Verwendung");
+				getGame().getDorfBeitretenPanel().setStatus(Status.BEREIT);
 			}
 			return;
 		}
 		case 1: {
 			System.out.println("SpielDaten aktualisierung empfangen");
-			System.out.println(formatter.ByteArrayToObject(inhalt));
 			SpielDaten daten = (SpielDaten)formatter.ByteArrayToObject(inhalt);
-			getGame().getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
+			game.setSpielDaten(daten);
+			game.getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
 			return;
 			
 		}
@@ -96,7 +100,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			e.printStackTrace();
 		}
 		System.out.println("Verbindung hergestellt...");
-		verbunden = true;
+		
 	}
 
 	protected Spieler getSpieler() {
@@ -107,11 +111,13 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		this.spieler = spieler;
 	}
 	
-	public boolean isVerbunden() {
-		return verbunden;
+	public boolean isBereit() {
+		return bereit;
 	}
 	
-	
+	public Game getGame() {
+		return game;
+	}
 
 	
 
