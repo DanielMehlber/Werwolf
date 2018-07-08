@@ -54,8 +54,6 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Server erhalten!");
 		byte[] inhalt = formatter.getInhalt(data);
-		System.out.println("Kategorie: "+(int)data[0]);
-		System.out.println(formatter.ByteArrayToString(data));
 		switch((int)data[0]) {
 		case 0: {
 			System.out.println("Anmeldung empfangen");

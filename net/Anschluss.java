@@ -34,7 +34,6 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	@Override
 	protected void verarbeiten(byte[] data) {
 		System.out.println("Bytes vom Client erhalten!");
-		System.out.println(formatter.ByteArrayToString(data));
 		byte[] inhalt = formatter.getInhalt(data);
 		switch((int)data[0]) {
 			//Anmeldung
