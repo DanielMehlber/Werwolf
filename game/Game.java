@@ -71,8 +71,6 @@ public class Game{
 		
 		ui.verbindungsInfoAnzeigen(moderator.get_self_ip(), moderator.get_self_port());
 		
-		
-		
 	}
 	
 	public void dorf_beitreten(DorfBeitretenPanel ui) {

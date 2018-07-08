@@ -187,7 +187,7 @@ public class DorfErstellenPanel extends JPanel {
 			progressBar.setStringPainted(true);
 			loading.setVisible(true);
 			button.setEnabled(false);
-			button.setText("Generating Server...");
+			button.setText("Generiere Server...");
 			
 			num_werwoelfe.setEnabled(false);
 			num_bewohner.setEnabled(false);
@@ -197,7 +197,7 @@ public class DorfErstellenPanel extends JPanel {
 			progressBar.setIndeterminate(true);
 			progressBar.setStringPainted(true);
 			progressBar.setIndeterminate(false);
-			button.setText("Waiting for Players");
+			button.setText("Warten auf Spieler");
 			break;}
 		case FERTIG: {
 			//window.change();
