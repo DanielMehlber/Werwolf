@@ -11,8 +11,10 @@ public class Spieler implements Serializable{
 	private Client client;
 	private SpielerDaten spieler_daten;
 	
+	
 	public Spieler(SpielerDaten daten, Game game) {
 		this.spieler_daten = daten;
+		
 	}
 	
 	public void verbinden(String ziel_ip_addresse, int ziel_port) {
@@ -23,6 +25,7 @@ public class Spieler implements Serializable{
 		}
 		Thread th = new Thread(client);
 		th.start();
+		
 	}
 	
 	
@@ -44,6 +47,10 @@ public class Spieler implements Serializable{
 	
 	public void anmelden() {
 		client.schreiben(client.formatter.formatieren((byte)0, client.formatter.ObjectToByteArray(spieler_daten)));
+	}
+	
+	public boolean isVerbunden() {
+		return client.isBereit();
 	}
 	
 	

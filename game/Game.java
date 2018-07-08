@@ -1,6 +1,8 @@
 package game;
 import java.io.Serializable;
 
+import javax.swing.JOptionPane;
+
 import net.Client;
 import ui.*;
 import ui.DorfBeitretenPanel.Status;
@@ -13,6 +15,7 @@ public class Game{
 	
 	private SpielDaten spiel_daten;
 	private Moderator moderator;
+	private Spieler spieler;
 	
 	public Game() {
 		launcher = new LauncherWindow(this);
@@ -49,9 +52,26 @@ public class Game{
 		//Warten bis Server fertig ist
 		while(!moderator.getServerBereit()) {System.out.print("");}
 		
-		//Warten auf Spieler
 		ui.setStatus(DorfErstellenPanel.Status.WARTEN_AUF_SPIELER);
+		//Spieler erstllen
+		String name = null; 
+		while(!spiel_daten.spielerNameFrei(name)) {
+			name = JOptionPane.showInputDialog("Wie möchstest du heißen?");
+		}
+		spieler = new Spieler(new SpielerDaten(name), this);
+		Client client = new Client(this, spieler, "localhost", moderator.get_self_port());
+		spieler.setClient(client);
+		spieler.verbinden("localhost", moderator.get_self_port());
+		
+		while(!spieler.isVerbunden()) {System.out.print("");}
+		
+		spieler.anmelden();
+		
+		//Warten auf Spieler
+		
 		ui.verbindungsInfoAnzeigen(moderator.get_self_ip(), moderator.get_self_port());
+		
+		
 		
 	}
 	

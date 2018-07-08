@@ -31,6 +31,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	public Client(Game game, Spieler spieler) {
 		this.spieler = spieler;
 		bereit = false;
+		this.game = game;
 	}
 	
 	public Client(Game game, Spieler spieler, String ziel_ip_addresse, int ziel_port) {
@@ -71,7 +72,10 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			System.out.println("SpielDaten aktualisierung empfangen");
 			SpielDaten daten = (SpielDaten)formatter.ByteArrayToObject(inhalt);
 			game.setSpielDaten(daten);
-			game.getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
+			if(game.getDorfBeitretenPanel() != null)
+				game.getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
+			else
+				game.getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 			return;
 			
 		}

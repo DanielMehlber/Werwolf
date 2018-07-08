@@ -59,6 +59,12 @@ public class SpielDaten implements Serializable{
 	}
 	
 	public boolean spielerNameFrei(String name) {
+		if(name==null) {
+			return false;
+		}
+		if(name.isEmpty()||name.length() < 2||name.length()>8) {
+			return false;
+		}
 		if(getSpieler(name)==null) {
 			return true;
 		} 
