@@ -1,24 +1,41 @@
 package ui;
 
-import java.awt.Button;
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
-import java.awt.Font;
 import javax.swing.SwingConstants;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-public class MainGame extends JPanel {
+public class MainGame extends JDesktopPane {
 	JButton btnShowInfo;
 	/**
 	 * Create the panel.
 	 */
 	private GameWindow window;
+	
 	public MainGame(GameWindow window) {
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				System.out.println("HEY!");
+			}
+		});
+		
 		setBackground(Color.BLACK);
 		this.window = window;
 		setBounds(0,0,1100,800);
@@ -31,14 +48,15 @@ public class MainGame extends JPanel {
 				window.showInfoBoard();
 			}
 		});
-		btnShowInfo.setIcon(new ImageIcon(MainGame.class.getResource("/res/lexicon_icon.png")));
-		btnShowInfo.setBounds(10, 11, 50, 50);
-		add(btnShowInfo);
 		
-		JButton button = new JButton("");
-		button.setIcon(new ImageIcon(MainGame.class.getResource("/res/chat_icon.png")));
-		button.setBounds(10, 72, 50, 50);
-		add(button);
+		Phone phone = new Phone();
+		phone.setNormalBounds(new Rectangle(100, 100, 380, 740));
+		phone.setLocation(176, 49);
+		add(phone);
+		phone.show();
+		btnShowInfo.setIcon(new ImageIcon(MainGame.class.getResource("/res/lexicon_icon.png")));
+		btnShowInfo.setBounds(10, 49, 50, 50);
+		add(btnShowInfo);
 		
 		JLabel lblNewLabel = new JLabel("12:20");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -46,10 +64,13 @@ public class MainGame extends JPanel {
 		lblNewLabel.setForeground(Color.RED);
 		lblNewLabel.setBounds(463, 364, 200, 101);
 		add(lblNewLabel);
+		
 	}
 	
 	public JButton getShowInfoButton() {
 		return btnShowInfo;
 	}
+	
+	
 
 }

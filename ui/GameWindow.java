@@ -6,11 +6,17 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.BorderLayout;
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 import javax.swing.ImageIcon;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class GameWindow {
 
@@ -32,12 +38,14 @@ public class GameWindow {
 		});
 	}
 	
-	private JPanel current_panel;
+	private JLayeredPane current_panel;
 	private InfoPanel infoPanel;
+	
 	/**
 	 * Create the application.
 	 */
 	public GameWindow() {
+		
 		initialize();
 	}
 
@@ -46,7 +54,7 @@ public class GameWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setResizable(false);
+		
 		frame.setBackground(Color.BLACK);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Werwolf");
@@ -59,22 +67,27 @@ public class GameWindow {
 		change(new MainGame(this));
 	}
 	
-	public void change(JPanel panel) {
+	public void change(JLayeredPane panel) {
 		if(current_panel != null)
 			frame.remove(current_panel);
 		current_panel = panel;
-		frame.getContentPane().add(panel);
+		frame.getContentPane().add(panel, new BorderLayout().CENTER);
+		
 	}
 	
 	public void showInfoBoard() {
 		infoPanel.setVisible(true);
 	}
 	
-	public JPanel getCurrentPanel() {
+	public JLayeredPane getCurrentPanel() {
 		return current_panel;
 	}
 	
 	public InfoPanel getInfoPanel() {
 		return infoPanel;
 	}
+	
+	
+	
+	
 }
