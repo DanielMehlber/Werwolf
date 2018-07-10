@@ -27,6 +27,7 @@ public class MainGame extends JDesktopPane {
 	 * Create the panel.
 	 */
 	private GameWindow window;
+	private InfoPanel infoPanel;
 	
 	public MainGame(GameWindow window) {
 		addComponentListener(new ComponentAdapter() {
@@ -41,6 +42,10 @@ public class MainGame extends JDesktopPane {
 		setBounds(0,0,1100,800);
 		setBounds(window.frame.getBounds());
 		setLayout(null);
+		
+		infoPanel = new InfoPanel(window);
+		infoPanel.setBounds(60, 11, 500, 771);
+		infoPanel.setVisible(true);
 		
 		btnShowInfo = new JButton("");
 		btnShowInfo.addActionListener(new ActionListener() {

@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import game.Game;
 import game.SpielDaten;
 import game.Spieler;
+import ui.HauptMenuPanel;
 import ui.DorfBeitretenPanel.Status;
 
 
@@ -65,6 +66,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				System.err.println("Abgelehnt, Name bereits in Verwendung");
 				out.SpielAusgabe.error(null, "Anmeldung verweigert", "Dein Name ist bereits in Verwendung");
 				getGame().getDorfBeitretenPanel().setStatus(Status.BEREIT);
+				getGame().getLauncherWindow().wechseln(new HauptMenuPanel(getGame().getLauncherWindow()));
 			}
 			return;
 		}

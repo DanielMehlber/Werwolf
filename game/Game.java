@@ -10,12 +10,15 @@ import ui.DorfBeitretenPanel.Status;
 public class Game{
 	
 	private LauncherWindow launcher;
+	private GameWindow gameWindow;
 	private DorfErstellenPanel dorf_erstellen_panel;
 	private DorfBeitretenPanel dorf_beitreten_panel;
 	
 	private SpielDaten spiel_daten;
 	private Moderator moderator;
 	private Spieler spieler;
+	
+	private Thread warten;
 	
 	public Game() {
 		launcher = new LauncherWindow(this);
@@ -25,6 +28,12 @@ public class Game{
 		launcher.wechseln(new HauptMenuPanel(launcher));
 		
 		spiel_daten = new SpielDaten();
+		
+		warten = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				aufSpielerWarten();
+		}});
 	}
 	
 	public static void main(String[]args) {
@@ -71,6 +80,7 @@ public class Game{
 		
 		ui.verbindungsInfoAnzeigen(moderator.get_self_ip(), moderator.get_self_port());
 		
+		warten.start();
 	}
 	
 	public void dorf_beitreten(DorfBeitretenPanel ui) {
@@ -89,6 +99,28 @@ public class Game{
 		while(!spieler.getClient().isBereit()) {System.out.print("");}
 		spieler.anmelden();
 		ui.setStatus(Status.WARTEN_AUF_SPIELER);
+		
+		warten.start();
+	}
+	
+	public void aufSpielerWarten() {
+		while(getSpielDaten().get_warten_auf_spieler()) {System.out.print("");}
+		spiel_einleiten();
+		try {
+			Thread.currentThread().join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void spiel_einleiten() {
+		launcher.close();
+		gameWindow = new GameWindow(this);
+		Ladebildschirm lb = new Ladebildschirm(gameWindow);
+		lb.setStatus(Ladebildschirm.Status.WARTEN);
+		gameWindow.change(lb);
+		gameWindow.frame.setVisible(true);
 	}
 	
 	
@@ -100,4 +132,15 @@ public class Game{
 		this.spiel_daten = daten;
 	}
 	
+	public LauncherWindow getLauncherWindow() {
+		return launcher;
+	}
+	
+	public GameWindow getGameWindow() {
+		return gameWindow;
+	}
+	
+	public Spieler getSpieler() {
+		return spieler;
+	}
 }

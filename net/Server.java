@@ -1,5 +1,6 @@
 package net;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
@@ -103,7 +104,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 	public void rufen(byte[] data) {
 		boolean irgenteinEmpfaenger = false;
 		for(int i = 0; i < anschluss_liste.size(); i++) {
-			if(anschluss_liste.get(i).getOutputStream()!=null) {
+			if(anschluss_liste.get(i).getOutputStream()!=null && !anschluss_liste.get(i).getSocket().isClosed()) {
 				anschluss_liste.get(i).schreiben(data);
 				irgenteinEmpfaenger = true;
 			}
@@ -162,7 +163,20 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		return game;
 	}
 	
-	
+	public void anschlussErsetzen(Anschluss anschluss) {
+		try {
+			anschluss.getSocket().close();
+			anschluss.destroy();
+			anschluss_liste.remove(anschluss);
+			Anschluss neu = new Anschluss(this);
+			anschluss_liste.add(neu);
+			Thread neu_thread = new Thread(neu);
+			neu_thread.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	
 

@@ -6,13 +6,14 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 
 import java.awt.Font;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Ladebildschirm extends JPanel {
+public class Ladebildschirm extends JLayeredPane {
 
 	/**
 	 * Create the panel.
@@ -35,6 +36,7 @@ public class Ladebildschirm extends JPanel {
 		btnBereit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setStatus(Status.FERTIG);
+				window.getGame().getSpieler().getClient().schreiben(new byte[] {(byte)-2});
 			}
 		});
 		btnBereit.setForeground(Color.RED);

@@ -165,8 +165,9 @@ public class DorfBeitretenPanel extends JPanel {
 			lblPlayerConnected.setVisible(false);
 			break;}
 		case VERBINDEN:{
-			txtIP.setEditable(false);
-			txtPort.setEditable(false);
+			txtIP.setEnabled(false);
+			txtPort.setEnabled(false);
+			txtName.setEnabled(false);
 			progressBar.setVisible(true);
 			progressBar.setIndeterminate(true);
 			btnDorfAufsuchen.setText("Verbinden...");

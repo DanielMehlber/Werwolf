@@ -68,5 +68,9 @@ public class LauncherWindow implements Runnable{
 	public boolean isBereit() {
 		return isReady;
 	}
+	
+	public void close() {
+		frame.dispose();
+	}
 
 }

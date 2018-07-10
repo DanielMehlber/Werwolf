@@ -210,15 +210,13 @@ public class DorfErstellenPanel extends JPanel {
 	}
 	
 	private void updateGesamtLabel() {
-		int wer = (int)num_bewohner.getValue();
-		int bew = (int)num_werwoelfe.getValue();
-		int ges = wer+bew;
-		lblGesamt.setText("Gesamt: "+ges);
+		lblGesamt.setText("Gesamt: "+getGesamteSpielerAnzahl());
 	}
 	
 	public int getGesamteSpielerAnzahl() {
 		int wer = (int)num_bewohner.getValue();
 		int bew = (int)num_werwoelfe.getValue();
 		return wer+bew;
+		
 	}
 }

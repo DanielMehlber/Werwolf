@@ -13,14 +13,17 @@ public class SpielDaten implements Serializable{
 	
 	private ArrayList<Spieler> spieler_liste = new ArrayList<Spieler>();
 	private int max_spieler;
-	private boolean wartet_auf_spieler;
+	private boolean warten_auf_spieler;
 	
 	public SpielDaten() {
-		set_wartet_auf_spieler(true);
+		set_warten_auf_spieler(true);
 	}
 	
 	public void addSpieler(Spieler spieler) {
 		spieler_liste.add(spieler);
+		if(getSpielerAnzahl() == get_max_spieler()) {
+			set_warten_auf_spieler(false);
+		}
 	}
 	
 	public void removeSpieler(Spieler spieler) {
@@ -38,11 +41,12 @@ public class SpielDaten implements Serializable{
 	
 	public Spieler getSpieler(String name) {
 		for(int i = 0; i < spieler_liste.size(); i++) {
-			if(spieler_liste.get(i).getSpielerDaten().getName()==name) {
+			String n = spieler_liste.get(i).getSpielerDaten().getName();
+			if(n.equals(name)) {
 				return spieler_liste.get(i);
 			}
 		}
-		
+		System.out.println("---nicht gefunden---");
 		return null;
 	}
 
@@ -71,12 +75,12 @@ public class SpielDaten implements Serializable{
 		return false;
 	}
 
-	public boolean get_wartet_auf_spieler() {
-		return wartet_auf_spieler;
+	public boolean get_warten_auf_spieler() {
+		return warten_auf_spieler;
 	}
 
-	public void set_wartet_auf_spieler(boolean waiting_for_players) {
-		this.wartet_auf_spieler = waiting_for_players;
+	public void set_warten_auf_spieler(boolean waiting_for_players) {
+		this.warten_auf_spieler = waiting_for_players;
 	}
 	
 	

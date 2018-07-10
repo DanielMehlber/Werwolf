@@ -9,10 +9,13 @@ public class SpielerDaten implements Serializable{
 	private String name;
 	private Boolean amLeben;
 	private Kreatur kreatur;
+	private boolean bereit;
+	
 	
 	public SpielerDaten(String name) {
 		amLeben = true;
 		this.name = name;
+		bereit = false;
 	}
 
 	public String getName() {
@@ -38,6 +41,13 @@ public class SpielerDaten implements Serializable{
 	public void setKreatur(Kreatur kreatur) {
 		this.kreatur = kreatur;
 	}
+	
+	public void setBereit(boolean b) {
+		bereit = true;
+	}
 
+	public boolean isBereit() {
+		return bereit;
+	}
 	
 }
