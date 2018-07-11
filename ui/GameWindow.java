@@ -30,7 +30,6 @@ public class GameWindow {
 	}
 	
 	private JLayeredPane current_panel;
-	private InfoPanel infoPanel;
 	private Game game;
 	
 	/**
@@ -52,10 +51,10 @@ public class GameWindow {
 		frame.setBackground(Color.BLACK);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Werwolf");
-		frame.setBounds(0, 0, 1100, 800);
+		frame.setBounds(0, 0, 1200, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		change(new Ladebildschirm(this));
+		//change(new MainGame(this));
 	}
 	
 	public void change(JLayeredPane panel) {
@@ -66,17 +65,12 @@ public class GameWindow {
 		
 	}
 	
-	public void showInfoBoard() {
-		infoPanel.setVisible(true);
-	}
+	
 	
 	public JLayeredPane getCurrentPanel() {
 		return current_panel;
 	}
 	
-	public InfoPanel getInfoPanel() {
-		return infoPanel;
-	}
 	
 	public Game getGame() {
 		return game;

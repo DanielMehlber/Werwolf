@@ -83,5 +83,9 @@ public class SpielDaten implements Serializable{
 		this.warten_auf_spieler = waiting_for_players;
 	}
 	
+	public ArrayList<Spieler> getSpielerListe(){
+		return this.spieler_liste;
+	}
+	
 	
 }

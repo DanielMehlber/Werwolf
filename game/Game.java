@@ -123,6 +123,10 @@ public class Game{
 		gameWindow.frame.setVisible(true);
 	}
 	
+	public void spiel_starten() {
+		System.out.println("Das Hauptspiel wird gestartet...");
+		System.exit(-2);
+	}
 	
 	public SpielDaten getSpielDaten() {
 		return spiel_daten;
@@ -142,5 +146,16 @@ public class Game{
 	
 	public Spieler getSpieler() {
 		return spieler;
+	}
+	
+	public boolean sindAlleBereit() {
+		boolean alle_bereit = true;
+		for(int i = 0; i < getSpielDaten().getSpielerAnzahl(); i++) {
+			Spieler sp = getSpielDaten().getSpielerListe().get(i);
+			if(!sp.getSpielerDaten().isBereit()) {
+				alle_bereit = false;
+			}
+		}
+		return alle_bereit;
 	}
 }

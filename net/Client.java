@@ -81,6 +81,10 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			return;
 			
 		}
+		case -2:{
+			System.out.println("Alle sind bereit. Das Spiel kann gestartet werden");
+			getGame().spiel_starten();
+		}
 		default:{return;}
 		}
 		

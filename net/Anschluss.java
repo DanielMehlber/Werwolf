@@ -65,7 +65,10 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 			case -2:{
 				spieler.getSpielerDaten().setBereit(true);
 				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(server.getGame().getSpielDaten())));
-				//TODO: Prüfen ob alle Spieler bereit sind
+				if(server.getGame().sindAlleBereit()) {
+					server.rufen(new byte[] {-2});
+				}
+				
 				break;
 			}
 		}
