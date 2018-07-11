@@ -2,8 +2,12 @@ package game;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
+
+import karten.Buerger;
+import karten.Kreatur;
 
 /**
  * Speichert allerlei Informationen über das Spiel, und wird regelmäßig geteilt
@@ -13,6 +17,17 @@ public class SpielDaten implements Serializable{
 	private ArrayList<Spieler> spieler_liste = new ArrayList<Spieler>();
 	private int max_spieler;
 	private boolean warten_auf_spieler;
+	
+	private ArrayList<Spieler> werwolf_liste;
+	private ArrayList<Spieler> liebespaar;
+	
+	private int anzahl_werwoelfe = 0;
+	private int anzahl_wesen = 0;
+	private final int ANZAHL_AMOR = 1;
+	private final int ANZAHL_SEHERIN = 1;
+	private final int ANZAHL_JAEGER = 1;
+	private final int ANZAHL_HEXE = 1;
+	private int anzahl_buerger;
 	
 	public SpielDaten() {
 		set_warten_auf_spieler(true);
@@ -81,6 +96,69 @@ public class SpielDaten implements Serializable{
 		} 
 		return false;
 	}
+	
+	/**
+	 * Jeder Spieler zieht eine Karte und wird zu einem Wesen
+	 * */
+	public void kartenZiehen() {
+		
+		anzahl_buerger = getSpielerAnzahl() - (ANZAHL_AMOR + ANZAHL_HEXE + ANZAHL_JAEGER + ANZAHL_SEHERIN + anzahl_werwoelfe);
+		int buerger = anzahl_buerger;
+		int hexe = ANZAHL_HEXE;
+		int seherin = ANZAHL_SEHERIN;
+		int werwoelfe = anzahl_werwoelfe;
+		int jaeger = ANZAHL_JAEGER;
+		int amor = ANZAHL_AMOR;
+		
+		final int BUERGER = 0;
+		final int AMOR = 1;
+		final int HEXE = 2;
+		final int WERWOLF = 3;
+		final int SEHERIN = 4;
+		final int JAEGER = 5;
+		
+		ArrayList<Spieler> spieler = (ArrayList<Spieler>) spieler_liste.clone();
+		
+		for(int i = 0; i < spieler.size(); i++) {
+			boolean gezogen = false;
+			Spieler s = spieler.get(i);
+			while(!gezogen) {
+				int zahl = new Random().nextInt(6);
+				switch(zahl) {
+				case BUERGER: {
+					if(buerger > 0) {
+						s.getSpielerDaten().setKreatur(Kreatur.BUERGER);
+					}
+					break;}
+				case AMOR: {
+					if(amor > 0) {
+						s.getSpielerDaten().setKreatur(Kreatur.ARMOR);
+					}
+					break;}
+				case HEXE: {
+					if(hexe > 0) {
+						s.getSpielerDaten().setKreatur(Kreatur.HEXE);
+					}
+					break;}
+				case WERWOLF: {
+					if(werwoelfe > 0) {
+						s.getSpielerDaten().setKreatur(Kreatur.WERWOLF);
+					}
+					break;}
+				case SEHERIN: {
+					if(seherin > 0) {
+						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
+					}
+					break;}
+				case JAEGER: {
+					if(jaeger > 0) {
+						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
+					}
+					break;}
+				}
+			}
+		}
+	}
 
 	public int get_max_spieler() {
 		return max_spieler;
@@ -106,6 +184,37 @@ public class SpielDaten implements Serializable{
 	public ArrayList<Spieler> getSpielerListe(){
 		return this.spieler_liste;
 	}
+
+	public int getAnzahlWerwoelfe() {
+		return anzahl_werwoelfe;
+	}
+
+	public void setAnzahlWerwoelfe(int anzahl_wwerwoelfe) {
+		this.anzahl_werwoelfe = anzahl_wwerwoelfe;
+	}
+
+	public int getAnzahlWesen() {
+		return anzahl_wesen;
+	}
+
+	public void setAnzahlWesen(int anzahl_wesen) {
+		this.anzahl_wesen = anzahl_wesen;
+	}
 	
+	public void addWerwolf(Spieler spieler) {
+		if(!spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+			try {
+				throw new Exception("Spieler ist kein Werwolf");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		werwolf_liste.add(spieler);
+			
+	}
 	
+	public void removeWerwolf(String name) {
+		werwolf_liste.remove(getSpieler(name));
+	}
 }

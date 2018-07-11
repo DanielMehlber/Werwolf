@@ -177,6 +177,13 @@ public class Server extends NetzwerkKomponente implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Verschickz die aktuellen Spieldaten an die Spieler
+	 * */
+	public void spielDatenTeilen() {
+		rufen(formatter.formatieren(1, formatter.ObjectToByteArray(getGame().getSpielDaten())));
+	}
 
 	
 

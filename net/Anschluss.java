@@ -60,7 +60,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				
 				//SpielDaten aktulisieren und weiterleiten
 				server.getGame().getSpielDaten().addSpieler(spieler);
-				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(spiel_daten)));
+				server.spielDatenTeilen();
 				server.getGame().getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 				break;
 			}
@@ -68,7 +68,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				System.out.println("Ein Spieler ist Bereit!");
 				server.getGame().getSpielDaten().getSpieler((String)formatter.ByteArrayToObject(inhalt)).getSpielerDaten().setBereit(true);
 				
-				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(server.getGame().getSpielDaten())));
+				server.spielDatenTeilen();
 				if(server.getGame().sindAlleBereit()) {
 					System.err.println("Es sind alle Bereit, der startcode wird gesendet...");
 					server.rufen(new byte[] {2});

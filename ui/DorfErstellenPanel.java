@@ -219,4 +219,12 @@ public class DorfErstellenPanel extends JPanel {
 		return wer+bew;
 		
 	}
+	
+	public int getAnzahlWerwoelfe() {
+		return (int)num_werwoelfe.getValue();
+	}
+	
+	public int getAnzahlWesen() {
+		return (int)num_bewohner.getValue();
+	}
 }

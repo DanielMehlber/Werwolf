@@ -57,6 +57,8 @@ public class Game{
 		moderator = new Moderator(this);
 		//SpielDaten setzen
 		spiel_daten.set_max_spieler(ui.getGesamteSpielerAnzahl());
+		spiel_daten.setAnzahlWerwoelfe(ui.getAnzahlWerwoelfe());
+		spiel_daten.setAnzahlWesen(ui.getAnzahlWesen());
 		
 		//Server erstellen mit Thread
 		ui.setStatus(DorfErstellenPanel.Status.GEN_SERVER);
