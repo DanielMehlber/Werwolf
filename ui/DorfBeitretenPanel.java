@@ -186,7 +186,7 @@ public class DorfBeitretenPanel extends JPanel {
 	}
 	
 	public void dorf_beitreten() {
-		window.getGame().dorf_beitreten(this);
+		window.getGame().dorfBeitreten(this);
 	}
 	
 	public void aktualisiereVerbundeneSpieler(int ges, int connected) {

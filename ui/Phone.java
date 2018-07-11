@@ -27,7 +27,7 @@ public class Phone extends JInternalFrame {
 		try {
 			setIcon(true);
 		} catch (PropertyVetoException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

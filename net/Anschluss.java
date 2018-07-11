@@ -18,7 +18,6 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	
 	
 	private Server server;
-	private Spieler spieler;
 	public Anschluss(Server server) {
 		this.server = server;
 		
@@ -34,9 +33,13 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 
 	@Override
 	protected void verarbeiten(byte[] data) {
-		System.out.println("Bytes vom Client erhalten!");
+		System.out.println("Bytes vom Client erhalten! Type: "+(int)data[0]);
 		byte[] inhalt = formatter.getInhalt(data);
 		switch((int)data[0]) {
+			case -1:{
+				System.err.println("Client ausgeloggt");
+				destroy();
+			}
 			//Anmeldung
 			case 0:{
 				System.out.println("Eine Anmeldung wurde eingereicht...");
@@ -54,7 +57,6 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				
 				//Spieler zu SpielDaten hinzufügen und die anderen Clients zukommen lassen
 				Spieler spieler = new Spieler(spieler_daten, server.getGame());
-				this.spieler = spieler;
 				
 				//SpielDaten aktulisieren und weiterleiten
 				server.getGame().getSpielDaten().addSpieler(spieler);
@@ -62,11 +64,14 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				server.getGame().getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 				break;
 			}
-			case -2:{
-				spieler.getSpielerDaten().setBereit(true);
+			case 2:{
+				System.out.println("Ein Spieler ist Bereit!");
+				server.getGame().getSpielDaten().getSpieler((String)formatter.ByteArrayToObject(inhalt)).getSpielerDaten().setBereit(true);
+				
 				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(server.getGame().getSpielDaten())));
 				if(server.getGame().sindAlleBereit()) {
-					server.rufen(new byte[] {-2});
+					System.err.println("Es sind alle Bereit, der startcode wird gesendet...");
+					server.rufen(new byte[] {2});
 				}
 				
 				break;
@@ -91,10 +96,4 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 		
 	}
 	
-	public Spieler getSpieler() {
-		return spieler;
-	}
-
-	
-
 }

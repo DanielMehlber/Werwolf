@@ -54,7 +54,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 
 	@Override
 	protected void verarbeiten(byte[] data) {
-		System.out.println("Bytes vom Server erhalten!");
+		System.out.println("Bytes vom Server erhalten! Type: "+(int)data[0]);
 		byte[] inhalt = formatter.getInhalt(data);
 		switch((int)data[0]) {
 		case 0: {
@@ -76,16 +76,16 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			game.setSpielDaten(daten);
 			if(game.getDorfBeitretenPanel() != null)
 				game.getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
-			else
+			else if(game.getDorfErstellenPanel() != null)
 				game.getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 			return;
 			
 		}
-		case -2:{
+		case 2:{
 			System.out.println("Alle sind bereit. Das Spiel kann gestartet werden");
-			getGame().spiel_starten();
+			getGame().spielStarten();
 		}
-		default:{return;}
+		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]);}
 		}
 		
 		

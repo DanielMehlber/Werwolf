@@ -211,7 +211,7 @@ public abstract class NetzwerkKomponente {
 			out.SpielAusgabe.error(null, "Exit Fehler", "Ein Fehler ist beim schlieﬂen der Netzwerkkomponente aufgetreten!");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		System.out.println("Logged out!");

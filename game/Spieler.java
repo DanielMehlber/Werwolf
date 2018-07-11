@@ -17,6 +17,11 @@ public class Spieler implements Serializable{
 		
 	}
 	
+	/**
+	 * Mithilfe dieser Methode und des gesetzten Clients kann sich der Spieler verbinden
+	 * @param ziel_ip_addresse Die IP Addresse des Ziels
+	 * @param ziel_port Der Port auf dem sich der Remote Server befindet
+	 * */
 	public void verbinden(String ziel_ip_addresse, int ziel_port) {
 		System.out.println("Verbindung zum Server wird aufgebaut...");
 		if(client == null) {
@@ -28,9 +33,19 @@ public class Spieler implements Serializable{
 		
 	}
 	
-	
+	/**
+	 * Tötet einen Spieler
+	 * */
 	public void sterben() {
 		spieler_daten.setLebendig(false);
+	}
+	
+	/**
+	 * Sendet, dass der Spieler bereit ist
+	 * */
+	public void bereit_senden() {
+		byte[] data = getClient().formatter.formatieren(2, getClient().formatter.ObjectToByteArray(getSpielerDaten().getName()));
+		getClient().schreiben(data);
 	}
 
 	public Client getClient() {
@@ -52,7 +67,6 @@ public class Spieler implements Serializable{
 	public boolean isVerbunden() {
 		return client.isBereit();
 	}
-	
 	
 	
 }

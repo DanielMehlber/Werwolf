@@ -36,8 +36,8 @@ public class Ladebildschirm extends JLayeredPane {
 		btnBereit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setStatus(Status.FERTIG);
-				//TODO: Fehler NullPointerException
-				window.getGame().getSpieler().getClient().schreiben(new byte[] {(byte)-2});
+				window.getGame().getSpieler().getSpielerDaten().setBereit(true);
+				window.getGame().getSpieler().bereit_senden();
 			}
 		});
 		btnBereit.setForeground(Color.RED);

@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Wandelt Daten um. Extrem nützlich zum Netz-Datenaustausch!
+ * */
 public class InetDataFormatter {
 	
 	
@@ -14,6 +17,11 @@ public class InetDataFormatter {
 		
 	}
 	
+	/**
+	 * Erstellt einen Debug-String um Einblicke in den Byte-Array zu erhalten.
+	 * @param data Der Byte Array
+	 * @return Der Debug-String
+	 * */
 	public String ByteArrayToString(byte[] data) {
 		String s = data.length+" [";
 		for(int i = 0; i < data.length; i++) {
@@ -28,6 +36,11 @@ public class InetDataFormatter {
 		return s;
 	}
 	
+	/**
+	 * Wandelt ein Object in einen byte[] um. Vorsicht, das Objekt und dessen Attribute müssen Serializable implementieren
+	 * @param obj Das Object
+	 * @return Das Object in den Byte-Array umgewandelt
+	 * */
 	public byte[] ObjectToByteArray(Object obj) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
@@ -36,19 +49,24 @@ public class InetDataFormatter {
 			os.writeObject(obj);
 			os.reset();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	    byte[] data = out.toByteArray();
 	    try {
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	    return data;
 	}
 	
+	/**
+	 * Wandelt einen byte[] in ein Object um. 
+	 * @param data Der byte[] der konvertiert werden soll.
+	 * @return Das rohe Object. Muss noch geparst werden.
+	 * */
 	public Object ByteArrayToObject(byte[] data){
 		Object obj = null;
 	   ByteArrayInputStream in = new ByteArrayInputStream(data);
@@ -57,21 +75,27 @@ public class InetDataFormatter {
 			is = new ObjectInputStream(in);
 			obj = is.readObject();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try {
 			in.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	    return obj;
 	}
 	
+	/**
+	 * Formatiert Daten in das übliche Werwolf Format. data = {int was_ist_das, Daten daten}
+	 * @param b Der Bezeichner der darauffolgenden Daten
+	 * @param content Der Inhalt des Formats
+	 * @return Das fertige Format
+	 * */
 	public byte[] formatieren(int b, byte[] content) {
 		int length = 1 + content.length;
 		byte[] format = new byte[length];
@@ -85,6 +109,11 @@ public class InetDataFormatter {
 		return format;
 	}
 	
+	/**
+	 * Umkehrmethode von {@link #formatieren(int, byte[])}
+	 * @param data Daten aus denen der Inhalt gezogen wird
+	 * @return Der Inhalt des Formats
+	 * */
 	public byte[] getInhalt(byte[] data) {
 		byte[] content = new byte[data.length - 1];
 		for(int i = 0; i < data.length; i++) {

@@ -83,7 +83,7 @@ public class DorfErstellenPanel extends JPanel {
 		add(separator);
 		
 		num_werwoelfe = new JSpinner();
-		num_werwoelfe.setModel(new SpinnerNumberModel(new Integer(2), new Integer(2), null, new Integer(1)));
+		num_werwoelfe.setModel(new SpinnerNumberModel(new Integer(2), new Integer(1), null, new Integer(1)));
 		num_werwoelfe.setBounds(266, 141, 75, 20);
 		add(num_werwoelfe);
 		num_werwoelfe.addChangeListener(cl);
@@ -103,7 +103,7 @@ public class DorfErstellenPanel extends JPanel {
 		add(lblBewohner);
 		
 		num_bewohner = new JSpinner();
-		num_bewohner.setModel(new SpinnerNumberModel(new Integer(5), new Integer(5), null, new Integer(1)));
+		num_bewohner.setModel(new SpinnerNumberModel(new Integer(5), new Integer(1), null, new Integer(1)));
 		num_bewohner.setBounds(434, 141, 75, 20);
 		add(num_bewohner);
 		num_bewohner.addChangeListener(cl);
@@ -206,7 +206,7 @@ public class DorfErstellenPanel extends JPanel {
 	}
 	
 	private void dorfErstellen() {
-		window.getGame().dorf_erstellen(this);
+		window.getGame().dorfErstellen(this);
 	}
 	
 	private void updateGesamtLabel() {

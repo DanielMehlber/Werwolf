@@ -9,6 +9,8 @@ import game.Game;
 
 import java.awt.BorderLayout;
 import java.awt.Window.Type;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Hällt die Frames, die das Spiel steuern
@@ -24,6 +26,9 @@ public class LauncherWindow implements Runnable{
 	private JPanel current_panel;
 	private Game game;
 	private boolean isReady;
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public LauncherWindow(Game game) {
 		this.game = game;
 		isReady = false;
@@ -35,6 +40,17 @@ public class LauncherWindow implements Runnable{
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				
+			}
+		});
 		frame.setResizable(false);
 		frame.setTitle("Werwolf");
 		frame.setBounds(100, 100, 800, 600);
@@ -71,6 +87,12 @@ public class LauncherWindow implements Runnable{
 	
 	public void close() {
 		frame.dispose();
+	}
+	
+	public void close_exit_logout() {
+		if(getGame().getSpieler()!=null) {
+			getGame().getSpieler().getClient().destroy();
+		}
 	}
 
 }

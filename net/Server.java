@@ -173,7 +173,7 @@ public class Server extends NetzwerkKomponente implements Runnable{
 			Thread neu_thread = new Thread(neu);
 			neu_thread.start();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
