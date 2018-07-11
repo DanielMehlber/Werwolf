@@ -50,7 +50,7 @@ public class MainGame extends JDesktopPane {
 		btnShowInfo = new JButton("");
 		btnShowInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				window.showInfoBoard();
+				//Show Info Board
 			}
 		});
 		
