@@ -76,5 +76,9 @@ public class GameWindow {
 		return game;
 	}
 	
+	public void redraw() {
+		frame.repaint();
+	}
+	
 	
 }

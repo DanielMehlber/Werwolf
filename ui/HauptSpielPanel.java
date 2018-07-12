@@ -82,6 +82,10 @@ public class HauptSpielPanel extends JDesktopPane {
 		add(uhr);
 		
 		getDesktopManager().iconifyFrame(phone);
+		
+		revalidate();
+		window.redraw();
+		repaint();
 	}
 	
 	public JButton getShowInfoButton() {
@@ -127,6 +131,8 @@ public class HauptSpielPanel extends JDesktopPane {
 			Karte karte = karten_liste.get(i);
 			karte.setBounds(posX - karte.getBounds().width / 2, posY - karte.getBounds().height / 2, karte.getBounds().width, karte.getBounds().height);
 		}
+		
+		revalidate();
 	}
 	
 
