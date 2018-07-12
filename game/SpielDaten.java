@@ -158,7 +158,7 @@ public class SpielDaten implements Serializable{
 				}
 			}
 		}
-		
+		System.err.println("Karten gezogen...");
 	}
 
 	public int get_max_spieler() {
