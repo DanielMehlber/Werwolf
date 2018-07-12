@@ -10,7 +10,7 @@ public class Spieler implements Serializable{
 
 	private Client client;
 	private SpielerDaten spieler_daten;
-	
+	private boolean getarnt;
 	
 	public Spieler(SpielerDaten daten, Game game) {
 		this.spieler_daten = daten;
@@ -68,5 +68,7 @@ public class Spieler implements Serializable{
 		return client.isBereit();
 	}
 	
-	
+	public void setGetarnt(boolean g) {
+		this.getarnt = g;
+	}
 }

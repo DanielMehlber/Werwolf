@@ -18,10 +18,14 @@ import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import game.SpielDaten;
+import game.Spieler;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-public class MainGame extends JDesktopPane {
+public class HauptSpielPanel extends JDesktopPane {
 	JButton btnShowInfo;
 	/**
 	 * Create the panel.
@@ -29,7 +33,7 @@ public class MainGame extends JDesktopPane {
 	private GameWindow window;
 	private InfoPanel infoPanel;
 	
-	public MainGame(GameWindow window) {
+	public HauptSpielPanel(GameWindow window) {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -59,7 +63,7 @@ public class MainGame extends JDesktopPane {
 		phone.setLocation(176, 49);
 		add(phone);
 		phone.show();
-		btnShowInfo.setIcon(new ImageIcon(MainGame.class.getResource("/res/lexicon_icon.png")));
+		btnShowInfo.setIcon(new ImageIcon(HauptSpielPanel.class.getResource("/res/lexicon_icon.png")));
 		btnShowInfo.setBounds(10, 49, 50, 50);
 		add(btnShowInfo);
 		
@@ -76,6 +80,18 @@ public class MainGame extends JDesktopPane {
 		return btnShowInfo;
 	}
 	
+	public void kartenSetzen() {
+		SpielDaten daten = window.getGame().getSpielDaten();
+		for(int i = 0; i < daten.getSpielerAnzahl(); i++) {
+			Spieler spieler = daten.getSpielerListe().get(i);
+			Karte karte = new Karte(this);
+			karte.setName(spieler.getSpielerDaten().getName());
+		}
+	}
+	
+	public GameWindow getGameWindow() {
+		return window;
+	}
 	
 
 }

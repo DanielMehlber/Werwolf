@@ -8,10 +8,12 @@ import net.Server;
 public class Moderator extends Server implements Runnable{
 
 	private Game game;
+	private boolean moderiert;
 	
 	public Moderator(Game game) {
 		super(game);
 		this.game = game;
+		this.moderiert = true;
 	}
 	
 	
@@ -19,7 +21,14 @@ public class Moderator extends Server implements Runnable{
 		return game;
 	}
 	
+	public void uebernehmen() {
+		moderiert = true;
+		
+	}
 	
+	public boolean getModeriert() {
+		return moderiert;
+	}
 	
 	
 	

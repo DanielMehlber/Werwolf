@@ -147,6 +147,10 @@ public class Game{
 	 * */
 	public void spielStarten() {
 		System.out.println("Das Hauptspiel wird gestartet...");
+		HauptSpielPanel hauptSpielPanel = new HauptSpielPanel(gameWindow);
+		if(moderator != null)
+			moderator.uebernehmen();
+		
 	}
 	
 	/**
