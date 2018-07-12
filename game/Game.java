@@ -137,7 +137,7 @@ public class Game{
 		gameWindow = new GameWindow(this);
 		Ladebildschirm lb = new Ladebildschirm(gameWindow);
 		lb.setStatus(Ladebildschirm.Status.WARTEN);
-		gameWindow.change(lb);
+		gameWindow.wechseln(lb);
 		gameWindow.frame.setVisible(true);
 	}
 	
@@ -148,9 +148,10 @@ public class Game{
 	public void spielStarten() {
 		System.out.println("Das Hauptspiel wird gestartet...");
 		HauptSpielPanel hauptSpielPanel = new HauptSpielPanel(gameWindow);
+		gameWindow.wechseln(hauptSpielPanel);
+		hauptSpielPanel.kartenErstellen();
 		if(moderator != null)
 			moderator.uebernehmen();
-		
 	}
 	
 	/**

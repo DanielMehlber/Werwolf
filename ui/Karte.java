@@ -9,10 +9,13 @@ import javax.swing.SwingConstants;
 import game.Spieler;
 
 import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Karte extends JPanel {
 
 	private JLabel icon;
+	private JLabel lblname;
 	
 	private HauptSpielPanel window;
 	private String name;
@@ -31,6 +34,41 @@ public class Karte extends JPanel {
 		this.window = window;
 		setBounds(0,0,125, (int)(125/0.712));
 		setLayout(null);
+		addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(e.getButton() == e.BUTTON3) {
+					System.out.println("Pressed");
+				}
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == e.BUTTON3) {
+					System.out.println("Pressed");
+				}
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		icon = new JLabel("");
 		icon.setIcon(new ImageIcon(Karte.class.getResource("/res/unknown_icon.jpg")));
@@ -43,7 +81,7 @@ public class Karte extends JPanel {
 		add(lblNameBg);
 		lblNameBg.setLayout(null);
 		
-		JLabel lblname = new JLabel("Spieler");
+		lblname = new JLabel("Spieler");
 		lblname.setBounds(0, 0, 85, 14);
 		lblNameBg.add(lblname);
 		lblname.setBackground(Color.WHITE);
@@ -76,5 +114,9 @@ public class Karte extends JPanel {
 		icon.setIcon(new ImageIcon(icon_path));
 	}
 	
+	public void setSpielerName(String name) {
+		this.name = name;
+		lblname.setText(name);
+	}
 	
 }

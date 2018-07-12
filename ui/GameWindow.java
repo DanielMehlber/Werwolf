@@ -54,15 +54,15 @@ public class GameWindow {
 		frame.setBounds(0, 0, 1200, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//change(new MainGame(this));
+		wechseln(new HauptSpielPanel(this));
 	}
 	
-	public void change(JLayeredPane panel) {
-		if(current_panel != null)
-			frame.remove(current_panel);
+	public void wechseln(JLayeredPane panel) {
+		frame.getContentPane().removeAll();
 		current_panel = panel;
-		frame.getContentPane().add(panel, new BorderLayout().CENTER);
-		
+		frame.getContentPane().add(panel);
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	

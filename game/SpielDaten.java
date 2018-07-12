@@ -158,6 +158,7 @@ public class SpielDaten implements Serializable{
 				}
 			}
 		}
+		
 	}
 
 	public int get_max_spieler() {

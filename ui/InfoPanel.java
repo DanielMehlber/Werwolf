@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+import karten.Kreatur;
+
 import javax.swing.JSeparator;
 import java.awt.Button;
 import javax.swing.ImageIcon;
@@ -56,7 +58,8 @@ public class InfoPanel extends JPanel {
 		exit.setBounds(420, 10, 70, 22);
 		add(exit);
 		
-		werwolf();
+		//ERROR: NullPointerException
+		//setKreatur(window.getGame().getSpieler().getSpielerDaten().getKreatur());
 	}
 	
 	public Button getExitButton() {
@@ -128,4 +131,17 @@ public class InfoPanel extends JPanel {
 		hexe_anleitung.setBounds(239, 462, 235, 253);
 		add(hexe_anleitung);
 	}
+	
+	public void setKreatur(Kreatur k) {
+		switch(k) {
+		case BUERGER:{break;}
+		case HEXE: {hexe(); break;}
+		case SEHERIN: {break;}
+		case WERWOLF: {werwolf(); break;}
+		case ARMOR: {break;}
+		case JAEGER: {break;}
+		}
+	}
+	
+	
 }

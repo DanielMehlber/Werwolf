@@ -23,6 +23,8 @@ public class Moderator extends Server implements Runnable{
 	
 	public void uebernehmen() {
 		moderiert = true;
+		game.getSpielDaten().kartenZiehen();
+		super.spielDatenTeilen();
 		
 	}
 	
