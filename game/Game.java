@@ -134,6 +134,8 @@ public class Game{
 	 * */
 	public void spielEinleiten() {
 		launcher.close();
+		if(moderator != null)
+			moderator.uebernehmen();
 		gameWindow = new GameWindow(this);
 		Ladebildschirm lb = new Ladebildschirm(gameWindow);
 		lb.setStatus(Ladebildschirm.Status.WARTEN);
@@ -150,8 +152,7 @@ public class Game{
 		HauptSpielPanel hauptSpielPanel = new HauptSpielPanel(gameWindow);
 		gameWindow.wechseln(hauptSpielPanel);
 		hauptSpielPanel.kartenErstellen();
-		if(moderator != null)
-			moderator.uebernehmen();
+		
 	}
 	
 	/**
@@ -179,6 +180,7 @@ public class Game{
 	
 	public void setSpielDaten(SpielDaten daten) {
 		this.spiel_daten = daten;
+		this.spieler.setSpielerDaten(daten.getSpieler(spieler.getSpielerDaten().getName()).getSpielerDaten());
 	}
 	
 	public LauncherWindow getLauncherWindow() {

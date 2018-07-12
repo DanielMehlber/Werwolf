@@ -58,7 +58,7 @@ public class InfoPanel extends JPanel {
 		exit.setBounds(420, 10, 70, 22);
 		add(exit);
 		
-		
+		//Fehler Null Pointer
 		setKreatur(window.getGame().getSpieler().getSpielerDaten().getKreatur());
 	}
 	

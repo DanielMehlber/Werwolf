@@ -12,6 +12,7 @@ public class Spieler implements Serializable{
 	private SpielerDaten spieler_daten;
 	private boolean getarnt;
 	
+	
 	public Spieler(SpielerDaten daten, Game game) {
 		this.spieler_daten = daten;
 		
@@ -70,5 +71,9 @@ public class Spieler implements Serializable{
 	
 	public void setGetarnt(boolean g) {
 		this.getarnt = g;
+	}
+	
+	public void setSpielerDaten(SpielerDaten daten) {
+		this.spieler_daten = daten;
 	}
 }
