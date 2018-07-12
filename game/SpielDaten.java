@@ -128,37 +128,44 @@ public class SpielDaten implements Serializable{
 				case BUERGER: {
 					if(buerger > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.BUERGER);
+						gezogen = true;
 					}
 					break;}
 				case AMOR: {
 					if(amor > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.ARMOR);
+						gezogen = true;
 					}
 					break;}
 				case HEXE: {
 					if(hexe > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.HEXE);
+						gezogen = true;
 					}
 					break;}
 				case WERWOLF: {
 					if(werwoelfe > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.WERWOLF);
+						gezogen = true;
 					}
 					break;}
 				case SEHERIN: {
 					if(seherin > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
+						gezogen = true;
 					}
 					break;}
 				case JAEGER: {
 					if(jaeger > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
+						gezogen = true;
 					}
 					break;}
 				}
 			}
 		}
-		System.err.println("Karten gezogen...");
+		System.out.println("Rollenverteilung abgeschlossen");
+		
 	}
 
 	public int get_max_spieler() {

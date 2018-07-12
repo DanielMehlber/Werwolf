@@ -58,8 +58,8 @@ public class InfoPanel extends JPanel {
 		exit.setBounds(420, 10, 70, 22);
 		add(exit);
 		
-		//ERROR: NullPointerException
-		//setKreatur(window.getGame().getSpieler().getSpielerDaten().getKreatur());
+		
+		setKreatur(window.getGame().getSpieler().getSpielerDaten().getKreatur());
 	}
 	
 	public Button getExitButton() {
