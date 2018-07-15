@@ -107,6 +107,7 @@ public class SpielDaten implements Serializable{
 	 * */
 	public void kartenZiehen() {
 		
+		//TODO: Es kann meherer von einer Sorte geben? Austesten mir über Spielern. Wenn fehler besteht neu schreiben
 		anzahl_buerger = getSpielerAnzahl() - (ANZAHL_AMOR + ANZAHL_HEXE + ANZAHL_JAEGER + ANZAHL_SEHERIN + anzahl_werwoelfe);
 		int buerger = anzahl_buerger;
 		int hexe = ANZAHL_HEXE;

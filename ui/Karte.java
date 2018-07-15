@@ -113,7 +113,7 @@ public class Karte extends JPanel {
 			break;
 		}
 		case HEXE: {
-			icon_path = null; //TODO: Hexe icon
+			icon_path = HEXE_ICON;
 			break;
 		}
 		case JAEGER: {

@@ -114,25 +114,12 @@ public class Server extends NetzwerkKomponente implements Runnable{
 		}
 	}
 	
-	
-	
-	
-	public Anschluss getAnschlussByName(String name) {
-		for(int i = 0; i < anschluss_liste.size(); i++) {
-			Anschluss anschluss = anschluss_liste.get(i);
-			//TODO: Anschluss SpielerDaten
-		}
-		return null;
-	} 
+
 	
 	public void nachricht(Anschluss a, byte[] data) {
 		a.schreiben(data);
 	}
 	
-	public Anschluss[] getLebendeSpieler() {
-		//TODO Implement
-		return null;
-	}
 
 	@Override //Server is not listening
 	protected void verarbeiten(byte[] data) {return;}

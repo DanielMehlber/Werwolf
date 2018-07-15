@@ -57,14 +57,14 @@ public class ZeitSystem{
 
 	
 	private void starten(int end_stunde, int end_min) {
-		addieren(0,1);
+		addieren(1,0);
 		while(!equalsUhrzeit(end_stunde, end_min)) {
 			try {
 				Thread.currentThread().sleep((int)(minuteInSekunden * 1000));
 				addieren(0, 1);
 				eventsAufrufen();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
