@@ -118,12 +118,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			System.out.println("SpielStatus geändert: "+status.name());
 			break;
 		}
-		//Du bist mitglied des Liebespaares
-		case 6: {
-			Spieler anderer = (Spieler)formatter.ByteArrayToObject(inhalt);
-			out.SpielAusgabe.info(null, "LIEBESBRIEF", "Du bist mit "+anderer.getSpielerDaten().getName()+ " in einer HEIMLICHEN Romanze. \nBetonung auf HEIMLICH !");
-			break;
-		}
+		
 		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]+" konnte nicht identifiziert werden!");break;}
 		}
 		

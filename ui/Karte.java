@@ -85,7 +85,10 @@ public class Karte extends JPanel {
 		add(bg);
 		bg.addMouseListener(ma);
 		
-		enttarnen(getHauptSpielPanel().getGameWindow().getGame().getSpieler().getSpielerDaten().getKreatur());
+		Spieler spieler = getHauptSpielPanel().getGameWindow().getGame().getSpieler();
+		if(spieler.getSpielerDaten().getName().equals(name)) {
+			enttarnen(spieler.getSpielerDaten().getKreatur());
+		}
 	}
 
 	public Spieler getSpielerFromGameData(String name) {

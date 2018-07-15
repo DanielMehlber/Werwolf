@@ -234,6 +234,30 @@ public class SpielDaten implements Serializable{
 			
 	}
 	
+	public boolean isInLiebesPaar(String name) {
+		for(Spieler s : liebespaar) {
+			if(s.getSpielerDaten().getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	public Spieler getLiebe(String name) {
+		if(!isInLiebesPaar(name)) {
+			return null;
+		}
+		
+		for(Spieler s : liebespaar) {
+			if(!s.getSpielerDaten().getName().equals(name)) {
+				return s;
+			}
+		}
+		
+		return null;
+	}
+	
 	public void removeWerwolf(String name) {
 		werwolf_liste.remove(getSpieler(name));
 	}

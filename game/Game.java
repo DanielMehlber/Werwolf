@@ -234,6 +234,7 @@ public class Game{
 			normalize();
 			eventÜberspringen("vorbereitung");
 			setPhase("Der Morgen ist angebrochen und alle erwachen");
+			geschehnisseVerarbeiten();
 			setNaechstePhaseBeschreibung(8, 0, "beginnt das Gericht");
 			setUISchlafen(false);
 			lockPhone(false);
@@ -264,7 +265,7 @@ public class Game{
 			//Gewinner hinrichten
 			String hinzurichtenden = getSpielDaten().getAbstimmung().getGewinner().getName();
 			System.out.println(hinzurichtenden+" hat eine Hinrichtung gewonnen!");
-			hinrichten(hinzurichtenden);
+			hinrichten(hinzurichtenden, Todesursache.HINRICHTUNG);
 			
 			//TODO: Hinweise festlegen
 			
@@ -294,10 +295,10 @@ public class Game{
 			normalize();
 			//Abstimmung schließen und Opfer setzen
 			getSpielDaten().getAbstimmung().setOffen(false);
-			getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(false);
-			getSpielDaten().setOpfer(getSpielDaten().getAbstimmung().getGewinner().getName());
+			opferSetzen();
 			spielDatenTeilen();
 			
+			//Amor
 			setPhase("Der Schrei des Opfers ließ Amor erwachen");
 			setNaechstePhaseBeschreibung(21, 0, "erwacht die Hexe");
 			setUISchlafen(true);
@@ -360,8 +361,11 @@ public class Game{
 	public void normalize() {
 		if(moderator != null) {
 			//TODO: Testvalue
-			moderator.getZeitSystem().setMinuteInSekunden(0.1);
+			moderator.getZeitSystem().setMinuteInSekunden(0.3);
 		}
+		
+		//Werwolfunktion beenden
+		getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(false);
 		
 		//Amorfunktionen beenden
 		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
@@ -403,11 +407,51 @@ public class Game{
 		getSpieler().getClient().schreiben(getSpieler().getClient().getFormatter().formatieren(4, getSpieler().getClient().getFormatter().ObjectToByteArray(spiel_daten)));
 	}
 	
-	public void hinrichten(String name) {
-		//Moderator
-			//Todesnachricht schicken
-			//aus Spielerliste löschen
-			//ui aktulisieren
+	public void hinrichten(String name, Todesursache t) {
+		if(spieler.getSpielerDaten().getName().equals(name)) {
+			//Todesbildschirm!
+		}else {
+			String text = null;
+			switch(t) {
+			case HEXE: {
+				text = "Der tapfere Spieler "+name+" ist von der Hexe, als unwürdig zu leben, auserwählt worden...";
+				break;
+			}
+			case LIEBE: {
+				text = "Als er seine große Liebe eigenhändig ins Grab legte, und er nur einmal wagte, den verunstalteten Kadaver zu betrachten, überkam es ihn\n"
+						+ "Er kroch zur Klippe, von der die Gräber aus in die Freiheit hinter dem Wald blicken konnten und sprang.\n"
+						+ "Im Fall fühlte er sich seiner Liebe so nah...";
+				break;
+			}
+			case HINRICHTUNG: {
+				text = "Er blickte in den leeren Korb, als er sich darauf vorbereitete seinen Körper jeden Moment nicht mehr fühlen zu können.\n"
+						+ "Er sag aus dem Augenwinkel, wie der Henker sein Beil hob, bevor er spürte, wie sein Kopf an den Haaren empor gehoben wurde...";
+				break;
+			}
+			case WERWOLF: {
+				text = "Sie kratzten an der Tür. Die Bestien der Nacht wollten ihn. Nur ihn. Nur sein Blut. Sie stießen die Türe auf, bovor er sich \n"
+						+ "noch unter dem Bett verstecken konnte. Es würde eh nichts helfen. Der Geruchssinn der Bestien war höllisch gut."
+						+ "Ihre Zähne bissen sich in sein Fleisch und sie zerrten ihn in den Wald. Er hat ihre gesichter gesehen, aber was"
+						+ "nützt das noch?";
+				break;
+			}
+			}
+			
+			String id = "Ein/e "+getSpielDaten().getSpieler(name).getSpielerDaten().getKreatur().toString()+" verließ in dieser Nacht den Erdboden";
+			
+			out.SpielAusgabe.info(null, "Todesmeldung:", text + "\n\n"+id);
+			
+			Spieler sp = getSpielDaten().getSpieler(name);
+			if(sp.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+				getSpielDaten().removeWerwolf(name);
+			}
+			
+		}
+		
+		getGameWindow().getHauptSpielPanel().spielerLoeschen(name);
+		getSpielDaten().removeSpieler(name);
+		getGameWindow().getHauptSpielPanel().getPhone().spielerListeAktualisieren();
+		
 	}
 	
 	public void liebesPaarPruefen() {
@@ -415,6 +459,55 @@ public class Game{
 		if(liebespaar.size() == 2) {
 			
 		}
+	}
+	
+	public void opferSetzen() {
+		Kandidat k = getSpielDaten().getAbstimmung().getGewinner();
+		if(k == null) {
+			return;
+		}
+		getSpielDaten().setOpfer(k.getName());
+		
+	}
+	
+	public void geschehnisseVerarbeiten() {
+		
+		for(int i = 0; i < getSpielDaten().getLiebespaar().size(); i++) {
+			Spieler s = getSpielDaten().getLiebespaar().get(i);
+			if(s.getSpielerDaten().getName().equals(getSpieler().getSpielerDaten().getName())) {
+				String anderer = null;
+				if(i == 0) {
+					anderer = getSpielDaten().getLiebespaar().get(1).getSpielerDaten().getName();
+				}else {
+					anderer = getSpielDaten().getLiebespaar().get(0).getSpielerDaten().getName();
+				}
+				out.SpielAusgabe.info(null, "Ein Brief lieht am Morgen in deinem Postfach:", "Du bist verliebt in "+anderer+ " !\nViel Glück, wenn deine Liebe stirbt, stirbst du auch!\nSchöne Grüße, Amor");
+				//TODO: Ein Icon auf die Karte
+			}
+		}
+		
+		//Werwolfopfer
+		String name_opfer = getSpielDaten().getOpferName();
+		Spieler opfer = getSpielDaten().getSpieler(name_opfer);
+		//Tod
+		if(!opfer.getSpielerDaten().isLebendig()) {
+			hinrichten(name_opfer, Todesursache.WERWOLF);
+			getSpielDaten().setOpfer(null);
+			//Wenn verliebt, dann auch töten
+			if(getSpielDaten().isInLiebesPaar(name_opfer)){
+				Spieler liebe = getSpielDaten().getLiebe(name_opfer);
+				hinrichten(liebe.getSpielerDaten().getName(), Todesursache.LIEBE);
+			}
+		//Von Hexe gerettet
+		}else {
+			if(getSpieler().getSpielerDaten().getName().equals(name_opfer)) {
+				out.SpielAusgabe.info(null, "Dank sei der Hexe", "Du wurdest von der Hexe gerettet. Dank ihr, dass du nicht in einem Magen vergammelst!");
+				getSpielDaten().setOpfer(null);
+			}
+		}
+		
+		
+		
 	}
 	
 }
