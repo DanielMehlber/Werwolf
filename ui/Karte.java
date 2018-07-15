@@ -9,6 +9,7 @@ import javax.swing.SwingConstants;
 import game.Spieler;
 
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -27,6 +28,7 @@ public class Karte extends JPanel {
 	public static String SEHERIN_ICON = "res/seherin_icon.jpg";
 	public static String UNKNOWN_ICON = "res/unknown_icon.jpg";
 	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -34,42 +36,14 @@ public class Karte extends JPanel {
 		this.window = window;
 		setBounds(0,0,125, (int)(125/0.712));
 		setLayout(null);
-		addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if(e.getButton() == e.BUTTON3) {
-					System.out.println("Pressed");
-				}
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				
-			}
-			
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(e.getButton() == e.BUTTON3) {
-					System.out.println("Pressed");
+				if(e.getButton() == MouseEvent.BUTTON3) {
+					new AktionPanel().show();
 				}
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
-		
 		icon = new JLabel("");
 		icon.setIcon(new ImageIcon(Karte.class.getResource("/res/unknown_icon.jpg")));
 		icon.setBackground(Color.MAGENTA);

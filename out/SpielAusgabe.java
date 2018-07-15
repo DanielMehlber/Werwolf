@@ -21,5 +21,14 @@ public class SpielAusgabe {
 		
 	}
 	
+	public static void info(Component parent, String title, String nachricht) {
+		SwingUtilities.invokeLater(new Runnable() {
+	        @Override
+	        public void run() {
+				JOptionPane.showMessageDialog(parent, nachricht, title, JOptionPane.INFORMATION_MESSAGE);      
+	        }
+	    });
+	}
+	
 	
 }

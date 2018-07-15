@@ -8,8 +8,10 @@ import javax.swing.JOptionPane;
 
 import game.Game;
 import game.SpielDaten;
+import game.SpielStatus;
 import game.Spieler;
 import ui.HauptMenuPanel;
+import ui.HauptSpielPanel;
 import ui.DorfBeitretenPanel.Status;
 
 
@@ -54,7 +56,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 
 	@Override
 	protected void verarbeiten(byte[] data) {
-		System.out.println("Bytes vom Server erhalten! Type: "+(int)data[0]);
+		//System.out.println("Bytes vom Server erhalten! Type: "+(int)data[0]);
 		byte[] inhalt = formatter.getInhalt(data);
 		switch((int)data[0]) {
 		case 0: {
@@ -68,7 +70,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				getGame().getDorfBeitretenPanel().setStatus(Status.BEREIT);
 				getGame().getLauncherWindow().wechseln(new HauptMenuPanel(getGame().getLauncherWindow()));
 			}
-			return;
+			break;
 		}
 		case 1: {
 			System.out.println("SpielDaten aktualisierung empfangen");
@@ -79,14 +81,38 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				game.getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
 			else if(game.getDorfErstellenPanel() != null)
 				game.getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
-			return;
+			
+			break;
 			
 		}
 		case 2:{
 			System.out.println("Alle sind bereit. Das Spiel kann gestartet werden");
 			getGame().spielStarten();
+			break;
 		}
-		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]);}
+		case 3: {
+			System.out.println("Chatnachricht erhalten");
+			game.getPhone().empfangen((String)formatter.ByteArrayToObject(inhalt));
+			break;
+		}
+		case 4: {
+			String zeit = (String)formatter.ByteArrayToObject(inhalt);
+			String st = zeit.substring(0, zeit.indexOf(":"));
+			String min = zeit.substring(zeit.indexOf(":")+1, zeit.length());
+			int stunde = Integer.parseInt(st);
+			int minute = Integer.parseInt(min);
+			HauptSpielPanel hsp = getGame().getGameWindow().getHauptSpielPanel();
+			if(hsp != null)
+				hsp.setZeit(stunde, minute);
+			break;
+		}
+		case 5: {
+			SpielStatus status = (SpielStatus)formatter.ByteArrayToObject(inhalt);
+			getGame().setSpielStatus(status);
+			System.out.println("SpielStatus geändert: "+status.name());
+			break;
+		}
+		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]+" konnte nicht identifiziert werden!");break;}
 		}
 		
 		

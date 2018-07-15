@@ -31,6 +31,7 @@ public class SpielDaten implements Serializable{
 	
 	public SpielDaten() {
 		set_warten_auf_spieler(true);
+		werwolf_liste = new ArrayList<Spieler>();
 	}
 	
 	/**
@@ -128,36 +129,43 @@ public class SpielDaten implements Serializable{
 				case BUERGER: {
 					if(buerger > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.BUERGER);
+						buerger -= 1;
 						gezogen = true;
 					}
 					break;}
 				case AMOR: {
 					if(amor > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.ARMOR);
+						amor -= 1;
 						gezogen = true;
 					}
 					break;}
 				case HEXE: {
 					if(hexe > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.HEXE);
+						hexe -= 1;
 						gezogen = true;
 					}
 					break;}
 				case WERWOLF: {
 					if(werwoelfe > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.WERWOLF);
+						werwoelfe -= 1;
+						addWerwolf(s);
 						gezogen = true;
 					}
 					break;}
 				case SEHERIN: {
 					if(seherin > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
+						seherin -= 1;
 						gezogen = true;
 					}
 					break;}
 				case JAEGER: {
 					if(jaeger > 0) {
 						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
+						jaeger -= 1;
 						gezogen = true;
 					}
 					break;}
@@ -225,4 +233,14 @@ public class SpielDaten implements Serializable{
 	public void removeWerwolf(String name) {
 		werwolf_liste.remove(getSpieler(name));
 	}
+
+	public ArrayList<Spieler> getWerwolf_liste() {
+		return werwolf_liste;
+	}
+
+	public void setWerwolf_liste(ArrayList<Spieler> werwolf_liste) {
+		this.werwolf_liste = werwolf_liste;
+	}
+	
+	
 }

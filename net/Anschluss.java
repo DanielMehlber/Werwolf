@@ -76,6 +76,12 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				
 				break;
 			}
+			
+			case 3: {
+				System.out.println("Chatnachricht weiterleiten...");
+				server.rufen(data);
+				break;
+			}
 		}
 	}
 	

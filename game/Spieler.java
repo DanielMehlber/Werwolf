@@ -45,7 +45,7 @@ public class Spieler implements Serializable{
 	 * Sendet, dass der Spieler bereit ist
 	 * */
 	public void bereit_senden() {
-		byte[] data = getClient().formatter.formatieren(2, getClient().formatter.ObjectToByteArray(getSpielerDaten().getName()));
+		byte[] data = getClient().getFormatter().formatieren(2, getClient().getFormatter().ObjectToByteArray(getSpielerDaten().getName()));
 		getClient().schreiben(data);
 	}
 
@@ -62,7 +62,7 @@ public class Spieler implements Serializable{
 	}
 	
 	public void anmelden() {
-		client.schreiben(client.formatter.formatieren((byte)0, client.formatter.ObjectToByteArray(spieler_daten)));
+		client.schreiben(client.getFormatter().formatieren((byte)0, client.getFormatter().ObjectToByteArray(spieler_daten)));
 	}
 	
 	public boolean isVerbunden() {
@@ -75,5 +75,11 @@ public class Spieler implements Serializable{
 	
 	public void setSpielerDaten(SpielerDaten daten) {
 		this.spieler_daten = daten;
+	}
+	
+	public void chatSchreiben(String nachricht) {
+		byte[] n = getClient().getFormatter().formatieren(3, client.getFormatter().ObjectToByteArray(nachricht));
+		System.out.println(client.getFormatter().ByteArrayToString(n));
+		getClient().schreiben(n);
 	}
 }

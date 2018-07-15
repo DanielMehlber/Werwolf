@@ -69,7 +69,7 @@ public class InetDataFormatter {
 	 * */
 	public Object ByteArrayToObject(byte[] data){
 		Object obj = null;
-	   ByteArrayInputStream in = new ByteArrayInputStream(data);
+	    ByteArrayInputStream in = new ByteArrayInputStream(data);
 	    ObjectInputStream is;
 		try {
 			is = new ObjectInputStream(in);

@@ -58,7 +58,7 @@ public abstract class NetzwerkKomponente {
 	private boolean is_listening;
 	
 	
-	public InetDataFormatter formatter;
+	protected InetDataFormatter formatter;
 	
 	
 	
@@ -315,6 +315,10 @@ public abstract class NetzwerkKomponente {
 			e.printStackTrace();
 		}
 		return ip;
+	}
+	
+	public InetDataFormatter getFormatter() {
+		return formatter;
 	}
 	
 	

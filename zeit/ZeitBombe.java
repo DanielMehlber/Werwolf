@@ -1,4 +1,4 @@
-package game;
+package zeit;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,14 +7,14 @@ import java.util.concurrent.Callable;
 import javafx.concurrent.Task;
 
 /**Eine Zeitbombe, die wenn die Zeit abgelaufen ist, eine Methode ausführt*/
-public class ZeitSteuerung {
+public class ZeitBombe {
 
 	private Callable action;
 	private int sekunden;
 	private Timer timer;
 	private TimerTask task;
 	
-	public ZeitSteuerung(int sekunden, Callable action) {
+	public ZeitBombe(int sekunden, Callable action) {
 		this.sekunden = sekunden;
 		this.action = action;
 		this.timer = new Timer();

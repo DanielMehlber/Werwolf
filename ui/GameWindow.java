@@ -12,6 +12,7 @@ import game.Game;
 public class GameWindow {
 
 	public JFrame frame;
+	
 
 	/**
 	 * Launch the application.
@@ -31,6 +32,7 @@ public class GameWindow {
 	
 	private JLayeredPane current_panel;
 	private Game game;
+	private HauptSpielPanel hauptSpielPanel;
 	
 	/**
 	 * Create the application.
@@ -54,7 +56,6 @@ public class GameWindow {
 		frame.setBounds(0, 0, 1200, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		wechseln(new HauptSpielPanel(this));
 	}
 	
 	public void wechseln(JLayeredPane panel) {
@@ -80,5 +81,11 @@ public class GameWindow {
 		frame.repaint();
 	}
 	
+	public HauptSpielPanel getHauptSpielPanel() {
+		return this.hauptSpielPanel;
+	}
 	
+	public void setHauptSpielPanel(HauptSpielPanel panel) {
+		this.hauptSpielPanel = panel;
+	}
 }
