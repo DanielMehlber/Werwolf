@@ -62,8 +62,10 @@ public class GameWindow {
 		frame.getContentPane().removeAll();
 		current_panel = panel;
 		frame.getContentPane().add(panel);
+		frame.setLocation(0, 0);
 		frame.revalidate();
 		frame.repaint();
+		
 	}
 	
 	

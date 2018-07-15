@@ -21,6 +21,10 @@ public class SpielDaten implements Serializable{
 	private ArrayList<Spieler> werwolf_liste;
 	private ArrayList<Spieler> liebespaar;
 	
+	private String opferName;
+	
+	private Abstimmung abstimmung;
+	
 	private int anzahl_werwoelfe = 0;
 	private int anzahl_wesen = 0;
 	private final int ANZAHL_AMOR = 1;
@@ -241,6 +245,29 @@ public class SpielDaten implements Serializable{
 	public void setWerwolf_liste(ArrayList<Spieler> werwolf_liste) {
 		this.werwolf_liste = werwolf_liste;
 	}
+
+	public Abstimmung getAbstimmung() {
+		return abstimmung;
+	}
+
+	public void setAbstimmung(Abstimmung abstimmung) {
+		this.abstimmung = abstimmung;
+	}
+	
+	public ArrayList<Spieler> getLiebespaar() {
+		return liebespaar;
+	}
+
+	public String getOpferName() {
+		return opferName;
+	}
+
+	public void setOpfer(String opferName) {
+		this.opferName = opferName;
+		getSpieler(opferName).getSpielerDaten().setLebendig(false);
+	}
+	
+	
 	
 	
 }

@@ -59,6 +59,8 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		//System.out.println("Bytes vom Server erhalten! Type: "+(int)data[0]);
 		byte[] inhalt = formatter.getInhalt(data);
 		switch((int)data[0]) {
+		//Anmeldung bestätigt
+		
 		case 0: {
 			System.out.println("Anmeldung empfangen");
 			Boolean b = (Boolean)formatter.ByteArrayToObject(inhalt);
@@ -72,6 +74,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			}
 			break;
 		}
+		//Aktualisierung der Spieldaten
 		case 1: {
 			System.out.println("SpielDaten aktualisierung empfangen");
 			SpielDaten daten = (SpielDaten)formatter.ByteArrayToObject(inhalt);
@@ -85,6 +88,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			break;
 			
 		}
+		//SpielStart einleiten
 		case 2:{
 			System.out.println("Alle sind bereit. Das Spiel kann gestartet werden");
 			getGame().spielStarten();
@@ -95,6 +99,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			game.getPhone().empfangen((String)formatter.ByteArrayToObject(inhalt));
 			break;
 		}
+		//Zeit setzen
 		case 4: {
 			String zeit = (String)formatter.ByteArrayToObject(inhalt);
 			String st = zeit.substring(0, zeit.indexOf(":"));
@@ -106,10 +111,17 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				hsp.setZeit(stunde, minute);
 			break;
 		}
+		//SpielStatus ändern
 		case 5: {
 			SpielStatus status = (SpielStatus)formatter.ByteArrayToObject(inhalt);
 			getGame().setSpielStatus(status);
 			System.out.println("SpielStatus geändert: "+status.name());
+			break;
+		}
+		//Du bist mitglied des Liebespaares
+		case 6: {
+			Spieler anderer = (Spieler)formatter.ByteArrayToObject(inhalt);
+			out.SpielAusgabe.info(null, "LIEBESBRIEF", "Du bist mit "+anderer.getSpielerDaten().getName()+ " in einer HEIMLICHEN Romanze. \nBetonung auf HEIMLICH !");
 			break;
 		}
 		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]+" konnte nicht identifiziert werden!");break;}

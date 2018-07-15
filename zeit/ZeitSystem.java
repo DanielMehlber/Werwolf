@@ -19,14 +19,16 @@ public class ZeitSystem{
 	private ArrayList<ZeitEvent> events;
 	private Callable fertig;
 	
+	private boolean naechsteRunde;
 	
 	public ZeitSystem(int stunde, int minute) {
 		this.stunde = stunde;
 		this.minute = minute;
 		events = new ArrayList<ZeitEvent>();
+		this.naechsteRunde = true;
 	}
 	
-	public ZeitSystem(int stunde, int minute, int minuteInSekunden) {
+	public ZeitSystem(int stunde, int minute, double minuteInSekunden) {
 		this(stunde, minute);
 		this.minuteInSekunden = minuteInSekunden;
 	}
@@ -40,7 +42,11 @@ public class ZeitSystem{
 			
 			@Override
 			public void run() {
-				starten();
+				while(naechsteRunde) {
+					System.out.println("---Zyklus gestartet---");
+					//TODO: Überspringt 23 Uhr, aber mei das müssen eh alle warten
+					starten(23, 59);
+				}
 				
 			}
 		});
@@ -48,11 +54,13 @@ public class ZeitSystem{
 		th.start();
 	}
 	
+
 	
-	private synchronized void starten() {
-		while(equalsUhrzeit(23, 59)) {
+	private void starten(int end_stunde, int end_min) {
+		addieren(0,1);
+		while(!equalsUhrzeit(end_stunde, end_min)) {
 			try {
-				Thread.currentThread().sleep((int)minuteInSekunden * 1000);
+				Thread.currentThread().sleep((int)(minuteInSekunden * 1000));
 				addieren(0, 1);
 				eventsAufrufen();
 			} catch (InterruptedException e) {
@@ -60,13 +68,8 @@ public class ZeitSystem{
 				e.printStackTrace();
 			}
 		}
+		System.out.println("---Zyklus beendet---");
 		
-		try {
-			fertig.call();
-		} catch (Exception e) {
-			System.err.println("FertigEvent kann nicht ausgeführt werden!");
-			e.printStackTrace();
-		}
 	}
 	
 	public void addieren(int stunden, int minuten) {
@@ -166,7 +169,7 @@ public class ZeitSystem{
 	}
 
 	public boolean equalsUhrzeit(int stunde, int sekunde) {
-		return stunde != this.stunde && stunde != this.stunde;
+		return stunde == this.stunde && stunde == this.stunde;
 	}
 	
 	public ZeitEvent getEvent(String name) {

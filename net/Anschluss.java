@@ -39,9 +39,16 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 			case -1:{
 				System.err.println("Client ausgeloggt");
 				destroy();
+				break;
 			}
 			//Anmeldung
 			case 0:{
+				
+				if(inhalt[0] == 0 && inhalt[1] == 0 && inhalt[2] == 0 && inhalt [3] == 0 && inhalt[4] == 0 && inhalt[5] == 0) {
+					System.err.println("Ungueltiger Stream Header, ungueltiges / leeres Paket!");
+					return;
+				}
+				
 				System.out.println("Eine Anmeldung wurde eingereicht...");
 				SpielerDaten spieler_daten = (SpielerDaten)formatter.ByteArrayToObject(inhalt);
 				SpielDaten spiel_daten = server.getGame().getSpielDaten();
@@ -64,6 +71,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				server.getGame().getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 				break;
 			}
+			//Spieler ist bereit
 			case 2:{
 				System.out.println("Ein Spieler ist Bereit!");
 				server.getGame().getSpielDaten().getSpieler((String)formatter.ByteArrayToObject(inhalt)).getSpielerDaten().setBereit(true);
@@ -76,10 +84,22 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				
 				break;
 			}
-			
+			//Chatnachricht weiterleiten
 			case 3: {
 				System.out.println("Chatnachricht weiterleiten...");
 				server.rufen(data);
+				break;
+			}
+			//SpielDaten weiterleiten (Bei Abstimmung etc)
+			case 4: {
+				server.getGame().setSpielDaten((SpielDaten)formatter.ByteArrayToObject(inhalt));
+				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(server.getGame().getSpielDaten())));
+				break;
+			}
+			
+			//ZeitRaffer aktivieren, bitte
+			case 5: {
+				server.getGame().zeitRaffer();
 				break;
 			}
 		}

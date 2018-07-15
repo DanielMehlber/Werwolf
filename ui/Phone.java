@@ -30,8 +30,11 @@ public class Phone extends JInternalFrame {
 	private TextArea schreiben;
 	private List spieler_panel;
 	
+	private boolean gesperrt;
+	
 	public Phone(GameWindow window) {
 		this.window = window;
+		gesperrt = false;
 		window.getGame().setPhone(this);
 		try {
 			setIcon(true);
@@ -112,17 +115,22 @@ public class Phone extends JInternalFrame {
 	
 	public void addMessage(String absender, String inhalt) {
 		String seperator = "----------------------------------";
-		String text =  "\n" + "[@"+absender+"]: "+inhalt+"\n"+seperator;
+		String text =  "\n" + "[@"+absender+"]: \n"+inhalt+"\n"+seperator;
 		chat.setText(chat.getText() + text);
 	}
 	
 	public void senden() {
+		if(gesperrt)
+			return;
 		String nachricht = schreiben.getText();
 		nachricht = "["+window.getGame().getSpieler().getSpielerDaten().getName()+"]"+nachricht;
 		window.getGame().getSpieler().chatSchreiben(nachricht);
+		schreiben.setText("");
 	}
 	
 	public void empfangen(String nachricht) {
+		if(gesperrt)
+			return;
 		int one = nachricht.indexOf("[");
 		int two = nachricht.indexOf("]");
 		String absender = nachricht.substring(one+1, two);
@@ -142,7 +150,10 @@ public class Phone extends JInternalFrame {
 		}
 	}
 	
-	
+	public void sperren(boolean b) {
+		gesperrt = b;
+		schreiben.setEnabled(!b);
+	}
 	
 	
 }

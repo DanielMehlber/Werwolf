@@ -134,7 +134,7 @@ public abstract class NetzwerkKomponente {
 		while(is_listening) {
 			
 			try {
-				data = new byte[1024];
+				data = new byte[1024*4];
 				input.read(data);
 				//nachricht = reader.readLine();
 			} catch (IOException e) {

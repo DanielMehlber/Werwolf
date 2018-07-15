@@ -1,7 +1,11 @@
 package game;
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
+import karten.Kreatur;
 import net.Client;
+import net.InetDataFormatter;
 import ui.DorfBeitretenPanel;
 import ui.DorfBeitretenPanel.Status;
 import ui.DorfErstellenPanel;
@@ -222,48 +226,115 @@ public class Game{
 			normalize();
 			out.SpielAusgabe.info(null, "TIPP", "Fahre mit dem Cursor über die Uhrzeit, um zu sehen was gerade passiert");
 			setPhase("Die erste und letzte Vorbereitung vor der Nacht, die Opfer einfordern wird");
+			setNaechstePhaseBeschreibung(18, 0, "beginnt die Nacht erneut");
+			setUISchlafen(false);
+			lockPhone(false);
 			break;}
 		case MORGEN: {
 			normalize();
 			eventÜberspringen("vorbereitung");
 			setPhase("Der Morgen ist angebrochen und alle erwachen");
+			setNaechstePhaseBeschreibung(8, 0, "beginnt das Gericht");
+			setUISchlafen(false);
+			lockPhone(false);
+			
 			break;}
 		case GERICHT: {
 			normalize();
 			setPhase("Das Gericht hat sich zusammengefunden");
+			setNaechstePhaseBeschreibung(12, 0, "wird abgestimmt!");
+			getSpielDaten().setAbstimmung(new Abstimmung(getSpielDaten()));
 			break;}
 		case ABSTIMMUNG: {
 			normalize();
 			setPhase("Die Abstimmung hat begonnen!");
+			setNaechstePhaseBeschreibung(13, 0, "findet die Hinrichtung statt");
+			lockPhone(true);
+			getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(true);
 			break;}
 		case HINRICHTUNG_NACHMITTAG: {
 			normalize();
 			setPhase("Die Kirchenglocken leuten den Nachmittag und die feierliche Hinrichtung eines verurteilten Werwolfes ein.");
+			setNaechstePhaseBeschreibung(18, 00, "bricht die Nacht herein. Vllt erfährst du etwas?");
 			minuteInSekunden(0.1);
+			lockPhone(false);
+			//Abstimmung beenden
+			getSpielDaten().getAbstimmung().setOffen(false);
+			getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(false);
+			//Gewinner hinrichten
+			String hinzurichtenden = getSpielDaten().getAbstimmung().getGewinner().getName();
+			System.out.println(hinzurichtenden+" hat eine Hinrichtung gewonnen!");
+			hinrichten(hinzurichtenden);
+			
+			//TODO: Hinweise festlegen
+			
 			break;}
 		case NACHT: {
 			normalize();
 			setPhase("Die Nacht schlägt erneut zu");
+			setNaechstePhaseBeschreibung(18, 30, "erwachen die Werwölfe");
+			lockPhone(true);
+			setUISchlafen(true);
 			break;}
 		case WERWOLF: {
+			getSpielDaten().setAbstimmung(new Abstimmung(spiel_daten));
 			normalize();
 			setPhase("Die Werwölfe sind erwacht und ziehen um die Häuser. Bete!");
+			setNaechstePhaseBeschreibung(20, 0, "erwacht Amor");
+			
+			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+				lockPhone(false);
+				setUISchlafen(false);
+				getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(true);
+				getGameWindow().getHauptSpielPanel().abstimmungBeiWerwoelfenSetzen(false);
+			}
+			
 			break;}
 		case AMOR: {
 			normalize();
+			//Abstimmung schließen und Opfer setzen
+			getSpielDaten().getAbstimmung().setOffen(false);
+			getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(false);
+			getSpielDaten().setOpfer(getSpielDaten().getAbstimmung().getGewinner().getName());
+			spielDatenTeilen();
+			
 			setPhase("Der Schrei des Opfers ließ Amor erwachen");
+			setNaechstePhaseBeschreibung(21, 0, "erwacht die Hexe");
+			setUISchlafen(true);
+			//Amorfunktionen freischalten
+			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
+				getGameWindow().getHauptSpielPanel().amorFreischalten(true);
+			} 
+			
 			break;}
 		case HEXE: {
 			normalize();
 			setPhase("Die Hexe fühlt sich gezwungen in die Situation einzugreifen");
+			setNaechstePhaseBeschreibung(22, 0, "erwacht die Seherin");
+			
+			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.HEXE)) {
+				getGameWindow().getHauptSpielPanel().hexeFreischalten(true);
+			}
+			
+			setUISchlafen(true);
 			break;}
 		case SEHERIN: {
 			normalize();
 			setPhase("Die Seherin lässt es sich nicht nehmen, den Werwölfen auf die Schliche zu kommen...");
+			setNaechstePhaseBeschreibung(23, 0, "legen sich alle schlafen");
+			setUISchlafen(true);
+			
+			//Seherinfunktion freischalten
+			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.SEHERIN)) {
+				getGameWindow().getHauptSpielPanel().seherinFreischalten(true);
+			}
+			
 			break;}
 		case SCHLAFEN: {
 			normalize();
 			setPhase("Über das übernatürliche Konzert legt sich ein dichter Nebel. Die Nacht ist wieder ruhig.");
+			setNaechstePhaseBeschreibung(7, 0, "Morgengrauen");
+			setUISchlafen(true);
 			break;}
 		}
 	}
@@ -272,15 +343,39 @@ public class Game{
 		getGameWindow().getHauptSpielPanel().setPhase(text);
 	}
 	
+	public void setNaechstePhaseBeschreibung(int stunde, int minute, String beschreibung) {
+		getGameWindow().getHauptSpielPanel().setNaechstePhaseBeschreibung(stunde, minute, beschreibung);
+	}
+	
 	public void minuteInSekunden(double s) {
 		if(moderator != null) {
 			moderator.getZeitSystem().setMinuteInSekunden(s);
 		}
 	}
 	
+	public void lockPhone(boolean b) {
+		getGameWindow().getHauptSpielPanel().getPhone().sperren(b);
+	}
+	
 	public void normalize() {
 		if(moderator != null) {
-			moderator.getZeitSystem().setMinuteInSekunden(1);
+			//TODO: Testvalue
+			moderator.getZeitSystem().setMinuteInSekunden(0.1);
+		}
+		
+		//Amorfunktionen beenden
+		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
+			getGameWindow().getHauptSpielPanel().amorFreischalten(false);
+		} 
+		
+		//Hexefunktionen beenden
+		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.HEXE)) {
+			getGameWindow().getHauptSpielPanel().hexeFreischalten(false);
+		}
+		
+		//Seherinfunktion beenden
+		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.SEHERIN)) {
+			getGameWindow().getHauptSpielPanel().seherinFreischalten(true);
 		}
 	}
 	
@@ -292,10 +387,34 @@ public class Game{
 	}
 	
 	public void zeitRaffer() {
+		if(moderator == null) {
+			InetDataFormatter formatter = spieler.getClient().getFormatter();
+			spieler.getClient().schreiben(new byte[] {(byte)5});
+		}
 		moderator.getZeitSystem().setMinuteInSekunden(0.01);
 	}
 	
+	public void setUISchlafen(boolean b) {
+		getGameWindow().getHauptSpielPanel().setSchlafen(b);
+	}
 	
+	public void spielDatenTeilen() {
+		System.out.println("Spieldaten werden geteilt...");
+		getSpieler().getClient().schreiben(getSpieler().getClient().getFormatter().formatieren(4, getSpieler().getClient().getFormatter().ObjectToByteArray(spiel_daten)));
+	}
 	
+	public void hinrichten(String name) {
+		//Moderator
+			//Todesnachricht schicken
+			//aus Spielerliste löschen
+			//ui aktulisieren
+	}
+	
+	public void liebesPaarPruefen() {
+		ArrayList<Spieler> liebespaar = getSpielDaten().getLiebespaar();
+		if(liebespaar.size() == 2) {
+			
+		}
+	}
 	
 }

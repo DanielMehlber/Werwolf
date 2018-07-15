@@ -39,6 +39,8 @@ public class HauptSpielPanel extends JDesktopPane {
 	
 	private ArrayList<Karte> karten_liste;
 	private JLabel lblSchlafen;
+	private JLabel naechtes;
+	private Phone phone;
 	
 	public HauptSpielPanel(GameWindow window) {
 		addComponentListener(new ComponentAdapter() {
@@ -55,7 +57,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		setLayout(null);
 		
 		infoPanel = new InfoPanel(window);
-		infoPanel.setBounds(60, 11, 500, 771);
+		infoPanel.setBounds(0, 11, 500, 771);
 		infoPanel.setVisible(true);
 		infoPanel.show();
 		
@@ -79,18 +81,27 @@ public class HauptSpielPanel extends JDesktopPane {
 		btnShowInfo.setBounds(10, 49, 50, 50);
 		add(btnShowInfo);
 		
-		Phone phone = new Phone(window);
+		phone = new Phone(window);
 		phone.setNormalBounds(new Rectangle(100, 100, 380, 740));
 		phone.setLocation(176, 49);
 		add(phone);
 		phone.show();
 		
+		naechtes = new JLabel("");
+		naechtes.setForeground(Color.RED);
+		naechtes.setHorizontalAlignment(SwingConstants.CENTER);
+		naechtes.setBounds(456, 460, 276, 14);
+		add(naechtes);
+		
 		uhr = new JLabel();
+		uhr.setText("99:99");
 		uhr.setHorizontalAlignment(SwingConstants.CENTER);
 		uhr.setFont(new Font("Segoe UI Light", Font.BOLD, 46));
 		uhr.setForeground(Color.RED);
 		uhr.setBounds(486, 373, 200, 101);
 		add(uhr);
+		
+		setNaechstePhaseBeschreibung(0, 0, "gehen die Geister um");
 		
 		getDesktopManager().iconifyFrame(phone);
 		
@@ -146,15 +157,9 @@ public class HauptSpielPanel extends JDesktopPane {
 	
 	
 	public void setZeit(int stunden, int minuten) {
-		String zeit = "";
-		String st = String.valueOf(stunden);
-		if(st.toCharArray().length == 1)
-			st = "0"+st;
-		String min = String.valueOf(minuten);
-		if(st.toCharArray().length == 1)
-			min = "0"+min;
-		zeit = st+":"+min;
-		uhr.setText(zeit);
+		String s = zuZeit(stunden);
+		String m = zuZeit(minuten);
+		uhr.setText(s+":"+m);
 		
 	}
 	
@@ -171,5 +176,80 @@ public class HauptSpielPanel extends JDesktopPane {
 	public void setPhase(String text) {
 		uhr.setToolTipText(text);
 	}
+	
+	public void setNaechstePhaseBeschreibung(int stunde, int minute, String beschreibung) {
+		String b = "Um ";
+		String s = zuZeit(stunde);
+		String m = zuZeit(minute);
+		b = "Um "+s+":"+m+" "+beschreibung;
+		naechtes.setText(b);
+	}
+	
+	public String zuZeit(int i) {
+		String zeit = null;
+		String b = String.valueOf(i);
+		char [] cb = b.toCharArray();
+		if(cb.length == 1) {
+			char[] c = new char[2];
+			c[0] = '0';
+			c[1] = cb[0];
+			zeit = String.valueOf(c);
+			return zeit;
+		}else {
+			return String.valueOf(i);
+		}
+		
+	}
+	
+	public Phone getPhone() {
+		return phone;
+	}
 
+	public Karte getKarte(String name) {
+		for(int i = 0; i < karten_liste.size(); i++) {
+			Karte karte = karten_liste.get(i);
+			if(karte.getSpielerName().equals(name)) {
+				return karte;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void abstimmungBeiAllenKartenSetzen(boolean b) {
+		System.out.println("VOTE: Abstimmung von allen = "+b);
+		for(int i = 0; i < karten_liste.size(); i++) {
+			karten_liste.get(i).abstimmenFreischalten(b);
+		}
+	}
+	
+	public void abstimmungSpielerSetzen(String name, boolean b) {
+		System.out.println("VOTE: Abstimmung von "+name+" = "+b);
+		getKarte(name).abstimmenFreischalten(b);
+	}
+	
+	public void abstimmungBeiWerwoelfenSetzen(boolean b) {
+		System.out.println("VOTE: Abstimmung über Werwölfe = "+b);
+		for(int i = 0; i < getGameWindow().getGame().getSpielDaten().getWerwolf_liste().size(); i++) {
+			getKarte(getGameWindow().getGame().getSpielDaten().getWerwolf_liste().get(i).getSpielerDaten().getName()).abstimmenFreischalten(b);
+		}
+	}
+	
+	public void amorFreischalten(boolean b) {
+		for(Karte k : karten_liste) {
+			k.verliebenFreischalten(b);
+		}
+	}
+	
+	public void hexeFreischalten(boolean b) {
+		for(Karte k : karten_liste) {
+			k.hexeFreischalten(b);
+		}
+	}
+	
+	public void seherinFreischalten(boolean b) {
+		for(Karte k : karten_liste) {
+			k.seherinFreischalten(b);
+		}
+	}
 }
