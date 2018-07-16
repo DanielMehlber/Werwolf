@@ -70,4 +70,8 @@ public class Abstimmung implements Serializable{
 		return kandidaten.get(0);
 	}
 	
+	public int getWaehlerAnzahl() {
+		return bereits_absgestimmt.size();
+	}
+	
 }

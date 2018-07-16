@@ -293,8 +293,8 @@ public class Game{
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
 				lockPhone(false);
 				setUISchlafen(false);
-				getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(true);
-				getGameWindow().getHauptSpielPanel().abstimmungBeiWerwoelfenSetzen(false);
+				getGameWindow().getHauptSpielPanel().werwolfFreischalten(true);
+				
 			}
 			
 			break;}
@@ -312,6 +312,7 @@ public class Game{
 			//Amorfunktionen freischalten
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
 				getGameWindow().getHauptSpielPanel().amorFreischalten(true);
+				setUISchlafen(false);
 			} 
 			
 			break;}
@@ -322,6 +323,7 @@ public class Game{
 			
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.HEXE)) {
 				getGameWindow().getHauptSpielPanel().hexeFreischalten(true);
+				setUISchlafen(false);
 			}
 			
 			setUISchlafen(true);
@@ -335,6 +337,7 @@ public class Game{
 			//Seherinfunktion freischalten
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.SEHERIN)) {
 				getGameWindow().getHauptSpielPanel().seherinFreischalten(true);
+				setUISchlafen(false);
 			}
 			
 			break;}
@@ -368,12 +371,11 @@ public class Game{
 	
 	public void normalize() {
 		if(moderator != null) {
-			//TODO: Testvalue
 			moderator.getZeitSystem().setMinuteInSekunden(MINUTE_IN_SECONDS);
 		}
 		
 		//Werwolfunktion beenden
-		getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(false);
+		getGameWindow().getHauptSpielPanel().werwolfFreischalten(false);
 		
 		//Amorfunktionen beenden
 		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
@@ -422,7 +424,7 @@ public class Game{
 				System.err.println("DU BIST TOT");
 			}
 			
-			getGameWindow().getHauptSpielPanel().addTotenmeldung(toter.getName(), toter.getText(), "UNKNOWN"); //TODO
+			getGameWindow().getHauptSpielPanel().addTotenmeldung(toter.getName(), toter.getText(), "UNKNOWN");
 			getGameWindow().getHauptSpielPanel().spielerLoeschen(toter.getName());
 			
 		}
@@ -464,11 +466,17 @@ public class Game{
 		for(Spieler s : tote) {
 			if(!s.getSpielerDaten().getName().equals(opfer_name)) {
 				meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.HEXE));
+				if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+					spiel_daten.removeWerwolf(s.getSpielerDaten().getName());
+				}
 			}
 			
 			Spieler liebe;
 			if((liebe=getSpielDaten().getLiebe(s.getSpielerDaten().getName()))!=null) {
 				meldung.addToten(new Toter(liebe.getSpielerDaten().getName(), Todesursache.LIEBE));
+				if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+					spiel_daten.removeWerwolf(s.getSpielerDaten().getName());
+				}
 			}
 		}
 		

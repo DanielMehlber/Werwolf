@@ -167,4 +167,8 @@ public class Karte extends JPanel {
 	public void seherinFreischalten(boolean b) {
 		menu.seherinFreischalten(b);
 	}
+	
+	public void werwolfFreischalten(boolean b) {
+		menu.werwolfFreischalten(b);
+	}
 }

@@ -24,6 +24,7 @@ import com.sun.corba.se.impl.orbutil.ObjectUtility;
 
 import game.SpielDaten;
 import game.Spieler;
+import karten.Kreatur;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -233,12 +234,6 @@ public class HauptSpielPanel extends JDesktopPane {
 		getKarte(name).abstimmenFreischalten(b);
 	}
 	
-	public void abstimmungBeiWerwoelfenSetzen(boolean b) {
-		System.out.println("VOTE: Abstimmung über Werwölfe = "+b);
-		for(int i = 0; i < getGameWindow().getGame().getSpielDaten().getWerwolf_liste().size(); i++) {
-			getKarte(getGameWindow().getGame().getSpielDaten().getWerwolf_liste().get(i).getSpielerDaten().getName()).abstimmenFreischalten(b);
-		}
-	}
 	
 	public void amorFreischalten(boolean b) {
 		for(Karte k : karten_liste) {
@@ -247,6 +242,12 @@ public class HauptSpielPanel extends JDesktopPane {
 	}
 	
 	public void hexeFreischalten(boolean b) {
+		String opfer_name = getGameWindow().getGame().getSpielDaten().getAbstimmung().getGewinner().getName();
+		if(opfer_name == null) {
+			opfer_name = "Niemand";
+		}
+		out.SpielAusgabe.info(null, "Retten ?", opfer_name+" ist kurz davor von den Werwölfen zuerfleischt zu werden.\n"
+				+ "Wenn du noch einen Rettungstrank hast, hast du auch eine Wahl!");
 		for(Karte k : karten_liste) {
 			k.hexeFreischalten(b);
 		}
@@ -255,6 +256,14 @@ public class HauptSpielPanel extends JDesktopPane {
 	public void seherinFreischalten(boolean b) {
 		for(Karte k : karten_liste) {
 			k.seherinFreischalten(b);
+		}
+	}
+	
+	public void werwolfFreischalten(boolean b) {
+		for(Karte k : karten_liste) {
+			if(!getGameWindow().getGame().getSpielDaten().getSpieler(k.getName()).getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+			k.werwolfFreischalten(b);
+			}
 		}
 	}
 	

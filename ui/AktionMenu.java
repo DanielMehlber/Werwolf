@@ -1,5 +1,6 @@
 package ui;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -25,6 +26,7 @@ public class AktionMenu extends JPopupMenu {
 	
 	JMenuItem schliessen;
 	JMenuItem abstimmen;
+	JMenuItem opfer_abstimmen;
 	JMenuItem retten;
 	JMenuItem toeten;
 	JMenuItem jagt_ziel;
@@ -35,6 +37,8 @@ public class AktionMenu extends JPopupMenu {
 		schliessen = new JMenuItem("[X] Schließen");
 		abstimmen = new JMenuItem("Abstimmen");
 		abstimmen.setEnabled(false);
+		opfer_abstimmen = new JMenuItem("Opfer abstimmen");
+		opfer_abstimmen.setEnabled(false);
 		retten = new JMenuItem("Schützen");
 		retten.setEnabled(false);
 		toeten = new JMenuItem("Töten");
@@ -99,6 +103,16 @@ public class AktionMenu extends JPopupMenu {
 				setVisible(false);
 			}
 		});
+		
+		opfer_abstimmen.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				abstimmen();
+				setVisible(false);
+				habenAlleWerwoelfeGewaehlt();
+			}
+		});
 	}
 	
 	public void setKreatur(Kreatur k) {
@@ -139,6 +153,10 @@ public class AktionMenu extends JPopupMenu {
 		abstimmen.setEnabled(b);
 	}
 	
+	public void werwolfFreischalten(boolean b) {
+		opfer_abstimmen.setEnabled(b);
+	}
+	
 	public void abstimmen() {
 		String name = karte.getSpielerName();
 		System.out.println("VOTE: Du hast für "+name+ " abgestimmt");
@@ -176,7 +194,7 @@ public class AktionMenu extends JPopupMenu {
 			if(daten.getOpferName().equals(karte.getSpielerName()) && daten.getRettungsTrankAnzahl() != 0)
 				retten.setEnabled(true);
 			if(daten.getToetungsTrankAnzahl() != 0)
-				toeten.setEnabled(false);
+				toeten.setEnabled(true);
 		}else {
 			toeten.setEnabled(false);
 			retten.setEnabled(false);
@@ -210,5 +228,13 @@ public class AktionMenu extends JPopupMenu {
 	public void sehen() {
 		karte.enttarnen(null);
 	}
+	
+	public void habenAlleWerwoelfeGewaehlt() {
+		SpielDaten daten = karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten();
+		if(daten.getAbstimmung().getWaehlerAnzahl() == daten.getWerwolf_liste().size()) {
+			karte.getHauptSpielPanel().getGameWindow().getGame().zeitRaffer();
+		}
+	}
+	
 
 }
