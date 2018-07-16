@@ -10,7 +10,7 @@ public class Todesmeldung implements Serializable{
 	
 	private ArrayList<Toter> tote;
 	public Todesmeldung() {
-		// TODO Auto-generated constructor stub
+		tote = new ArrayList<Toter>();
 	}
 	
 	public void addToten(Toter t) {

@@ -269,6 +269,11 @@ public class Game{
 			System.out.println(hinzurichtenden+" hat eine Hinrichtung gewonnen!");
 			//Hinrichtung senden
 			
+			if(moderator != null) {
+				Todesmeldung tm = new Todesmeldung();
+				tm.addToten(new Toter(hinzurichtenden, Todesursache.HINRICHTUNG));
+				moderator.todesnachrichtSenden(tm);
+			}
 			//TODO: Hinweise festlegen
 			
 			break;}
@@ -337,6 +342,7 @@ public class Game{
 			normalize();
 			setPhase("Über das übernatürliche Konzert legt sich ein dichter Nebel. Die Nacht ist wieder ruhig.");
 			setNaechstePhaseBeschreibung(7, 0, "Morgengrauen");
+			zeitRaffer();
 			setUISchlafen(true);
 			break;}
 		}
