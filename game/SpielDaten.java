@@ -22,6 +22,8 @@ public class SpielDaten implements Serializable{
 	private ArrayList<Spieler> liebespaar;
 	
 	private String opferName;
+	private int rettungs_trank_anzahl = 1;
+	private int toetungs_trank_anzahl = 1;
 	
 	private Abstimmung abstimmung;
 	
@@ -290,6 +292,40 @@ public class SpielDaten implements Serializable{
 	public void setOpfer(String opferName) {
 		this.opferName = opferName;
 		getSpieler(opferName).getSpielerDaten().setLebendig(false);
+	}
+	
+	public ArrayList<Spieler> getToteSpieler() {
+		ArrayList<Spieler> tot = new ArrayList<Spieler>();
+		for(Spieler s : getSpielerListe()) {
+			if(!s.getSpielerDaten().isLebendig()) {
+				tot.add(s);
+			}
+		}
+		
+		return tot;
+	}
+	
+	public void toteBegraben() {
+		for(Spieler s : getSpielerListe()) {
+			if(!s.getSpielerDaten().isLebendig())
+				removeSpieler(s);
+		}
+	}
+
+	public int getRettungsTrankAnzahl() {
+		return rettungs_trank_anzahl;
+	}
+
+	public void setRettungsTrankAnzahl(int rettungs_trank_anzahl) {
+		this.rettungs_trank_anzahl = rettungs_trank_anzahl;
+	}
+
+	public int getToetungsTrankAnzahl() {
+		return toetungs_trank_anzahl;
+	}
+
+	public void setToetungsTrankAnzahl(int toetungs_trank_anzahl) {
+		this.toetungs_trank_anzahl = toetungs_trank_anzahl;
 	}
 	
 	

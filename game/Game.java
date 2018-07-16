@@ -234,7 +234,7 @@ public class Game{
 			normalize();
 			event‹berspringen("vorbereitung");
 			setPhase("Der Morgen ist angebrochen und alle erwachen");
-			geschehnisseVerarbeiten();
+			naechtlicheGeschehnisseVerarbeiten();
 			setNaechstePhaseBeschreibung(8, 0, "beginnt das Gericht");
 			setUISchlafen(false);
 			lockPhone(false);
@@ -410,11 +410,15 @@ public class Game{
 	public void hinrichten(Todesmeldung meldung) {
 		for(Toter toter : meldung.getTotenListe()) {
 			if(toter.getName().equals(getSpieler().getSpielerDaten().getName())) {
-				//Todesbildschrirm
+				System.err.println("DU BIST TOT");
 			}
 			
-			getGameWindow().getHauptSpielPanel().addTotenmeldung(toter.getName(), toter.getText(), "UNKNOWN");
+			getGameWindow().getHauptSpielPanel().addTotenmeldung(toter.getName(), toter.getText(), "UNKNOWN"); //TODO
+			getGameWindow().getHauptSpielPanel().spielerLoeschen(toter.getName());
+			
 		}
+		
+		
 	}
 	
 	public void liebesPaarPruefen() {
@@ -433,10 +437,39 @@ public class Game{
 		
 	}
 	
-	public void geschehnisseVerarbeiten() {
+	public void naechtlicheGeschehnisseVerarbeiten() {
+		Todesmeldung meldung = new Todesmeldung();
+		ArrayList<Spieler> tote = getSpielDaten().getToteSpieler();
+		boolean istTod = false;
+		String opfer_name = getSpielDaten().getOpferName();
+		if(opfer_name != null) {
+			if(getSpielDaten().getSpieler(opfer_name).getSpielerDaten().isLebendig()) {
+				out.SpielAusgabe.info(null, "Rettung durch Hexe", opfer_name+" wurde von der Hexe gerettet!");
+			}else {
+				meldung.addToten(new Toter(opfer_name, Todesursache.WERWOLF));
+				getSpielDaten().setOpfer(null);
+				istTod = true;
+			}
+		}
 		
-		//Senden
+		for(Spieler s : tote) {
+			if(!s.getSpielerDaten().getName().equals(opfer_name)) {
+				meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.HEXE));
+			}
+			
+			Spieler liebe;
+			if((liebe=getSpielDaten().getLiebe(s.getSpielerDaten().getName()))!=null) {
+				meldung.addToten(new Toter(liebe.getSpielerDaten().getName(), Todesursache.LIEBE));
+			}
+		}
 		
+		getSpielDaten().toteBegraben();
+		spielDatenTeilen();
+		
+		if(moderator != null) 
+			moderator.todesnachrichtSenden(meldung);
+		
+	
 	}
 	
 }

@@ -15,6 +15,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 import game.Game;
+import game.SpielDaten;
 import game.Spieler;
 import karten.Kreatur;
 
@@ -170,12 +171,20 @@ public class AktionMenu extends JPopupMenu {
 	}
 	
 	public void hexeFreischalten(boolean b) {
-		if(karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().getOpferName().equals(karte.getSpielerName()))
-			retten.setEnabled(b);
-		toeten.setEnabled(b);
+		if(b) {
+			SpielDaten daten = karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten();
+			if(daten.getOpferName().equals(karte.getSpielerName()) && daten.getRettungsTrankAnzahl() != 0)
+				retten.setEnabled(true);
+			if(daten.getToetungsTrankAnzahl() != 0)
+				toeten.setEnabled(false);
+		}else {
+			toeten.setEnabled(false);
+			retten.setEnabled(false);
+		}
 	}
 	
 	public void retten() {
+		karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().setRettungsTrankAnzahl(0);
 		Game game = karte.getHauptSpielPanel().getGameWindow().getGame();
 		Spieler opfer = game.getSpielDaten().getSpieler(game.getSpielDaten().getOpferName());
 		opfer.getSpielerDaten().setLebendig(true);
@@ -185,6 +194,7 @@ public class AktionMenu extends JPopupMenu {
 	}
 	
 	public void toeten() {
+		karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().setToetungsTrankAnzahl(0);
 		Game game = karte.getHauptSpielPanel().getGameWindow().getGame();
 		Spieler opfer = game.getSpielDaten().getSpieler(karte.getSpielerName());
 		opfer.getSpielerDaten().setLebendig(false);

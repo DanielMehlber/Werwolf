@@ -135,7 +135,9 @@ public class Moderator extends Server implements Runnable{
 	}
 	
 	
-	
+	public void todesnachrichtSenden(Todesmeldung meldung) {
+		rufen(formatter.formatieren(6, formatter.ObjectToByteArray(meldung)));
+	}
 	
 	
 	

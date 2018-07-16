@@ -10,6 +10,7 @@ import game.Game;
 import game.SpielDaten;
 import game.SpielStatus;
 import game.Spieler;
+import game.Todesmeldung;
 import ui.HauptMenuPanel;
 import ui.HauptSpielPanel;
 import ui.DorfBeitretenPanel.Status;
@@ -118,7 +119,11 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			System.out.println("SpielStatus geändert: "+status.name());
 			break;
 		}
-		
+		case 6: {
+			Todesmeldung meldung = (Todesmeldung)formatter.ByteArrayToObject(inhalt);
+			getGame().hinrichten(meldung);
+			break;
+		}
 		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]+" konnte nicht identifiziert werden!");break;}
 		}
 		

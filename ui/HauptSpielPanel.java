@@ -56,7 +56,6 @@ public class HauptSpielPanel extends JDesktopPane {
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
-		addTotenmeldung("LALA", "Fick dich", "MAMA");
 		
 		infoPanel = new InfoPanel(window);
 		infoPanel.setBounds(0, 11, 500, 771);
@@ -103,7 +102,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		uhr.setBounds(486, 373, 200, 101);
 		add(uhr);
 		
-		setNaechstePhaseBeschreibung(0, 0, "gehen die Geister um");
+		setNaechstePhaseBeschreibung(0, 0, "");
 		
 		getDesktopManager().iconifyFrame(phone);
 		
@@ -278,4 +277,6 @@ public class HauptSpielPanel extends JDesktopPane {
 		tm.show();
 		tm.setBounds(800, 11, 390, 500);
 	}
+	
+	
 }
