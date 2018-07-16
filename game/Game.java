@@ -402,8 +402,9 @@ public class Game{
 		if(moderator == null) {
 			InetDataFormatter formatter = spieler.getClient().getFormatter();
 			spieler.getClient().schreiben(new byte[] {(byte)5});
+		}else {
+			moderator.getZeitSystem().setMinuteInSekunden(0.01);
 		}
-		moderator.getZeitSystem().setMinuteInSekunden(0.01);
 	}
 	
 	public void setUISchlafen(boolean b) {
