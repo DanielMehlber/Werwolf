@@ -131,6 +131,8 @@ public class Karte extends JPanel {
 		}
 		
 		setIcon(icon_path);
+		getHauptSpielPanel().seherinFreischalten(false);
+		getHauptSpielPanel().getGameWindow().getGame().zeitRaffer();
 	}
 	
 	public void setIcon(String icon_path) {

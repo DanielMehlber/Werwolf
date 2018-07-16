@@ -56,6 +56,8 @@ public class HauptSpielPanel extends JDesktopPane {
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
+		addTotenmeldung("LALA", "Fick dich", "MAMA");
+		
 		infoPanel = new InfoPanel(window);
 		infoPanel.setBounds(0, 11, 500, 771);
 		infoPanel.setVisible(true);
@@ -96,7 +98,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		uhr = new JLabel();
 		uhr.setText("99:99");
 		uhr.setHorizontalAlignment(SwingConstants.CENTER);
-		uhr.setFont(new Font("Segoe UI Light", Font.BOLD, 46));
+		uhr.setFont(new Font("OCR A Extended", Font.BOLD, 46));
 		uhr.setForeground(Color.RED);
 		uhr.setBounds(486, 373, 200, 101);
 		add(uhr);
@@ -104,6 +106,10 @@ public class HauptSpielPanel extends JDesktopPane {
 		setNaechstePhaseBeschreibung(0, 0, "gehen die Geister um");
 		
 		getDesktopManager().iconifyFrame(phone);
+		
+		
+		
+		
 		
 	}
 	
@@ -262,5 +268,14 @@ public class HauptSpielPanel extends JDesktopPane {
 			}
 		}
 		kartenPositionieren(300, uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
+	}
+	
+	public void addTotenmeldung(String name, String txt, String id) {
+		TotenmeldungUI tm = new TotenmeldungUI();
+		tm.setName(name);
+		tm.setText(txt, id);
+		add(tm);
+		tm.show();
+		tm.setBounds(800, 11, 390, 500);
 	}
 }
