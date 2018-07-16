@@ -20,7 +20,7 @@ public class Moderator extends Server implements Runnable{
 		super(game);
 		this.game = game;
 		this.moderiert = true;
-		this.zeitSystem = new ZeitSystem(16, 30, 0.1);
+		this.zeitSystem = new ZeitSystem(16, 30, 1);
 		this.zeitSystem.setGame(getGame());
 		eventsSetzen();
 	}

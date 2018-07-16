@@ -32,6 +32,8 @@ public class Game{
 	private Spieler spieler;
 	private Phone phone;
 	
+	private final int MINUTE_IN_SECONDS = 1;
+	
 	private Thread warten;
 	
 	public Game() {
@@ -361,7 +363,7 @@ public class Game{
 	public void normalize() {
 		if(moderator != null) {
 			//TODO: Testvalue
-			moderator.getZeitSystem().setMinuteInSekunden(0.3);
+			moderator.getZeitSystem().setMinuteInSekunden(MINUTE_IN_SECONDS);
 		}
 		
 		//Werwolfunktion beenden
