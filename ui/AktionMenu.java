@@ -191,7 +191,7 @@ public class AktionMenu extends JPopupMenu {
 	public void hexeFreischalten(boolean b) {
 		if(b) {
 			SpielDaten daten = karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten();
-			if(daten.getOpferName().equals(karte.getSpielerName()) && daten.getRettungsTrankAnzahl() != 0)
+			if(daten.getWerwolfOpferName().equals(karte.getSpielerName()) && daten.getRettungsTrankAnzahl() != 0)
 				retten.setEnabled(true);
 			if(daten.getToetungsTrankAnzahl() != 0)
 				toeten.setEnabled(true);
@@ -204,11 +204,16 @@ public class AktionMenu extends JPopupMenu {
 	public void retten() {
 		karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().setRettungsTrankAnzahl(0);
 		Game game = karte.getHauptSpielPanel().getGameWindow().getGame();
-		Spieler opfer = game.getSpielDaten().getSpieler(game.getSpielDaten().getOpferName());
+		Spieler opfer = game.getSpielDaten().getSpieler(game.getSpielDaten().getWerwolfOpferName());
 		opfer.getSpielerDaten().setLebendig(true);
 		game.spielDatenTeilen();
 		hexeFreischalten(false);
 		game.zeitRaffer();
+		
+		Game g = karte.getHauptSpielPanel().getGameWindow().getGame();
+		if(g.getSpielDaten().getRettungsTrankAnzahl() == 0 && g.getSpielDaten().getToetungsTrankAnzahl() == 0) {
+			karte.getHauptSpielPanel().getGameWindow().getGame().event‹berspringen("hexe");
+		}
 	}
 	
 	public void toeten() {

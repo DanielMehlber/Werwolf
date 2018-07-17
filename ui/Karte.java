@@ -19,6 +19,7 @@ public class Karte extends JPanel {
 
 	private JLabel icon;
 	private JLabel lblname;
+	private JLabel blood;
 	
 	private HauptSpielPanel window;
 	private String name;
@@ -55,6 +56,11 @@ public class Karte extends JPanel {
 		menu.setVisible(false);
 		menu.setKreatur(window.getGameWindow().getGame().getSpieler().getSpielerDaten().getKreatur());
 		
+		blood = new JLabel("New label");
+		blood.setIcon(new ImageIcon(Karte.class.getResource("/res/blood.png")));
+		blood.setBounds(0, -22, 125, 175);
+		add(blood);
+		
 		
 		icon = new JLabel("");
 		icon.setIcon(new ImageIcon(Karte.class.getResource("/res/unknown_icon.jpg")));
@@ -89,6 +95,8 @@ public class Karte extends JPanel {
 		if(spieler.getSpielerDaten().getName().equals(name)) {
 			enttarnen(spieler.getSpielerDaten().getKreatur());
 		}
+		
+		setAlive(true);
 	}
 
 	public Spieler getSpielerFromGameData(String name) {
@@ -97,6 +105,11 @@ public class Karte extends JPanel {
 	
 	public void setSpieler(Spieler spieler) {
 		this.name = spieler.getSpielerDaten().getName();
+	}
+	
+	public void setAlive(boolean b) {
+		blood.setVisible(!b);
+		menu.setEnabled(b);
 	}
 	
 	public void enttarnen(Kreatur kreatur) {

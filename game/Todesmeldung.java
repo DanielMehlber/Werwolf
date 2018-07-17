@@ -14,11 +14,21 @@ public class Todesmeldung implements Serializable{
 	}
 	
 	public void addToten(Toter t) {
-		tote.add(t);
+		if(!istSchonInListe(t))
+			tote.add(t);
 	}
 	
 	public ArrayList<Toter> getTotenListe(){
 		return tote;
+	}
+	
+	public boolean istSchonInListe(Toter t) {
+		for(Toter toter : tote) {
+			if(toter.getName().equals(t.getName())) {
+				return true;
+			}
+		}
+		return false,
 	}
 
 }

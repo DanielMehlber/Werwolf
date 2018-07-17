@@ -71,28 +71,59 @@ public class Toter implements Serializable{
 		case ARMOR: {
 			if(ursache.equals(Todesursache.HINRICHTUNG)) {
 				kreaturText = "Bei dem Verurteilten handelte es sich um Amor, dem Gott der Liebe, der versteckt im Dorf unter nem Namen '"+name+"' gelebt hat"
-					+ "\nAls böder Werwolf angeprangert verließ er während der Hinrichtung den Düsterwald und verfluchte euch alle.";
+					+ "\nAls böser Werwolf angeprangert verließ er während der Hinrichtung den Düsterwald und verfluchte euch alle.";
+			}else if(ursache.equals(Todesursache.LIEBE)) {
+				kreaturText = "Als er sich selbst der Liebe aushändigte, sei es aus Neid oder aus Einsamkeit gewesen, kannte der Gott der Liebe die Folgen nicht.\n"
+					+ "Da er nicht sterben konnte, entfloh er dieser Welt und kehrte nie wieder zurück.";
+			}else if(ursache.equals(Todesursache.HEXE)) {
+				kreaturText = "Amor, der Gott der Liebe, der natürliche Feind, der herzlosen Hexe, fand auch durch ihre Hand sein Ende auf dieser Welt...";
+			}else if(ursache.equals(Todesursache.WERWOLF)) {
+				kreaturText = "Die Werwölfe entstellten den fleischgewordenen Gott, und verjagten Amor für immer von dieser Welt...";
 			}
 			break;}
 		case BUERGER: {
 			if(ursache.equals(Todesursache.HINRICHTUNG)) {
 				kreaturText = "Ein unschuldiger Mensch. Wie kann man einen einfachen Bürger wegen keiner bewiesenen Untat köpfen? ";
+			}else if(ursache.equals(Todesursache.LIEBE)) {
+				kreaturText = "Menschen waren schon immer anfällig für die Liebe gewesen. Auch in diesem Fall fand ein weiterer Bürger durch den Herzschmerz sein Ende...";
+			}else if(ursache.equals(Todesursache.HEXE)) {
+				kreaturText = "Die Angst der Bürger vor der Hexe, scheint begründet zu sein, schließlich tötet sie mit vergnügen unschuldige Bürger";
+			}else if(ursache.equals(Todesursache.WERWOLF)) {
+				kreaturText = "Ein weiterer Bürger wurde von den Werwölfen geraubt.";
 			}
 			break;}
 		case HEXE: {
 			if(ursache.equals(Todesursache.HINRICHTUNG)) {
 				kreaturText = "Als der Henker den abgetrennten Kopf in der Hand hällt, und ihn richtung Publikum streckt, spricht der Kopf einen letzten Fluch."
 					+ "\nIhr seid nun ohne Schutz und Todestrank auf euch gestellt. "+name+" ist eine mächtige Hexe gewesen.";
+			}else if(ursache.equals(Todesursache.LIEBE)) {
+				
+			}else if(ursache.equals(Todesursache.HEXE)) {
+				
+			}else if(ursache.equals(Todesursache.WERWOLF)) {
+				
 			}
 			break;}
 		case JAEGER: {
 			if(ursache.equals(Todesursache.HINRICHTUNG)) {
 				kreaturText = "Zu schnell wurde der Jäger zum gejagten. Das gefiel ihm nicht, und so tötete er seine letzte Beute bevor er selbst an der Reihe war.";
+			}else if(ursache.equals(Todesursache.LIEBE)) {
+				
+			}else if(ursache.equals(Todesursache.HEXE)) {
+				
+			}else if(ursache.equals(Todesursache.WERWOLF)) {
+				
 			}
 			break;}
 		case SEHERIN: {
 			if(ursache.equals(Todesursache.HINRICHTUNG)) {
 				kreaturText = "Tot hilft euch eine Seherin nichts mehr.";	
+			}else if(ursache.equals(Todesursache.LIEBE)) {
+				
+			}else if(ursache.equals(Todesursache.HEXE)) {
+				
+			}else if(ursache.equals(Todesursache.WERWOLF)) {
+				
 			}
 			break;}
 		case WERWOLF: {
@@ -104,6 +135,9 @@ public class Toter implements Serializable{
 		}
 	}
 	
+	public String getIdentityText() {
+		return kreaturText;
+	}
 	
 
 }

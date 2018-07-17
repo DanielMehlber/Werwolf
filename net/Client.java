@@ -127,7 +127,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		}
 		case 6: {
 			Todesmeldung meldung = (Todesmeldung)formatter.ByteArrayToObject(inhalt);
-			getGame().hinrichten(meldung);
+			getGame().spielerSterbenLassen(meldung);
 			break;
 		}
 		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]+" konnte nicht identifiziert werden!");break;}

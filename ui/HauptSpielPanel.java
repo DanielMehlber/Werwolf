@@ -267,15 +267,14 @@ public class HauptSpielPanel extends JDesktopPane {
 		}
 	}
 	
-	public void spielerLoeschen(String name) {
+	public void spielerToeten(String name) {
 		for(Karte karte : karten_liste) {
 			if(karte.getSpielerName().equals(name)) {
-				karten_liste.remove(karte);
-				karte.setVisible(false);
-				karte.setEnabled(false);
+				karte.setAlive(false);
+				karte.enttarnen(getGameWindow().getGame().getSpielDaten().getSpieler(name).getSpielerDaten().getKreatur());
 			}
 		}
-		kartenPositionieren(300, uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
+		
 	}
 	
 	public void addTotenmeldung(String name, String txt, String id) {

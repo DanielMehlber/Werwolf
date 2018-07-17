@@ -267,13 +267,9 @@ public class Game{
 			//Gewinner hinrichten
 			String hinzurichtenden = getSpielDaten().getAbstimmung().getGewinner().getName();
 			System.out.println(hinzurichtenden+" hat eine Hinrichtung gewonnen!");
-			//Hinrichtung senden
+			getSpielDaten().setVerurteilterSpielerName(hinzurichtenden);
 			
-			if(moderator != null) {
-				Todesmeldung tm = new Todesmeldung();
-				tm.addToten(new Toter(hinzurichtenden, Todesursache.HINRICHTUNG));
-				moderator.todesnachrichtSenden(tm);
-			}
+			hinrichten();
 			//TODO: Hinweise festlegen
 			
 			break;}
@@ -302,7 +298,7 @@ public class Game{
 			normalize();
 			//Abstimmung schließen und Opfer setzen
 			getSpielDaten().getAbstimmung().setOffen(false);
-			opferSetzen();
+			werwolfOpferSetzen();
 			spielDatenTeilen();
 			
 			//Amor
@@ -418,18 +414,24 @@ public class Game{
 		getSpieler().getClient().schreiben(getSpieler().getClient().getFormatter().formatieren(4, getSpieler().getClient().getFormatter().ObjectToByteArray(spiel_daten)));
 	}
 	
-	public void hinrichten(Todesmeldung meldung) {
+	/**
+	 * Lässt die Spieler in der Todesmeldung sterben
+	 * */
+	public void spielerSterbenLassen(Todesmeldung meldung) {
 		for(Toter toter : meldung.getTotenListe()) {
+			//Überprufen ob der Spieler selbst der Tote ist
 			if(toter.getName().equals(getSpieler().getSpielerDaten().getName())) {
 				System.err.println("DU BIST TOT");
 			}
 			
-			getGameWindow().getHauptSpielPanel().addTotenmeldung(toter.getName(), toter.getText(), "UNKNOWN");
-			getGameWindow().getHauptSpielPanel().spielerLoeschen(toter.getName());
+			//Tote in der UI umsetzen
+			getGameWindow().getHauptSpielPanel().addTotenmeldung(toter.getName(), toter.getText(), toter.getIdentityText());
+			getGameWindow().getHauptSpielPanel().spielerToeten(toter.getName());
 			
-		}
-		
-		
+			//Spielerlisten aktualisieren
+			getSpielDaten().toteBegraben();
+			spielDatenTeilen();
+		}	
 	}
 	
 	public void liebesPaarPruefen() {
@@ -439,54 +441,100 @@ public class Game{
 		}
 	}
 	
-	public void opferSetzen() {
+	public void werwolfOpferSetzen() {
 		Kandidat k = getSpielDaten().getAbstimmung().getGewinner();
 		if(k == null) {
 			return;
 		}
-		getSpielDaten().setOpfer(k.getName());
+		getSpielDaten().setWerwolfOpfer(k.getName());
 		
 	}
 	
+	/**
+	 * Erstellt eine Todesmeldung der Nacht und schickt sie zu den Spielern
+	 * */
 	public void naechtlicheGeschehnisseVerarbeiten() {
 		Todesmeldung meldung = new Todesmeldung();
 		ArrayList<Spieler> tote = getSpielDaten().getToteSpieler();
-		boolean istTod = false;
-		String opfer_name = getSpielDaten().getOpferName();
+		String opfer_name = getSpielDaten().getWerwolfOpferName();
+		
 		if(opfer_name != null) {
+			//Durch Hexe gerettet ? 
 			if(getSpielDaten().getSpieler(opfer_name).getSpielerDaten().isLebendig()) {
 				out.SpielAusgabe.info(null, "Rettung durch Hexe", opfer_name+" wurde von der Hexe gerettet!");
 			}else {
-				meldung.addToten(new Toter(opfer_name, Todesursache.WERWOLF));
-				getSpielDaten().setOpfer(null);
-				istTod = true;
+			//Oder doch den Werwölfen zum fraß gefallen
+				meldung.addToten(new Toter(opfer_name, Todesursache.WERWOLF, getSpielDaten().getSpieler(opfer_name).getSpielerDaten().getKreatur()));
+				getSpielDaten().setWerwolfOpfer(null);
 			}
 		}
 		
+		//Tod durch Hexe
 		for(Spieler s : tote) {
 			if(!s.getSpielerDaten().getName().equals(opfer_name)) {
-				meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.HEXE));
-				if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
-					spiel_daten.removeWerwolf(s.getSpielerDaten().getName());
-				}
+				meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.HEXE, s.getSpielerDaten().getKreatur()));
 			}
 			
-			Spieler liebe;
-			if((liebe=getSpielDaten().getLiebe(s.getSpielerDaten().getName()))!=null) {
-				meldung.addToten(new Toter(liebe.getSpielerDaten().getName(), Todesursache.LIEBE));
-				if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
-					spiel_daten.removeWerwolf(s.getSpielerDaten().getName());
-				}
-			}
 		}
 		
-		getSpielDaten().toteBegraben();
-		spielDatenTeilen();
+		moeglichesLiebesOpferHinzufuegen(meldung);
 		
 		if(moderator != null) 
 			moderator.todesnachrichtSenden(meldung);
 		
 	
 	}
+	
+	/**
+	 * Erstellt eine Todesmeldung am Nachmittag und schickt diese zu den Spielern
+	 * */
+	public void hinrichten() {
+		//Verurteilten zur Meldunghinzufügen
+		Todesmeldung meldung = new Todesmeldung();
+		String name = getSpielDaten().getVerurteilterSpielerName();
+		if(name == null) {
+			return;
+		}
+		Spieler verurteilter = getSpielDaten().getSpieler(name);
+		meldung.addToten(new Toter(null, Todesursache.HINRICHTUNG, verurteilter.getSpielerDaten().getKreatur()));
+		
+		moeglichesJaegerZielHinzufuegen(meldung, verurteilter);
+		moeglichesLiebesOpferHinzufuegen(meldung);
+		
+		//Spieler als Tot setzen
+		for(Toter toter : meldung.getTotenListe()) {
+			getSpielDaten().getSpieler(toter.getName()).getSpielerDaten().setLebendig(false);
+		}
+		
+		if(moderator != null) 
+			moderator.todesnachrichtSenden(meldung);
+		
+	}
+	
+	/**
+	 * Prüft ob es sich beim Spieler um einen Jäger handelt, und fügt das Opfer hinzu
+	 * */
+	public void moeglichesJaegerZielHinzufuegen(Todesmeldung meldung, Spieler s) {
+		if(s.getSpielerDaten().getKreatur().equals(Kreatur.JAEGER)) {
+			String zielName = getSpielDaten().getJaegerZiel();
+			Spieler ziel = getSpielDaten().getSpieler(zielName);
+			meldung.addToten(new Toter(zielName, Todesursache.HINRICHTUNG, ziel.getSpielerDaten().getKreatur()));
+		}
+	}
+	
+	/**
+	 * Prüft ob die Toten teil eines Liebespaares sind, wenn ja, dann wird die Liebe auch noch hinzugefügt
+	 * */
+	public void moeglichesLiebesOpferHinzufuegen(Todesmeldung meldung) {
+		for(Toter t : meldung.getTotenListe()) {
+			Spieler s = getSpielDaten().getSpieler(t.getName());
+			Spieler liebe;
+			if((liebe=getSpielDaten().getLiebe(s.getSpielerDaten().getName()))!=null) {
+				meldung.addToten(new Toter(liebe.getSpielerDaten().getName(), Todesursache.LIEBE, liebe.getSpielerDaten().getKreatur()));
+			}
+		}
+	}
+	
+	
 	
 }

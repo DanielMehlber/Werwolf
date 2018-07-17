@@ -21,9 +21,11 @@ public class SpielDaten implements Serializable{
 	private ArrayList<Spieler> werwolf_liste;
 	private ArrayList<Spieler> liebespaar;
 	
-	private String opferName;
+	private String werwolfOpferName;
 	private int rettungs_trank_anzahl = 1;
 	private int toetungs_trank_anzahl = 1;
+	private String jaegerZielName;
+	private String verurteilterSpielerName;
 	
 	private Abstimmung abstimmung;
 	
@@ -285,12 +287,12 @@ public class SpielDaten implements Serializable{
 		return liebespaar;
 	}
 
-	public String getOpferName() {
-		return opferName;
+	public String getWerwolfOpferName() {
+		return werwolfOpferName;
 	}
 
-	public void setOpfer(String opferName) {
-		this.opferName = opferName;
+	public void setWerwolfOpfer(String opferName) {
+		this.werwolfOpferName = opferName;
 		getSpieler(opferName).getSpielerDaten().setLebendig(false);
 	}
 	
@@ -305,10 +307,17 @@ public class SpielDaten implements Serializable{
 		return tot;
 	}
 	
+	/**
+	 * Löscht die toten aus der SpielerListe und Werwolfliste
+	 * */
 	public void toteBegraben() {
 		for(Spieler s : getSpielerListe()) {
-			if(!s.getSpielerDaten().isLebendig())
+			if(!s.getSpielerDaten().isLebendig()) {
 				removeSpieler(s);
+				if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+					removeWerwolf(s.getSpielerDaten().getName());
+				}
+			}
 		}
 	}
 
@@ -328,7 +337,21 @@ public class SpielDaten implements Serializable{
 		this.toetungs_trank_anzahl = toetungs_trank_anzahl;
 	}
 	
+	public void setJaegerZiel(String name) {
+		this.jaegerZielName = name;
+	}
 	
+	public String getJaegerZiel() {
+		return jaegerZielName;
+	}
+
+	public String getVerurteilterSpielerName() {
+		return verurteilterSpielerName;
+	}
+
+	public void setVerurteilterSpielerName(String verurteilterSpielerName) {
+		this.verurteilterSpielerName = verurteilterSpielerName;
+	}
 	
 	
 }
