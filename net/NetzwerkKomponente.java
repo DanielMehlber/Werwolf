@@ -193,6 +193,9 @@ public abstract class NetzwerkKomponente {
 			output.write(data);
 			output.flush();
 			//schreiben(" "); //Warum auch immer, aber man muss den PrintWriter besetzen und flushen
+		} catch (SocketException e) {
+			out.SpielAusgabe.info(null, "Unerwarteter Logout", "Eine Komponente im Netzwerk hat die verbindung beendet");
+			e.printStackTrace();
 		} catch (IOException e) {
 			out.SpielAusgabe.error(null, "Outboxfehler", "Fehler beim verschicken von byte[]");
 			e.printStackTrace();
