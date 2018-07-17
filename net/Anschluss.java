@@ -44,7 +44,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 			//Anmeldung
 			case 0:{
 				
-				if(inhalt[0] == 0 && inhalt[1] == 0 && inhalt[2] == 0 && inhalt [3] == 0 && inhalt[4] == 0 && inhalt[5] == 0) {
+				if(inhalt[0] == 0 && inhalt[1] == 0 && inhalt[2] == 0 && inhalt [3] == 0) {
 					System.err.println("Ungueltiger Stream Header, ungueltiges / leeres Paket!");
 					return;
 				}
