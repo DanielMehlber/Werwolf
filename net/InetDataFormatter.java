@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 
 /**
  * Wandelt Daten um. Extrem nützlich zum Netz-Datenaustausch!
@@ -74,11 +75,13 @@ public class InetDataFormatter {
 		try {
 			is = new ObjectInputStream(in);
 			obj = is.readObject();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
+		} catch (StreamCorruptedException e) {
+			System.err.println("INVALID STREAM RECEIVED");
 		} catch (ClassNotFoundException e) {
 			
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {

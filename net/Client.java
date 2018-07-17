@@ -63,13 +63,13 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		//Anmeldung bestätigt
 		
 		case 0: {
+			System.out.println("Anmeldung empfangen");
 			
-			if(inhalt[0] == 0 && inhalt[1] == 0 && inhalt[2] == 0 && inhalt [3] == 0) {
-				System.err.println("Ungueltiger Stream Header, ungueltiges / leeres Paket!");
+			if(!dataGueltig(inhalt)) {
+				FATAL_ERROR = true;
 				return;
 			}
 			
-			System.out.println("Anmeldung empfangen");
 			Boolean b = (Boolean)formatter.ByteArrayToObject(inhalt);
 			if(b) {
 				System.out.println("Erfolgreich Angemeldet");

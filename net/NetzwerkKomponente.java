@@ -56,7 +56,7 @@ public abstract class NetzwerkKomponente {
 	/**Der Thread in dem die Komponente laufen wird*/
 	private Thread thread_listen;
 	private boolean is_listening;
-	
+	protected boolean FATAL_ERROR;
 	
 	protected InetDataFormatter formatter;
 	
@@ -65,6 +65,7 @@ public abstract class NetzwerkKomponente {
 	public NetzwerkKomponente() {
 		formatter = new InetDataFormatter();
 		is_listening = true;
+		FATAL_ERROR = false;
 		
 	}
 	
@@ -72,6 +73,9 @@ public abstract class NetzwerkKomponente {
 	 * Erstellt die Kommunikations-Systeme der Komponente (Input & Output von Text, Int und Bytes)
 	 * */
 	protected void kommunikationBereitstellen() {
+		if(FATAL_ERROR == true) {
+			return;
+		}
 		if(socket == null) {
 			System.err.println("Der Socket existiert noch nicht!");
 			return;
@@ -128,6 +132,9 @@ public abstract class NetzwerkKomponente {
 	 * Greift addressierte Nachrichten vom typ String und byte[] auf 
 	 * */
 	protected void auffassen() {
+		if(FATAL_ERROR == true) {
+			return;
+		}
 		String nachricht = null;
 		byte[] data = null;
 		is_listening = true;
@@ -321,7 +328,14 @@ public abstract class NetzwerkKomponente {
 		return formatter;
 	}
 	
-	
+	public boolean dataGueltig(byte[] inhalt) {
+		if(formatter.ByteArrayToObject(inhalt)==null) {
+			out.SpielAusgabe.error(null, "Ungueltige Anmeldung", "Die Datenübertragung ist schiefgelaufen.\n"
+					+ "Das kann daran liegen, dass pro PC mehr als ein Spiel läuft, und die Daten sich überlagern...");
+			return false;
+		}
+		return true;
+	}
 
 
 	
