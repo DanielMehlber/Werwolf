@@ -53,7 +53,7 @@ public class GameWindow {
 		frame.setBackground(Color.BLACK);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Werwolf");
-		frame.setBounds(0, 0, 1200, 900);
+		frame.setBounds(0, 0, 1100, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}

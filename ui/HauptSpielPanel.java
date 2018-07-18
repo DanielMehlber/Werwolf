@@ -53,7 +53,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		
 		setBackground(Color.BLACK);
 		this.window = window;
-		setBounds(0,0,1200,900);
+		setBounds(0,0,1100,800);
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
@@ -67,7 +67,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		lblSchlafen.setFont(new Font("Impact", Font.PLAIN, 63));
 		lblSchlafen.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSchlafen.setForeground(Color.RED);
-		lblSchlafen.setBounds(0, 536, 1200, 101);
+		lblSchlafen.setBounds(-14, 536, 1200, 101);
 		add(lblSchlafen);
 		lblSchlafen.setVisible(false);
 		add(infoPanel);
@@ -92,7 +92,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		naechtes = new JLabel("");
 		naechtes.setForeground(Color.RED);
 		naechtes.setHorizontalAlignment(SwingConstants.CENTER);
-		naechtes.setBounds(456, 460, 276, 14);
+		naechtes.setBounds(420, 462, 276, 14);
 		add(naechtes);
 		
 		uhr = new JLabel();
@@ -100,7 +100,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		uhr.setHorizontalAlignment(SwingConstants.CENTER);
 		uhr.setFont(new Font("OCR A Extended", Font.BOLD, 46));
 		uhr.setForeground(Color.RED);
-		uhr.setBounds(486, 373, 200, 101);
+		uhr.setBounds(450, 375, 200, 101);
 		add(uhr);
 		
 		setNaechstePhaseBeschreibung(0, 0, "");

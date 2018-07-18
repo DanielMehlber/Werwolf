@@ -20,13 +20,13 @@ public class Endbildschirm extends JLayeredPane {
 	public Endbildschirm(GameWindow window) {
 		setBackground(Color.BLACK);
 		this.window = window;
-		setBounds(0,0,1200,900);
+		setBounds(0,0,1100,800);
 		setLayout(null);
 		
 		bg = new JLabel("");
 		bg.setIcon(new ImageIcon(Endbildschirm.class.getResource("/res/deadly_love.png")));
 		bg.setHorizontalAlignment(SwingConstants.CENTER);
-		bg.setBounds(0, 0, 1200, 900);
+		bg.setBounds(-31, -45, 1200, 900);
 		add(bg);
 	}
 	
