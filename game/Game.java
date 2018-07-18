@@ -371,7 +371,8 @@ public class Game{
 		}
 		
 		//Werwolfunktion beenden
-		getGameWindow().getHauptSpielPanel().werwolfFreischalten(false);
+		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF))
+			getGameWindow().getHauptSpielPanel().werwolfFreischalten(false);
 		
 		//Amorfunktionen beenden
 		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {

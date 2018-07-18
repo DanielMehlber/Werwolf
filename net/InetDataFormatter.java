@@ -77,6 +77,7 @@ public class InetDataFormatter {
 			obj = is.readObject();
 		} catch (StreamCorruptedException e) {
 			System.err.println("INVALID STREAM RECEIVED");
+			return null;
 		} catch (ClassNotFoundException e) {
 			
 			e.printStackTrace();

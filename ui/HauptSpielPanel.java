@@ -260,8 +260,11 @@ public class HauptSpielPanel extends JDesktopPane {
 	}
 	
 	public void werwolfFreischalten(boolean b) {
+		SpielDaten spielDaten = getGameWindow().getGame().getSpielDaten();
 		for(Karte k : karten_liste) {
-			if(!getGameWindow().getGame().getSpielDaten().getSpieler(k.getName()).getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+			String name = k.getName();
+			Spieler spieler = spielDaten.getSpieler(name);
+			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
 				k.werwolfFreischalten(b);
 			}
 		}

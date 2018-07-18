@@ -180,6 +180,7 @@ public class SpielDaten implements Serializable{
 					break;}
 				}
 			}
+			System.out.println("Spieler kartenwahl");
 		}
 		System.out.println("Rollenverteilung abgeschlossen");
 		
