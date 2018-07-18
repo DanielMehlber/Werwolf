@@ -370,14 +370,15 @@ public class Game{
 			moderator.getZeitSystem().setMinuteInSekunden(MINUTE_IN_SECONDS);
 		}
 		
-		//Werwolfunktion beenden
-		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF))
-			getGameWindow().getHauptSpielPanel().werwolfFreischalten(false);
-		
 		//Amorfunktionen beenden
 		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
 			getGameWindow().getHauptSpielPanel().amorFreischalten(false);
 		} 
+		
+		//Werwolfunktion beenden
+		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF))
+			getGameWindow().getHauptSpielPanel().werwolfFreischalten(false);
+		
 		
 		//Hexefunktionen beenden
 		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.HEXE)) {

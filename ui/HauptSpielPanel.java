@@ -242,9 +242,12 @@ public class HauptSpielPanel extends JDesktopPane {
 	}
 	
 	public void hexeFreischalten(boolean b) {
-		String opfer_name = getGameWindow().getGame().getSpielDaten().getAbstimmung().getGewinner().getName();
-		if(opfer_name == null) {
-			opfer_name = "Niemand";
+		String opfer_name = null;
+		if(b) {
+			opfer_name = getGameWindow().getGame().getSpielDaten().getAbstimmung().getGewinner().getName();
+			if(opfer_name == null) {
+				opfer_name = "Niemand";
+			}
 		}
 		out.SpielAusgabe.info(null, "Retten ?", opfer_name+" ist kurz davor von den Werwölfen zuerfleischt zu werden.\n"
 				+ "Wenn du noch einen Rettungstrank hast, hast du auch eine Wahl!");

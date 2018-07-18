@@ -12,6 +12,9 @@ public class Kandidat implements Serializable, Comparable<Kandidat>{
 	public Kandidat(String spieler) {
 		this.spieler = spieler;
 		stimmen = 1;
+		if(spieler == null) {
+			System.err.println("Der Spieler darf nicht null sein!");
+		}
 	}
 	
 	public void stimme() {
