@@ -500,7 +500,7 @@ public class Game{
 			return;
 		}
 		Spieler verurteilter = getSpielDaten().getSpieler(name);
-		meldung.addToten(new Toter(null, Todesursache.HINRICHTUNG, verurteilter.getSpielerDaten().getKreatur()));
+		meldung.addToten(new Toter(name, Todesursache.HINRICHTUNG, verurteilter.getSpielerDaten().getKreatur()));
 		
 		moeglichesJaegerZielHinzufuegen(meldung, verurteilter);
 		moeglichesLiebesOpferHinzufuegen(meldung);
@@ -539,6 +539,38 @@ public class Game{
 		}
 	}
 	
+	public void spielStandUeberpruefen() {
+		if(sindNurWesen()) {
+			out.SpielAusgabe.info(null, "SPIEL BEENDET", "Die Werwoelfe sind alle Tot! Glückwunsch, das Dorf ist gerettet!");
+		}
+		
+		if(sindNurWerwoelfe()) {
+			out.SpielAusgabe.info(null, "SPIEL BEENDET", "Die Werwölfe haben gewonnen!");
+		}
+		
+		if(getSpielDaten().getSpielerListe().size() == 2) {
+			//Check fpr Liebespaar
+		}
+	}
 	
+	private boolean sindNurWerwoelfe() {
+		boolean b = true;
+		for(Spieler s : getSpielDaten().getSpielerListe()) {
+			if(!s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+				b = false;
+			}
+		}
+		return b;
+	}
+	
+	private boolean sindNurWesen() {
+		boolean b = true;
+		for(Spieler s : getSpielDaten().getSpielerListe()) {
+			if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+				b = false;
+			}
+		}
+		return b;
+	}
 	
 }

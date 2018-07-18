@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 
 import com.sun.corba.se.impl.orbutil.ObjectUtility;
 
+import game.Kandidat;
 import game.SpielDaten;
 import game.Spieler;
 import karten.Kreatur;
@@ -263,9 +264,12 @@ public class HauptSpielPanel extends JDesktopPane {
 	public void hexeFreischalten(boolean b) {
 		String opfer_name = null;
 		if(b) {
-			opfer_name = getGameWindow().getGame().getSpielDaten().getAbstimmung().getGewinner().getName();
-			if(opfer_name == null) {
+			Kandidat opfer = getGameWindow().getGame().getSpielDaten().getAbstimmung().getGewinner();
+			
+			if(opfer == null) {
 				opfer_name = "Niemand";
+			}else {
+				opfer_name = opfer.getName();
 			}
 			out.SpielAusgabe.info(null, "Retten ?", opfer_name+" ist kurz davor von den Werwölfen zuerfleischt zu werden.\n"
 					+ "Wenn du noch einen Rettungstrank hast, hast du auch eine Wahl!");

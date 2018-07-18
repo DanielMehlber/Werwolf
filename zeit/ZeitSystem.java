@@ -48,6 +48,8 @@ public class ZeitSystem{
 					starten(23, 59);
 				}
 				
+				//SpielEnde
+				
 			}
 		});
 		
