@@ -40,6 +40,7 @@ public class SpielDaten implements Serializable{
 	public SpielDaten() {
 		set_warten_auf_spieler(true);
 		werwolf_liste = new ArrayList<Spieler>();
+		liebespaar = new ArrayList<Spieler>();
 	}
 	
 	/**
