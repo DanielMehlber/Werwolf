@@ -29,7 +29,7 @@ public class Ladebildschirm extends JLayeredPane {
 	public Ladebildschirm(GameWindow window) {
 		setBackground(Color.BLACK);
 		this.window = window;
-		setBounds(0,0,1100,800);
+		setBounds(0,0,1100,700);
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
@@ -41,16 +41,17 @@ public class Ladebildschirm extends JLayeredPane {
 				window.getGame().getSpieler().bereit_senden();
 			}
 		});
-		btnBereit.setForeground(Color.RED);
-		btnBereit.setFont(new Font("Felix Titling", Font.BOLD, 15));
-		btnBereit.setBounds(419, 747, 243, 42);
-		btnBereit.setBackground(new Color(0,0,0,0));
-		add(btnBereit);
 		
 		loading = new JLabel("");
 		loading.setIcon(new ImageIcon(DorfErstellenPanel.class.getResource("/res/loading.gif")));
-		loading.setBounds(462, 691, 145, 58);
+		loading.setBounds(463, 572, 145, 58);
 		add(loading);
+		loading.setVisible(false);
+		btnBereit.setForeground(Color.RED);
+		btnBereit.setFont(new Font("Felix Titling", Font.BOLD, 15));
+		btnBereit.setBounds(420, 629, 243, 42);
+		btnBereit.setBackground(new Color(0,0,0,0));
+		add(btnBereit);
 		
 		JTextArea txtrDsterwaldEineKleiner = new JTextArea();
 		txtrDsterwaldEineKleiner.setEditable(false);
@@ -58,14 +59,13 @@ public class Ladebildschirm extends JLayeredPane {
 		txtrDsterwaldEineKleiner.setFont(new Font("Copperplate Gothic Light", Font.BOLD, 15));
 		txtrDsterwaldEineKleiner.setForeground(Color.WHITE);
 		txtrDsterwaldEineKleiner.setBackground(new Color(0, 0, 0, 0));
-		txtrDsterwaldEineKleiner.setBounds(139, 136, 816, 478);
+		txtrDsterwaldEineKleiner.setBounds(139, 83, 816, 478);
 		add(txtrDsterwaldEineKleiner);
 		
 		label = new JLabel("");
 		label.setIcon(new ImageIcon(Ladebildschirm.class.getResource("/res/Ladebildschirm.jpg")));
-		label.setBounds(0, 0, 1200, 800);
+		label.setBounds(0, -122, 1200, 800);
 		add(label);
-		loading.setVisible(false);
 		
 		setStatus(Status.WARTEN);
 	}
