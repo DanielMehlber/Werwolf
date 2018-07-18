@@ -54,7 +54,7 @@ public class Ladebildschirm extends JLayeredPane {
 		btnBereit.setForeground(Color.RED);
 		btnBereit.setFont(new Font("Felix Titling", Font.BOLD, 15));
 		btnBereit.setBounds(420, 629, 243, 42);
-		btnBereit.setBackground(new Color(0,0,0,0));
+		btnBereit.setBackground(new Color(0,0,0));
 		add(btnBereit);
 		
 		JTextArea txtrDsterwaldEineKleiner = new JTextArea();

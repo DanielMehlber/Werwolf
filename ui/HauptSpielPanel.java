@@ -28,6 +28,9 @@ import karten.Kreatur;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class HauptSpielPanel extends JDesktopPane {
 	JButton btnShowInfo;
@@ -38,6 +41,7 @@ public class HauptSpielPanel extends JDesktopPane {
 	private InfoPanel infoPanel;
 	public JLabel uhr;
 	
+	private JSlider slider;
 	private ArrayList<Karte> karten_liste;
 	private JLabel lblSchlafen;
 	private JLabel naechtes;
@@ -106,6 +110,21 @@ public class HauptSpielPanel extends JDesktopPane {
 		setNaechstePhaseBeschreibung(0, 0, "");
 		
 		getDesktopManager().iconifyFrame(phone);
+		
+		slider = new JSlider();
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				if(karten_liste != null)
+					kartenPositionieren(slider.getValue(),uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
+			}
+		});
+		slider.setMinimum(100);
+		slider.setMaximum(500);
+		slider.setPaintLabels(true);
+		slider.setToolTipText("Radius der Karten");
+		slider.setValue(300);
+		slider.setBounds(10, 11, 200, 26);
+		add(slider);
 		
 		
 		
@@ -297,8 +316,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		setBounds(b);
 		this.uhr.setLocation((int)b.getWidth() / 2 - uhr.getBounds().width/2, (int)b.getHeight() / 2 - uhr.getBounds().height/2);
 		this.naechtes.setLocation((int) (b.getCenterX() - naechtes.getBounds().getCenterX()), (int) ((int) b.getCenterY() - naechtes.getBounds().getCenterY()-uhr.getBounds().getHeight()));
-		kartenPositionieren(200, uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
+		kartenPositionieren(slider.getValue(), uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
+		this.lblSchlafen.setLocation((int)(b.getCenterX() - lblSchlafen.getBounds().getCenterX()), (int)(b.getHeight() - 300));
 	}
-	
-	
 }

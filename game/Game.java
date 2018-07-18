@@ -469,7 +469,7 @@ public class Game{
 			}else {
 			//Oder doch den Werwölfen zum fraß gefallen
 				meldung.addToten(new Toter(opfer_name, Todesursache.WERWOLF, getSpielDaten().getSpieler(opfer_name).getSpielerDaten().getKreatur()));
-				getSpielDaten().setWerwolfOpfer(null);
+				getSpielDaten().setWerwolfOpfer(opfer_name);
 			}
 		}
 		
