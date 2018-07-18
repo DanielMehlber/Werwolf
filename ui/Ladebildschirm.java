@@ -9,7 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import javax.swing.JTextArea;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -80,5 +84,13 @@ public class Ladebildschirm extends JLayeredPane {
 			break;}
 		
 		}
+	}
+	
+	public void update(Rectangle b) {
+		setBounds(b);
+		Point before = btnBereit.getLocation();
+		this.btnBereit.setLocation((int)(b.getWidth() / 2 - btnBereit.getBounds().getWidth()/2), (int)(b.getHeight() - btnBereit.getBounds().getHeight() / 2 - btnBereit.getBounds().getHeight() + 10));
+		this.loading.setLocation(before.x + btnBereit.getLocation().x, before.y + btnBereit.getLocation().y);
+		this.label.setLocation((int)(b.getWidth() / 2 - label.getBounds().getWidth() / 2), (int)(b.getHeight() / 2 - label.getBounds().getHeight() / 2));
 	}
 }

@@ -248,9 +248,10 @@ public class HauptSpielPanel extends JDesktopPane {
 			if(opfer_name == null) {
 				opfer_name = "Niemand";
 			}
+			out.SpielAusgabe.info(null, "Retten ?", opfer_name+" ist kurz davor von den Werwölfen zuerfleischt zu werden.\n"
+					+ "Wenn du noch einen Rettungstrank hast, hast du auch eine Wahl!");
 		}
-		out.SpielAusgabe.info(null, "Retten ?", opfer_name+" ist kurz davor von den Werwölfen zuerfleischt zu werden.\n"
-				+ "Wenn du noch einen Rettungstrank hast, hast du auch eine Wahl!");
+		
 		for(Karte k : karten_liste) {
 			k.hexeFreischalten(b);
 		}
@@ -265,7 +266,7 @@ public class HauptSpielPanel extends JDesktopPane {
 	public void werwolfFreischalten(boolean b) {
 		SpielDaten spielDaten = getGameWindow().getGame().getSpielDaten();
 		for(Karte k : karten_liste) {
-			String name = k.getName();
+			String name = k.getSpielerName();
 			Spieler spieler = spielDaten.getSpieler(name);
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
 				k.werwolfFreischalten(b);
@@ -290,6 +291,13 @@ public class HauptSpielPanel extends JDesktopPane {
 		add(tm);
 		tm.show();
 		tm.setBounds(800, 11, 390, 500);
+	}
+	
+	public void update(Rectangle b) {
+		setBounds(b);
+		this.uhr.setLocation((int)b.getWidth() / 2 - uhr.getBounds().width/2, (int)b.getHeight() / 2 - uhr.getBounds().height/2);
+		this.naechtes.setLocation((int) (b.getCenterX() - naechtes.getBounds().getCenterX()), (int) ((int) b.getCenterY() - naechtes.getBounds().getCenterY()-uhr.getBounds().getHeight()));
+		kartenPositionieren(200, uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
 	}
 	
 	

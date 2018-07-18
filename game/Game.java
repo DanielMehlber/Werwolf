@@ -153,6 +153,7 @@ public class Game{
 		Ladebildschirm lb = new Ladebildschirm(gameWindow);
 		lb.setStatus(Ladebildschirm.Status.WARTEN);
 		gameWindow.wechseln(lb);
+		gameWindow.setLadeBildschirm(lb);
 		gameWindow.frame.setVisible(true);
 	}
 	
@@ -165,6 +166,7 @@ public class Game{
 		HauptSpielPanel hauptSpielPanel = new HauptSpielPanel(gameWindow);
 		gameWindow.wechseln(hauptSpielPanel);
 		gameWindow.setHauptSpielPanel(hauptSpielPanel);
+		gameWindow.getFrame().setResizable(true);
 		hauptSpielPanel.kartenErstellen();
 		if(moderator != null)
 			moderator.starten();

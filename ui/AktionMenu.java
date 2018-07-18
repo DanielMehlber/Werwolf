@@ -141,6 +141,7 @@ public class AktionMenu extends JPopupMenu {
 			break;
 		}
 		case WERWOLF: {
+			add(opfer_abstimmen);
 			break;
 		}
 		}

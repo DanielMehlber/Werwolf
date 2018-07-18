@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
 import game.Game;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class GameWindow {
 
@@ -22,6 +24,7 @@ public class GameWindow {
 			public void run() {
 				try {
 					GameWindow window = new GameWindow(null);
+					
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -33,6 +36,7 @@ public class GameWindow {
 	private JLayeredPane current_panel;
 	private Game game;
 	private HauptSpielPanel hauptSpielPanel;
+	private Ladebildschirm laden;
 	
 	/**
 	 * Create the application.
@@ -47,6 +51,14 @@ public class GameWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				if(hauptSpielPanel != null)
+					hauptSpielPanel.update(frame.getBounds());
+
+			}
+		});
 		frame.setResizable(false);
 		frame.getContentPane().setBackground(Color.BLACK);
 		
@@ -90,4 +102,18 @@ public class GameWindow {
 	public void setHauptSpielPanel(HauptSpielPanel panel) {
 		this.hauptSpielPanel = panel;
 	}
+
+	public Ladebildschirm getLadeBildschrim() {
+		return laden;
+	}
+
+	public void setLadeBildschirm(Ladebildschirm laden) {
+		this.laden = laden;
+	}
+	
+	public JFrame getFrame() {
+		return frame;
+	}
+	
+	
 }
