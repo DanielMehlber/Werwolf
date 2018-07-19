@@ -17,6 +17,9 @@ import ui.LauncherWindow;
 import ui.Phone;
 import zeit.ZeitEvent;
 
+//Amor kann nicht erwachen
+//Werwölfe können nur für sich selbst abstimmen
+
 /**
  * Das Herzstück des Spiels 
  * */
