@@ -97,7 +97,7 @@ public class Game{
 		
 		//Warten auf weitere Spieler
 		
-		ui.verbindungsInfoAnzeigen(moderator.get_self_ip(), moderator.get_self_port());
+		ui.verbindungsInfoAnzeigen(moderator.get_self_ip(), moderator.get_self_port(), moderator.getExternalIP());
 		warten.start();
 	}
 	

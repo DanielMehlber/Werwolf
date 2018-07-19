@@ -11,8 +11,10 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Random;
 
@@ -340,7 +342,26 @@ public abstract class NetzwerkKomponente {
 		return true;
 	}
 
+	
+	public String getExternalIP() {
+		URL whatismyip;
+		String ip = null;
+		try {
+			whatismyip = new URL("http://checkip.amazonaws.com");
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+	                whatismyip.openStream()));
 
+			ip = in.readLine(); //you get the IP as a String
+			System.out.println(ip);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ip;
+	}
 	
 	
 	

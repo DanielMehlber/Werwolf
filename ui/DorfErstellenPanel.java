@@ -36,6 +36,7 @@ public class DorfErstellenPanel extends JPanel {
 	private JLabel lblCode;
 	private JLabel lblIp;
 	private JLabel loading;
+	private JLabel lblExternal;
 	
 	public static enum Status{
 		BEREIT, GEN_SERVER, WARTEN_AUF_SPIELER, FERTIG
@@ -129,7 +130,7 @@ public class DorfErstellenPanel extends JPanel {
 		lblCode.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCode.setForeground(Color.RED);
 		lblCode.setFont(new Font("DialogInput", Font.BOLD, 33));
-		lblCode.setBounds(304, 330, 179, 50);
+		lblCode.setBounds(302, 330, 179, 50);
 		add(lblCode);
 		
 		lblIp = new JLabel("IP");
@@ -150,6 +151,15 @@ public class DorfErstellenPanel extends JPanel {
 		loading.setIcon(new ImageIcon(DorfErstellenPanel.class.getResource("/res/loading.gif")));
 		loading.setBounds(316, 490, 145, 58);
 		add(loading);
+		
+		lblExternal = new JLabel("External");
+		lblExternal.setToolTipText("External IP");
+		lblExternal.setHorizontalAlignment(SwingConstants.CENTER);
+		lblExternal.setForeground(Color.GREEN);
+		lblExternal.setFont(new Font("DialogInput", Font.BOLD, 16));
+		lblExternal.setBounds(220, 272, 342, 14);
+		lblExternal.setVisible(false);
+		add(lblExternal);
 		loading.setVisible(false);
 		
 		updateGesamtLabel();
@@ -167,11 +177,13 @@ public class DorfErstellenPanel extends JPanel {
 		aktualisiereVerbundeneSpieler(ges, con);
 	}
 	
-	public void verbindungsInfoAnzeigen(String ip, int code) {
+	public void verbindungsInfoAnzeigen(String ip, int code, String external) {
 		lblIp.setText(ip);
 		lblCode.setText(""+code);
 		lblIp.setVisible(true);
 		lblCode.setVisible(true);
+		lblExternal.setText("External: "+external);
+		lblExternal.setVisible(true);
 	}
 	
 	public void setStatus(Status s) {
