@@ -39,6 +39,8 @@ public class SpielDaten implements Serializable{
 	
 	private SpielStatus status;
 	private String naechsterStatusBeschreibung;
+	private int nextStunde;
+	private int nextMinute;
 	
 	public SpielDaten() {
 		set_warten_auf_spieler(true);
@@ -115,7 +117,6 @@ public class SpielDaten implements Serializable{
 	 * */
 	public void kartenZiehen() {
 		
-		//TODO: Es kann meherer von einer Sorte geben? Austesten mir über Spielern. Wenn fehler besteht neu schreiben
 		anzahl_buerger = getSpielerAnzahl() - (ANZAHL_AMOR + ANZAHL_HEXE + ANZAHL_JAEGER + ANZAHL_SEHERIN + anzahl_werwoelfe);
 		int buerger = anzahl_buerger;
 		int hexe = ANZAHL_HEXE;
@@ -177,7 +178,7 @@ public class SpielDaten implements Serializable{
 					break;}
 				case JAEGER: {
 					if(jaeger > 0) {
-						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
+						s.getSpielerDaten().setKreatur(Kreatur.JAEGER);
 						jaeger -= 1;
 						gezogen = true;
 					}
@@ -188,6 +189,20 @@ public class SpielDaten implements Serializable{
 		}
 		System.out.println("Rollenverteilung abgeschlossen");
 		
+	}
+	
+	public boolean isliebesPaar(String one, String two) {
+		boolean b = true;
+		if(!isInLiebesPaar(one))
+			b = false;
+		if(!isInLiebesPaar(two))
+			b = false;
+		return b;
+	}
+	
+	public Spieler getRandomSpieler() {
+		Spieler s = spieler_liste.get(new Random().nextInt(spieler_liste.size()+1));
+		return s;
 	}
 
 	public int get_max_spieler() {
@@ -356,6 +371,38 @@ public class SpielDaten implements Serializable{
 
 	public void setVerurteilterSpielerName(String verurteilterSpielerName) {
 		this.verurteilterSpielerName = verurteilterSpielerName;
+	}
+
+	public SpielStatus getSpielStatus() {
+		return status;
+	}
+
+	public void setSpielStatus(SpielStatus status) {
+		this.status = status;
+	}
+
+	public String getNaechsterStatusBeschreibung() {
+		return naechsterStatusBeschreibung;
+	}
+
+	public void setNaechsterStatusBeschreibung(String naechsterStatusBeschreibung) {
+		this.naechsterStatusBeschreibung = naechsterStatusBeschreibung;
+	}
+
+	public int getNextStunde() {
+		return nextStunde;
+	}
+
+	public void setNextStunde(int nextStunde) {
+		this.nextStunde = nextStunde;
+	}
+
+	public int getNextMinute() {
+		return nextMinute;
+	}
+
+	public void setNextMinute(int nextMinute) {
+		this.nextMinute = nextMinute;
 	}
 	
 	

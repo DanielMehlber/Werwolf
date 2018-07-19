@@ -3,6 +3,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import hinweis.Hinweis;
+import hinweis.HinweisGen;
 import karten.Kreatur;
 import net.Client;
 import net.InetDataFormatter;
@@ -34,6 +36,8 @@ public class Game{
 	private Moderator moderator;
 	private Spieler spieler;
 	private Phone phone;
+	
+	private HinweisGen hinweisGenerator =  new HinweisGen(this);
 	
 	private final int MINUTE_IN_SECONDS = 1;
 	
@@ -233,7 +237,6 @@ public class Game{
 			normalize();
 			out.SpielAusgabe.info(null, "TIPP", "Fahre mit dem Cursor über die Uhrzeit, um zu sehen was gerade passiert");
 			setPhase("Die erste und letzte Vorbereitung vor der Nacht, die Opfer einfordern wird");
-			setNaechstePhaseBeschreibung(18, 0, "beginnt die Nacht erneut");
 			setUISchlafen(false);
 			lockPhone(false);
 			break;}
@@ -242,28 +245,25 @@ public class Game{
 			eventÜberspringen("vorbereitung");
 			setPhase("Der Morgen ist angebrochen und alle erwachen");
 			naechtlicheGeschehnisseVerarbeiten();
-			setNaechstePhaseBeschreibung(8, 0, "beginnt das Gericht");
 			setUISchlafen(false);
 			lockPhone(false);
+			
 			
 			break;}
 		case GERICHT: {
 			normalize();
 			setPhase("Das Gericht hat sich zusammengefunden");
-			setNaechstePhaseBeschreibung(12, 0, "wird abgestimmt!");
 			getSpielDaten().setAbstimmung(new Abstimmung(getSpielDaten()));
 			break;}
 		case ABSTIMMUNG: {
 			normalize();
 			setPhase("Die Abstimmung hat begonnen!");
-			setNaechstePhaseBeschreibung(13, 0, "findet die Hinrichtung statt");
 			lockPhone(true);
 			getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(true);
 			break;}
 		case HINRICHTUNG_NACHMITTAG: {
 			normalize();
 			setPhase("Die Kirchenglocken leuten den Nachmittag und die feierliche Hinrichtung eines verurteilten Werwolfes ein.");
-			setNaechstePhaseBeschreibung(18, 00, "bricht die Nacht herein. Vllt erfährst du etwas?");
 			minuteInSekunden(0.1);
 			lockPhone(false);
 			//Abstimmung beenden
@@ -274,14 +274,15 @@ public class Game{
 			System.out.println(hinzurichtenden+" hat eine Hinrichtung gewonnen!");
 			getSpielDaten().setVerurteilterSpielerName(hinzurichtenden);
 			
+			zufallsHinweisErzeugen();
+			
 			hinrichten();
-			//TODO: Hinweise festlegen
+			
 			
 			break;}
 		case NACHT: {
 			normalize();
 			setPhase("Die Nacht schlägt erneut zu");
-			setNaechstePhaseBeschreibung(18, 30, "erwachen die Werwölfe");
 			lockPhone(true);
 			setUISchlafen(true);
 			break;}
@@ -289,7 +290,6 @@ public class Game{
 			getSpielDaten().setAbstimmung(new Abstimmung(spiel_daten));
 			normalize();
 			setPhase("Die Werwölfe sind erwacht und ziehen um die Häuser. Bete!");
-			setNaechstePhaseBeschreibung(20, 0, "erwacht Amor");
 			
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
 				lockPhone(false);
@@ -308,7 +308,6 @@ public class Game{
 			
 			//Amor
 			setPhase("Der Schrei des Opfers ließ Amor erwachen");
-			setNaechstePhaseBeschreibung(21, 0, "erwacht die Hexe");
 			setUISchlafen(true);
 			//Amorfunktionen freischalten
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
@@ -320,19 +319,17 @@ public class Game{
 		case HEXE: {
 			normalize();
 			setPhase("Die Hexe fühlt sich gezwungen in die Situation einzugreifen");
-			setNaechstePhaseBeschreibung(22, 0, "erwacht die Seherin");
+			setUISchlafen(true);
 			
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.HEXE)) {
 				getGameWindow().getHauptSpielPanel().hexeFreischalten(true);
 				setUISchlafen(false);
 			}
 			
-			setUISchlafen(true);
 			break;}
 		case SEHERIN: {
 			normalize();
 			setPhase("Die Seherin lässt es sich nicht nehmen, den Werwölfen auf die Schliche zu kommen...");
-			setNaechstePhaseBeschreibung(23, 0, "legen sich alle schlafen");
 			setUISchlafen(true);
 			
 			//Seherinfunktion freischalten
@@ -342,14 +339,19 @@ public class Game{
 			}
 			
 			break;}
+		
 		case SCHLAFEN: {
 			normalize();
 			setPhase("Über das übernatürliche Konzert legt sich ein dichter Nebel. Die Nacht ist wieder ruhig.");
-			setNaechstePhaseBeschreibung(7, 0, "Morgengrauen");
 			zeitRaffer();
 			setUISchlafen(true);
 			break;}
 		}
+	}
+	
+	public void zufallsHinweisErzeugen() {
+		Spieler s = getSpielDaten().getRandomSpieler();
+		hinweisGenerator.hinweis(s.getSpielerDaten().getName(), null);
 	}
 	
 	public void setPhase(String text) {
@@ -444,7 +446,9 @@ public class Game{
 	public void liebesPaarPruefen() {
 		ArrayList<Spieler> liebespaar = getSpielDaten().getLiebespaar();
 		if(liebespaar.size() == 2) {
-			
+			eventÜberspringen("amor");
+		}else {
+			liebespaar.clear();
 		}
 	}
 	
@@ -461,6 +465,7 @@ public class Game{
 	 * Erstellt eine Todesmeldung der Nacht und schickt sie zu den Spielern
 	 * */
 	public void naechtlicheGeschehnisseVerarbeiten() {
+		liebesPaarPruefen();
 		Todesmeldung meldung = new Todesmeldung();
 		ArrayList<Spieler> tote = getSpielDaten().getToteSpieler();
 		String opfer_name = getSpielDaten().getWerwolfOpferName();
@@ -489,6 +494,7 @@ public class Game{
 		if(moderator != null) 
 			moderator.todesnachrichtSenden(meldung);
 		
+		spielStandUeberpruefen();
 	
 	}
 	
@@ -543,17 +549,23 @@ public class Game{
 	}
 	
 	public void spielStandUeberpruefen() {
+		if(getSpielDaten().getSpielerListe().size() == 2) {
+			if(spiel_daten.isliebesPaar(getSpielDaten().getSpielerListe().get(0).getSpielerDaten().getName(),getSpielDaten().getSpielerListe().get(1).getSpielerDaten().getName())) {
+				out.SpielAusgabe.info(null, "SPIEL BEENDET", "Das Liebespaar hat gewonnen!");
+				beenden();
+			}
+		}
+		
 		if(sindNurWesen()) {
 			out.SpielAusgabe.info(null, "SPIEL BEENDET", "Die Werwoelfe sind alle Tot! Glückwunsch, das Dorf ist gerettet!");
+			beenden();
 		}
 		
 		if(sindNurWerwoelfe()) {
 			out.SpielAusgabe.info(null, "SPIEL BEENDET", "Die Werwölfe haben gewonnen!");
+			beenden();
 		}
 		
-		if(getSpielDaten().getSpielerListe().size() == 2) {
-			//Check fpr Liebespaar
-		}
 	}
 	
 	private boolean sindNurWerwoelfe() {
@@ -574,6 +586,10 @@ public class Game{
 			}
 		}
 		return b;
+	}
+	
+	public void beenden() {
+		moderator.getZeitSystem().beenden();
 	}
 	
 }

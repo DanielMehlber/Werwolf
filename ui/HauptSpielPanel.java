@@ -291,7 +291,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		for(Karte k : karten_liste) {
 			String name = k.getSpielerName();
 			Spieler spieler = spielDaten.getSpieler(name);
-			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+			if(!spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
 				k.werwolfFreischalten(b);
 			}
 		}

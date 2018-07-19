@@ -92,6 +92,13 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			else if(game.getDorfErstellenPanel() != null)
 				game.getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 			
+			SpielStatus status = daten.getSpielStatus();
+			if(status != null)
+				getGame().setSpielStatus(status);
+			
+			String beschreibung = daten.getNaechsterStatusBeschreibung();
+			if(beschreibung != null)
+				getGame().setNaechstePhaseBeschreibung(daten.getNextStunde(), daten.getNextMinute(), beschreibung);
 			break;
 			
 		}
@@ -116,13 +123,6 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			HauptSpielPanel hsp = getGame().getGameWindow().getHauptSpielPanel();
 			if(hsp != null)
 				hsp.setZeit(stunde, minute);
-			break;
-		}
-		//SpielStatus ändern
-		case 5: {
-			SpielStatus status = (SpielStatus)formatter.ByteArrayToObject(inhalt);
-			getGame().setSpielStatus(status);
-			System.out.println("SpielStatus geändert: "+status.name());
 			break;
 		}
 		case 6: {

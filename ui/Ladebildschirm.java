@@ -34,6 +34,7 @@ public class Ladebildschirm extends JLayeredPane {
 		setBackground(Color.BLACK);
 		this.window = window;
 		setBounds(0,0,1100,700);
+		window.getFrame().setBounds(0,0,1100, 750);
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
@@ -68,7 +69,7 @@ public class Ladebildschirm extends JLayeredPane {
 		
 		label = new JLabel("");
 		label.setIcon(new ImageIcon(Ladebildschirm.class.getResource("/res/Ladebildschirm.jpg")));
-		label.setBounds(0, -122, 1200, 800);
+		label.setBounds(0, -122, 1200, 822);
 		add(label);
 		
 		setStatus(Status.WARTEN);
