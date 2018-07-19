@@ -38,6 +38,7 @@ public class SpielDaten implements Serializable{
 	private int anzahl_buerger;
 	
 	private SpielStatus status;
+	private String naechsterStatusBeschreibung;
 	
 	public SpielDaten() {
 		set_warten_auf_spieler(true);
