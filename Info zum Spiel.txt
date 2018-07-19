@@ -1,0 +1,15 @@
+Im built-ordner befindet sich die executable-jar-file zum Spiel.
+
+Das Spiel hat folgende Limitationen:
+1) Es funktioniert nur, wenn sich alle im selben Netz befinden (Local-IP)
+2) Es funktioniert nur 100% fehlerfrei, wenn auf einem PC eine Kopie des Spiels läuft. (Sonst können sich die Daten überschneiden)
+3) Es braucht 7 oder mehr Spieler (mit 2-5 treten häufig Fehler auf, und das Spiel macht keinen Sinn, da Charaktere fehlen müssen)
+4) Auf Windows 7/8 kann die UI manchmal etwas schräg rüberkommen (Schriftarten anders als Win10 usw, merkwürdige Verschiebungen im Layout...)
+5) Da das Projekt bis zu 30 Klassen umfasst können mir manche Fehlermeldungen oder Bugs durch die Lappen gehen. Wenn
+	Ihnen etwas auffällt also bitte melden 
+
+kurz: Alleine kann man das Spiel leider nicht spielen
+
+Außerdem befinden sich noch kleine Schönheitsfehler im Projekt, die wir bis Mittwoch hoffentlich alle behoben haben.
+
+
