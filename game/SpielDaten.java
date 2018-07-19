@@ -37,6 +37,8 @@ public class SpielDaten implements Serializable{
 	private final int ANZAHL_HEXE = 1;
 	private int anzahl_buerger;
 	
+	private SpielStatus status;
+	
 	public SpielDaten() {
 		set_warten_auf_spieler(true);
 		werwolf_liste = new ArrayList<Spieler>();

@@ -18,7 +18,7 @@ import ui.Phone;
 import zeit.ZeitEvent;
 
 /**
- * Das Herzstück des Spiels
+ * Das Herzstück des Spiels 
  * */
 public class Game{
 	
