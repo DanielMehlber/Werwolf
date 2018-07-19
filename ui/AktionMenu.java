@@ -113,6 +113,15 @@ public class AktionMenu extends JPopupMenu {
 				habenAlleWerwoelfeGewaehlt();
 			}
 		});
+		
+		jagt_ziel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jagt_ziel();
+				setVisible(false);
+			}
+		});
 	}
 	
 	public void setKreatur(Kreatur k) {
@@ -240,6 +249,11 @@ public class AktionMenu extends JPopupMenu {
 		if(daten.getAbstimmung().getWaehlerAnzahl() == daten.getWerwolf_liste().size()) {
 			karte.getHauptSpielPanel().getGameWindow().getGame().zeitRaffer();
 		}
+	}
+	
+	public void jagt_ziel() {
+		String name = karte.getName();
+		karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().setJaegerZiel(name);
 	}
 	
 

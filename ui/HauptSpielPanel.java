@@ -68,7 +68,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		infoPanel.setVisible(true);
 		infoPanel.show();
 		
-		lblSchlafen = new JLabel("Du schl\u00E4fst ...");
+		lblSchlafen = new JLabel("...Du schl\u00E4fst ...");
 		lblSchlafen.setFont(new Font("Impact", Font.PLAIN, 63));
 		lblSchlafen.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSchlafen.setForeground(Color.RED);
@@ -318,8 +318,8 @@ public class HauptSpielPanel extends JDesktopPane {
 	
 	public void update(Rectangle b) {
 		setBounds(b);
-		this.uhr.setLocation((int)b.getWidth() / 2 - uhr.getBounds().width/2, (int)b.getHeight() / 2 - uhr.getBounds().height/2);
-		this.naechtes.setLocation((int) (b.getCenterX() - naechtes.getBounds().getCenterX()), (int) ((int) b.getCenterY() - naechtes.getBounds().getCenterY()-uhr.getBounds().getHeight()));
+		this.uhr.setLocation((int)(b.getCenterX() - uhr.getBounds().getCenterX()), (int)(b.getCenterY() - uhr.getBounds().getCenterY()));
+		this.naechtes.setLocation((int) (b.getCenterX() - naechtes.getBounds().getCenterX()), (int) (b.getCenterY() - naechtes.getBounds().getCenterY()-uhr.getBounds().getHeight()));
 		kartenPositionieren(slider.getValue(), uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
 		this.lblSchlafen.setLocation((int)(b.getCenterX() - lblSchlafen.getBounds().getCenterX()), (int)(b.getHeight() - 300));
 	}
