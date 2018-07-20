@@ -39,7 +39,7 @@ public class Game{
 	
 	private HinweisGen hinweisGenerator =  new HinweisGen(this);
 	
-	private final int MINUTE_IN_SECONDS = 1;
+	private final double MINUTE_IN_SECONDS = 0.2;
 	
 	private Thread warten;
 	
@@ -314,7 +314,7 @@ public class Game{
 				getGameWindow().getHauptSpielPanel().amorFreischalten(true);
 				setUISchlafen(false);
 			} 
-			
+			System.exit(-1);
 			break;}
 		case HEXE: {
 			normalize();
