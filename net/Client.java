@@ -63,12 +63,11 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		//Anmeldung bestätigt
 		
 		case 0: {
-			System.out.println("Anmeldung empfangen");
-			
-			if(!dataGueltig(inhalt)) {
-				FATAL_ERROR = true;
+			if(!dataGueltig(inhalt)){
 				return;
 			}
+			
+			System.out.println("Anmeldung empfangen");
 			
 			Boolean b = (Boolean)formatter.ByteArrayToObject(inhalt);
 			if(b) {
@@ -83,12 +82,11 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		}
 		//Aktualisierung der Spieldaten
 		case 1: {
-			System.out.println("SpielDaten aktualisierung empfangen");
-			SpielDaten daten = (SpielDaten)formatter.ByteArrayToObject(inhalt);
-			
 			if(!dataGueltig(inhalt)){
 				return;
 			}
+			System.out.println("SpielDaten aktualisierung empfangen");
+			SpielDaten daten = (SpielDaten)formatter.ByteArrayToObject(inhalt);
 			
 			game.setSpielDaten(daten);
 			
@@ -109,17 +107,24 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		}
 		//SpielStart einleiten
 		case 2:{
+			
 			System.out.println("Alle sind bereit. Das Spiel kann gestartet werden");
 			getGame().spielStarten();
 			break;
 		}
 		case 3: {
+			if(!dataGueltig(inhalt)){
+				return;
+			}
 			System.out.println("Chatnachricht erhalten");
 			game.getPhone().empfangen((String)formatter.ByteArrayToObject(inhalt));
 			break;
 		}
 		//Zeit setzen
 		case 4: {
+			if(!dataGueltig(inhalt)){
+				return;
+			}
 			String zeit = (String)formatter.ByteArrayToObject(inhalt);
 			String st = zeit.substring(0, zeit.indexOf(":"));
 			String min = zeit.substring(zeit.indexOf(":")+1, zeit.length());
