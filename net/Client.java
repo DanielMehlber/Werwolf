@@ -85,6 +85,11 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		case 1: {
 			System.out.println("SpielDaten aktualisierung empfangen");
 			SpielDaten daten = (SpielDaten)formatter.ByteArrayToObject(inhalt);
+			
+			if(!dataGueltig(inhalt)){
+				return;
+			}
+			
 			game.setSpielDaten(daten);
 			
 			if(game.getDorfBeitretenPanel() != null)
