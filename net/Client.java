@@ -136,6 +136,9 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			break;
 		}
 		case 6: {
+			if(!dataGueltig(inhalt)){
+				return;
+			}
 			Todesmeldung meldung = (Todesmeldung)formatter.ByteArrayToObject(inhalt);
 			getGame().spielerSterbenLassen(meldung);
 			break;
