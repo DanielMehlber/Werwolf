@@ -94,6 +94,7 @@ public class Phone extends JInternalFrame {
 		chat.setFont(new Font("DialogInput", Font.PLAIN, 13));
 		chat.setBounds(29, 84, 313, 468);
 		getContentPane().add(chat);
+		chat.setEditable(false);
 		
 		schreiben = new TextArea();
 		schreiben.setFont(new Font("DialogInput", Font.PLAIN, 17));
