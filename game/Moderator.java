@@ -27,7 +27,7 @@ public class Moderator extends Server implements Runnable{
 	
 	public void eventsSetzen() {
 		Runnable r_vorbereitung = ()->vorbereitung();
-		zeitSystem.addEvent(new ZeitEvent("vorbereitung", r_vorbereitung , 17, 30));
+		zeitSystem.addEvent(new ZeitEvent("vorbereitung", r_vorbereitung , 17, 45));
 		Runnable r_nacht = ()->nacht();
 		zeitSystem.addEvent(new ZeitEvent("nacht_einleiten", r_nacht, 18, 0));
 		Runnable r_ww = ()->werwolf();
@@ -71,67 +71,83 @@ public class Moderator extends Server implements Runnable{
 	
 	private void vorbereitung() {
 		System.err.println("SERVER: Vorbereitungzeit");
-		updateSpielStatus(SpielStatus.VORBEREITUNG, "beginnt die erste Nacht", zeitSystem.getEvent("nacht_einleiten").getStunde(), zeitSystem.getEvent("nacht_einleiten").getMinute());
+		updateSpielStatus(SpielStatus.VORBEREITUNG, "Viel Spaß beim Spielen!","beginnt die erste Nacht", zeitSystem.getEvent("nacht_einleiten").getStunde(), zeitSystem.getEvent("nacht_einleiten").getMinute());
 		
 	}
 	
 	private void nacht() {
 		System.err.println("SERVER: Nacht eingeleitet");
 		getGame().getGameWindow().getHauptSpielPanel().setSchlafen(true);
-		updateSpielStatus(SpielStatus.NACHT, "erwachen die Werwölfe", zeitSystem.getEvent("werwolf").getStunde(), zeitSystem.getEvent("werwolf").getMinute());
+		updateSpielStatus(SpielStatus.NACHT, "Die Nacht legt sich über das Tal...",
+				"erwachen die Werwölfe", zeitSystem.getEvent("werwolf").getStunde(), zeitSystem.getEvent("werwolf").getMinute());
 	}
 	
 	public void werwolf() {
 		System.err.println("SERVER: Werwölfe sind an der Reihe");
-		updateSpielStatus(SpielStatus.WERWOLF, "erwacht Amor", zeitSystem.getEvent("amor").getStunde(), zeitSystem.getEvent("amor").getMinute());
+		updateSpielStatus(SpielStatus.WERWOLF, "Die Werwölfe ziehen um die Häuser, sei auf der Hut...",
+				"erwacht Amor", zeitSystem.getEvent("amor").getStunde(), zeitSystem.getEvent("amor").getMinute());
 	}
 	
 	public void amor() {
 		System.err.println("SERVER: Amor ist an der Reihe");
-		updateSpielStatus(SpielStatus.AMOR, "zieht die Hexe um die Häuser", zeitSystem.getEvent("hexe").getStunde(), zeitSystem.getEvent("hexe").getMinute());
+		updateSpielStatus(SpielStatus.AMOR,"Amor spannt seinen Bogen..." ,
+				"zieht die Hexe um die Häuser", zeitSystem.getEvent("hexe").getStunde(), zeitSystem.getEvent("hexe").getMinute());
 	}
 	
 	public void hexe() {
 		System.err.println("SERVER: Die Hexe ist nun an der Reihe");
-		updateSpielStatus(SpielStatus.HEXE, "erblickt die Seherin das bisher verborgene", zeitSystem.getEvent("seherin").getStunde(), zeitSystem.getEvent("seherin").getMinute());
+		updateSpielStatus(SpielStatus.HEXE,"Die Hexe zieht wieder um die Häuser und jongliert mit Leben und Tot...", 
+				"erblickt die Seherin das bisher verborgene", zeitSystem.getEvent("seherin").getStunde(), zeitSystem.getEvent("seherin").getMinute());
 	}
 	
 	public void seherin() {
 		System.err.println("SERVER: Die Seherin ist an der Reihe");
-		updateSpielStatus(SpielStatus.SEHERIN, "legen sich alle wieder schlafen", zeitSystem.getEvent("schlafen").getStunde(), zeitSystem.getEvent("schlafen").getMinute());
+		updateSpielStatus(SpielStatus.SEHERIN,"Die Seherin blickt nun in die Aura eines Bewohners...",
+				"legen sich alle wieder schlafen", zeitSystem.getEvent("schlafen").getStunde(), zeitSystem.getEvent("schlafen").getMinute());
 	}
 	
 	public void schlafen() {
 		System.err.println("SERVER: Alle schlfen bis zum Morgen");
-		updateSpielStatus(SpielStatus.SCHLAFEN, "geht die Sonne auf", zeitSystem.getEvent("morgen").getStunde(), zeitSystem.getEvent("morgen").getMinute());
+		updateSpielStatus(SpielStatus.SCHLAFEN,"Alle Bewohner schlafen wieder...",
+				"geht die Sonne auf", zeitSystem.getEvent("morgen").getStunde(), zeitSystem.getEvent("morgen").getMinute());
 	}
 	
 	public void morgen() {
 		System.err.println("SERVER: Der Morgen graut");
-		updateSpielStatus(SpielStatus.MORGEN, "tagt das Gericht", zeitSystem.getEvent("gericht").getStunde(), zeitSystem.getEvent("gericht").getMinute());
+		updateSpielStatus(SpielStatus.MORGEN,"Der Morgen graut und alle wachen auf...",
+				"tagt das Gericht", zeitSystem.getEvent("gericht").getStunde(), zeitSystem.getEvent("gericht").getMinute());
 	}
 	
 	public void gericht() {
 		System.err.println("SERVER: Das Gericht hat sich zusammengefunden!");
-		updateSpielStatus(SpielStatus.GERICHT, "wird abgestimmt...", zeitSystem.getEvent("abstimmen").getStunde(), zeitSystem.getEvent("abstimmen").getMinute());
+		updateSpielStatus(SpielStatus.GERICHT,"Aufgrund der Morde der letzten Nacht, hat sich das Dorf zum Gericht zusammengefunden..."
+				, "wird abgestimmt...", zeitSystem.getEvent("abstimmen").getStunde(), zeitSystem.getEvent("abstimmen").getMinute());
 	}
 	
 	public void abstimmung() {
 		System.err.println("SERVER: Die Abstimmung beginnt nun!");
-		updateSpielStatus(SpielStatus.ABSTIMMUNG, "wir die Hinrichtung vollzogen", zeitSystem.getEvent("hinrichtung").getStunde(), zeitSystem.getEvent("hinrichtung").getMinute());
+		updateSpielStatus(SpielStatus.ABSTIMMUNG,"Die Bewohner von Düsterwald stimmen nun ab."
+				, "wir die Hinrichtung vollzogen", zeitSystem.getEvent("hinrichtung").getStunde(), zeitSystem.getEvent("hinrichtung").getMinute());
 	}
 	
 	public void hinrichten() {
 		System.err.println("SERVER: Die hinrichtung wird vollzogen");
-		updateSpielStatus(SpielStatus.HINRICHTUNG_NACHMITTAG, "legt sich die Dunkelheit über das Land", zeitSystem.getEvent("nacht_einleiten").getStunde(), zeitSystem.getEvent("nacht_einleiten").getMinute());
+		updateSpielStatus(SpielStatus.HINRICHTUNG_NACHMITTAG,"Die Kirchenglocken lassen die Hinrichtung beginnen...",
+				"legt sich die Dunkelheit über das Land", zeitSystem.getEvent("nacht_einleiten").getStunde(), zeitSystem.getEvent("nacht_einleiten").getMinute());
 	}
 	
-	public void updateSpielStatus(SpielStatus s, String nextBeschreibung, int nextStunde, int nextMinute) {
-		getGame().getSpielDaten().setSpielStatus(s);
-		getGame().getSpielDaten().setNaechsterStatusBeschreibung(nextBeschreibung);
-		getGame().getSpielDaten().setNextStunde(nextStunde);
-		getGame().getSpielDaten().setNextMinute(nextMinute);
-		getGame().spielDatenTeilen();
+	public void updateSpielStatus(SpielStatus s, String beschreibung, String nextBeschreibung, int nextStunde, int nextMinute) {
+		SpielStatusPaket paket = new SpielStatusPaket(s);
+		paket.setBeschreibung(beschreibung);
+		paket.setNextBeschreibung(nextBeschreibung);
+		paket.setNextStunde(nextStunde);
+		paket.setNextMinute(nextMinute);
+		spielStatusTeilen(paket);
+	}
+	
+	public void spielStatusTeilen(SpielStatusPaket paket) {
+		rufen(formatter.formatieren(5, formatter.ObjectToByteArray(paket)));
+		System.out.println("SERVER: Spiel Status geteilt....");
 	}
 	
 	public ZeitSystem getZeitSystem() {

@@ -15,6 +15,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import game.Abstimmung;
 import game.Game;
 import game.SpielDaten;
 import game.Spieler;
@@ -170,8 +171,13 @@ public class AktionMenu extends JPopupMenu {
 	public void abstimmen() {
 		String name = karte.getSpielerName();
 		System.out.println("VOTE: Du hast für "+name+ " abgestimmt");
-		karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().getAbstimmung().stimme(karte.getHauptSpielPanel().getGameWindow().getGame().getSpieler().getSpielerDaten().getName() ,name);
-		karte.getHauptSpielPanel().getGameWindow().getGame().spielDatenTeilen();
+		Game game = karte.getHauptSpielPanel().getGameWindow().getGame();
+		Abstimmung a = game.getSpielDaten().getAbstimmung();
+		if(a == null) {
+			System.err.println("FEHLER: Es gibt keine Abstimmung für die gestimmt werden kann!");
+			return;
+		}
+		a.stimme(game.getSpieler().getSpielerDaten().getName(), name);
 	}
 	
 	public void amorFreischalten(boolean b) {
@@ -201,10 +207,13 @@ public class AktionMenu extends JPopupMenu {
 	public void hexeFreischalten(boolean b) {
 		if(b) {
 			SpielDaten daten = karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten();
-			if(daten.getWerwolfOpferName().equals(karte.getSpielerName()) && daten.getRettungsTrankAnzahl() != 0)
-				retten.setEnabled(true);
+			String ww_opfer = daten.getWerwolfOpferName();
 			if(daten.getToetungsTrankAnzahl() != 0)
 				toeten.setEnabled(true);
+			if(ww_opfer == null)
+				return;
+			if(ww_opfer.equals(karte.getSpielerName()) && daten.getRettungsTrankAnzahl() != 0)
+				retten.setEnabled(true);
 		}else {
 			toeten.setEnabled(false);
 			retten.setEnabled(false);

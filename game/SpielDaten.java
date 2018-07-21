@@ -37,10 +37,6 @@ public class SpielDaten implements Serializable{
 	private final int ANZAHL_HEXE = 1;
 	private int anzahl_buerger;
 	
-	private SpielStatus status;
-	private String naechsterStatusBeschreibung;
-	private int nextStunde;
-	private int nextMinute;
 	
 	public SpielDaten() {
 		set_warten_auf_spieler(true);
@@ -185,10 +181,8 @@ public class SpielDaten implements Serializable{
 					break;}
 				}
 			}
-			System.out.println("Spieler kartenwahl");
 		}
 		System.out.println("Rollenverteilung abgeschlossen");
-		
 	}
 	
 	public boolean isliebesPaar(String one, String two) {
@@ -331,12 +325,16 @@ public class SpielDaten implements Serializable{
 	 * Löscht die toten aus der SpielerListe und Werwolfliste
 	 * */
 	public void toteBegraben() {
+		ArrayList<Spieler> remove = new ArrayList<Spieler>();
 		for(Spieler s : getSpielerListe()) {
 			if(!s.getSpielerDaten().isLebendig()) {
-				removeSpieler(s);
-				if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
-					removeWerwolf(s.getSpielerDaten().getName());
-				}
+				remove.add(s);
+			}
+		}
+		for(Spieler s : remove) {
+			removeSpieler(s);
+			if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+				removeWerwolf(s.getSpielerDaten().getName());
 			}
 		}
 	}
@@ -373,37 +371,7 @@ public class SpielDaten implements Serializable{
 		this.verurteilterSpielerName = verurteilterSpielerName;
 	}
 
-	public SpielStatus getSpielStatus() {
-		return status;
-	}
-
-	public void setSpielStatus(SpielStatus status) {
-		this.status = status;
-	}
-
-	public String getNaechsterStatusBeschreibung() {
-		return naechsterStatusBeschreibung;
-	}
-
-	public void setNaechsterStatusBeschreibung(String naechsterStatusBeschreibung) {
-		this.naechsterStatusBeschreibung = naechsterStatusBeschreibung;
-	}
-
-	public int getNextStunde() {
-		return nextStunde;
-	}
-
-	public void setNextStunde(int nextStunde) {
-		this.nextStunde = nextStunde;
-	}
-
-	public int getNextMinute() {
-		return nextMinute;
-	}
-
-	public void setNextMinute(int nextMinute) {
-		this.nextMinute = nextMinute;
-	}
+	
 	
 	
 }

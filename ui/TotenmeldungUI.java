@@ -56,6 +56,6 @@ public class TotenmeldungUI extends JInternalFrame {
 	}
 	
 	public void setText(String _text, String identity) {
-		text.setText(text + "\n"+ identity);
+		text.setText(_text + "\n"+ identity);
 	}
 }

@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+import game.Spieler;
 import karten.Kreatur;
 
 import javax.swing.JSeparator;
@@ -70,7 +71,6 @@ public class InfoPanel extends JPanel {
 		
 		
 		setKreatur(window.getGame().getSpieler().getSpielerDaten().getKreatur());
-		setRudel();
 		setPlayerName(window.getGame().getSpieler().getSpielerDaten().getName());
 		
 	}
@@ -186,6 +186,7 @@ public class InfoPanel extends JPanel {
 		rudel.setBounds(10, 590, 434, 141);
 		add(rudel);
 		rudel.add("Dein Rudel:");
+		setRudel();
 	}
 	
 	public void hexe() {
@@ -274,7 +275,12 @@ public class InfoPanel extends JPanel {
 			return;
 		}
 		for(int i = 0 ; i < window.getGame().getSpielDaten().getWerwolf_liste().size(); i++) {
-			rudel.add(window.getGame().getSpielDaten().getWerwolf_liste().get(i).getSpielerDaten().getName());
+			Spieler ww = window.getGame().getSpielDaten().getWerwolf_liste().get(i);
+			String name = ww.getSpielerDaten().getName();
+			rudel.add(name);
+			Karte ww_karte = window.getHauptSpielPanel().getKarte(name);
+			ww_karte.enttarnen(Kreatur.WERWOLF);
 		}
+		
 	}
 }

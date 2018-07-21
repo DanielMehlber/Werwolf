@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import game.Game;
 import game.SpielDaten;
 import game.SpielStatus;
+import game.SpielStatusPaket;
 import game.Spieler;
 import game.Todesmeldung;
 import ui.HauptMenuPanel;
@@ -95,13 +96,13 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			else if(game.getDorfErstellenPanel() != null)
 				game.getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 			
-			SpielStatus status = daten.getSpielStatus();
-			if(status != null)
-				getGame().setSpielStatus(status);
+			/*
+			Spieler selbst = game.getSpieler();
+			Spieler s = daten.getSpieler(selbst.getSpielerDaten().getName());
+			selbst.getSpielerDaten().setKreatur(s.getSpielerDaten().getKreatur());
+			System.out.println("GLÜCKWUNSCH!: Du bist ein/e "+selbst.getSpielerDaten().getKreatur().name());
+			*/
 			
-			String beschreibung = daten.getNaechsterStatusBeschreibung();
-			if(beschreibung != null)
-				getGame().setNaechstePhaseBeschreibung(daten.getNextStunde(), daten.getNextMinute(), beschreibung);
 			break;
 			
 		}
@@ -135,6 +136,14 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				hsp.setZeit(stunde, minute);
 			break;
 		}
+		case 5: {
+			if(!dataGueltig(inhalt)) {
+				return;
+			}
+			SpielStatusPaket status = (SpielStatusPaket)formatter.ByteArrayToObject(inhalt);
+			getGame().setSpielStatus(status);
+			break;
+		}
 		case 6: {
 			if(!dataGueltig(inhalt)){
 				return;
@@ -150,6 +159,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 	}
 	
 	@Override
+	@Deprecated
 	protected void verarbeiten(String data) {
 		System.out.println("String vom Server erhalten!");
 		

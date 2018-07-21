@@ -49,6 +49,7 @@ public class HauptSpielPanel extends JDesktopPane {
 	private Phone phone;
 	
 	public HauptSpielPanel(GameWindow window) {
+		window.setHauptSpielPanel(this);
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -62,11 +63,6 @@ public class HauptSpielPanel extends JDesktopPane {
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
-		
-		infoPanel = new InfoPanel(window);
-		infoPanel.setBounds(0, 11, 500, 771);
-		infoPanel.setVisible(true);
-		infoPanel.show();
 		
 		lblSchlafen = new JLabel("...Du schl\u00E4fst ...");
 		lblSchlafen.setFont(new Font("Impact", Font.PLAIN, 63));
@@ -128,7 +124,10 @@ public class HauptSpielPanel extends JDesktopPane {
 		add(slider);
 		
 		
-		
+		infoPanel = new InfoPanel(window);
+		infoPanel.setBounds(0, 11, 500, 771);
+		infoPanel.setVisible(true);
+		infoPanel.show();
 		
 		
 	}
@@ -264,12 +263,9 @@ public class HauptSpielPanel extends JDesktopPane {
 	public void hexeFreischalten(boolean b) {
 		String opfer_name = null;
 		if(b) {
-			Kandidat opfer = getGameWindow().getGame().getSpielDaten().getAbstimmung().getGewinner();
-			
-			if(opfer == null) {
+			opfer_name = getGameWindow().getGame().getSpielDaten().getWerwolfOpferName();
+			if(opfer_name == null) {
 				opfer_name = "Niemand";
-			}else {
-				opfer_name = opfer.getName();
 			}
 			out.SpielAusgabe.info(null, "Retten ?", opfer_name+" ist kurz davor von den Werwölfen zuerfleischt zu werden.\n"
 					+ "Wenn du noch einen Rettungstrank hast, hast du auch eine Wahl!");
