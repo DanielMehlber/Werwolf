@@ -291,7 +291,7 @@ public class InfoPanel extends JPanel {
 		case HEXE: {hexe(); break;}
 		case SEHERIN: {seherin();break;}
 		case WERWOLF: {werwolf();break;}
-		case ARMOR: {amor();break;}
+		case AMOR: {amor();break;}
 		case JAEGER: {jaeger();break;}
 		}
 	}

@@ -133,7 +133,7 @@ public class AktionMenu extends JPopupMenu {
 		case BUERGER: {
 			break;
 		}
-		case ARMOR: {
+		case AMOR: {
 			add(verlieben);
 			break;
 		}
@@ -178,6 +178,7 @@ public class AktionMenu extends JPopupMenu {
 			return;
 		}
 		a.stimme(game.getSpieler().getSpielerDaten().getName(), name);
+		karte.getHauptSpielPanel().getGameWindow().getGame().spielDatenTeilen();
 	}
 	
 	public void amorFreischalten(boolean b) {
@@ -198,9 +199,9 @@ public class AktionMenu extends JPopupMenu {
 		
 		if(liebespaar.size() == 2) {
 			verlieben.setEnabled(false);
-			karte.getHauptSpielPanel().getGameWindow().getGame().zeitRaffer();
+			karte.getHauptSpielPanel().getGameWindow().getGame().zeitRafferAnfragen();
 			karte.getHauptSpielPanel().getGameWindow().getGame().spielDatenTeilen();
-			karte.getHauptSpielPanel().getGameWindow().getGame().event‹berspringen("amor");
+			karte.getHauptSpielPanel().getGameWindow().getGame().eventUeberspringen("amor");
 		}
 	}
 	
@@ -227,11 +228,11 @@ public class AktionMenu extends JPopupMenu {
 		opfer.getSpielerDaten().setLebendig(true);
 		game.spielDatenTeilen();
 		hexeFreischalten(false);
-		game.zeitRaffer();
+		game.zeitRafferAnfragen();
 		
 		Game g = karte.getHauptSpielPanel().getGameWindow().getGame();
 		if(g.getSpielDaten().getRettungsTrankAnzahl() == 0 && g.getSpielDaten().getToetungsTrankAnzahl() == 0) {
-			karte.getHauptSpielPanel().getGameWindow().getGame().event‹berspringen("hexe");
+			karte.getHauptSpielPanel().getGameWindow().getGame().eventUeberspringen("hexe");
 		}
 	}
 	
@@ -242,7 +243,7 @@ public class AktionMenu extends JPopupMenu {
 		opfer.getSpielerDaten().setLebendig(false);
 		game.spielDatenTeilen();
 		hexeFreischalten(false);
-		game.zeitRaffer();
+		game.zeitRafferAnfragen();
 	}
 	
 	public void seherinFreischalten(boolean b) {
@@ -256,7 +257,7 @@ public class AktionMenu extends JPopupMenu {
 	public void habenAlleWerwoelfeGewaehlt() {
 		SpielDaten daten = karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten();
 		if(daten.getAbstimmung().getWaehlerAnzahl() == daten.getWerwolf_liste().size()) {
-			karte.getHauptSpielPanel().getGameWindow().getGame().zeitRaffer();
+			karte.getHauptSpielPanel().getGameWindow().getGame().zeitRafferAnfragen();
 		}
 	}
 	
@@ -264,6 +265,7 @@ public class AktionMenu extends JPopupMenu {
 		String name = karte.getName();
 		karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().setJaegerZiel(name);
 		karte.getHauptSpielPanel().getInfoPanel().setJagtziel(name);
+		karte.getHauptSpielPanel().getGameWindow().getGame().spielDatenTeilen();
 	}
 	
 

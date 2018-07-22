@@ -121,7 +121,7 @@ public class Karte extends JPanel {
 			icon_path = BUERGER_ICON;
 			break;
 		}
-		case ARMOR: {
+		case AMOR: {
 			icon_path = AMOR_ICON;
 			break;
 		}
@@ -145,7 +145,7 @@ public class Karte extends JPanel {
 		
 		setIcon(icon_path);
 		getHauptSpielPanel().seherinFreischalten(false);
-		getHauptSpielPanel().getGameWindow().getGame().zeitRaffer();
+		getHauptSpielPanel().getGameWindow().getGame().zeitRafferAnfragen();
 	}
 	
 	public void setIcon(String icon_path) {
@@ -166,22 +166,32 @@ public class Karte extends JPanel {
 	}
 	
 	public void abstimmenFreischalten(boolean b) {
+		if(!getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().isSpielerAlive(getSpielerName()))
+			return;
 		menu.abstimmenFreischalten(b);
 	}
 	
 	public void verliebenFreischalten(boolean b) {
+		if(!getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().isSpielerAlive(getSpielerName()))
+			return;
 		menu.amorFreischalten(b);
 	}
 	
 	public void hexeFreischalten(boolean b) {
+		if(!getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().isSpielerAlive(getSpielerName()))
+			return;
 		menu.hexeFreischalten(b);
 	}
 	
 	public void seherinFreischalten(boolean b) {
+		if(!getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().isSpielerAlive(getSpielerName()))
+			return;
 		menu.seherinFreischalten(b);
 	}
 	
 	public void werwolfFreischalten(boolean b) {
+		if(!getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().isSpielerAlive(getSpielerName()))
+			return;
 		menu.werwolfFreischalten(b);
 	}
 }

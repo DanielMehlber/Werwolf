@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class Kandidat implements Serializable, Comparable<Kandidat>{
 
 	private String spieler;
-	private int stimmen;
+	private int stimmen = 0;
 	public Kandidat(String spieler) {
 		this.spieler = spieler;
-		stimmen = 1;
+		stimmen += 1;
 		if(spieler == null) {
 			System.err.println("Der Spieler darf nicht null sein!");
 		}

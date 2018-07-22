@@ -64,20 +64,15 @@ public class HauptSpielPanel extends JDesktopPane {
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
-		//Cursor
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage("icons/handwriting.gif");
-		Cursor c = toolkit.createCustomCursor(image , new Point(this.getX(), 
-		           this.getY()), "img");
-		setCursor(c);
-		
 		lblSchlafen = new JLabel("...Du schl\u00E4fst ...");
+		lblSchlafen.setBackground(Color.BLACK);
 		lblSchlafen.setFont(new Font("Impact", Font.PLAIN, 63));
 		lblSchlafen.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSchlafen.setForeground(Color.RED);
 		lblSchlafen.setBounds(-14, 536, 1200, 101);
 		add(lblSchlafen);
 		lblSchlafen.setVisible(false);
+		lblSchlafen.setOpaque(false);
 		
 		btnShowInfo = new JButton("");
 		btnShowInfo.addActionListener(new ActionListener() {
@@ -101,7 +96,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		naechtes = new JLabel("");
 		naechtes.setForeground(Color.RED);
 		naechtes.setHorizontalAlignment(SwingConstants.CENTER);
-		naechtes.setBounds(423, 380, 276, 14);
+		naechtes.setBounds(353, 380, 422, 14);
 		add(naechtes);
 		
 		uhr = new JLabel();
@@ -135,6 +130,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		infoPanel = new InfoPanel(window);
 		infoPanel.setBounds(0, 11, 500, 771);
 		infoPanel.setVisible(true);
+		btnShowInfo.setVisible(false);
 		infoPanel.show();
 		add(infoPanel);
 		
@@ -294,10 +290,12 @@ public class HauptSpielPanel extends JDesktopPane {
 	public void werwolfFreischalten(boolean b) {
 		SpielDaten spielDaten = getGameWindow().getGame().getSpielDaten();
 		for(Karte k : karten_liste) {
-			String name = k.getSpielerName();
-			Spieler spieler = spielDaten.getSpieler(name);
-			if(!spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
-				k.werwolfFreischalten(b);
+			if(getGameWindow().getGame().getSpielDaten().isSpielerAlive(k.getSpielerName())) {
+				String name = k.getSpielerName();
+				Spieler spieler = spielDaten.getSpieler(name);
+				if(!spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
+					k.werwolfFreischalten(b);
+				}
 			}
 		}
 	}
@@ -322,12 +320,12 @@ public class HauptSpielPanel extends JDesktopPane {
 	}
 	
 	public void update(Rectangle b) {
-		setBounds(b);
-		this.uhr.setLocation((int)(b.getCenterX() - uhr.getBounds().getCenterX()), (int)(b.getCenterY() - uhr.getBounds().getCenterY()));
-		this.naechtes.setLocation((int) (b.getCenterX() - naechtes.getBounds().getCenterX()), (int) (b.getCenterY() - naechtes.getBounds().getCenterY()-uhr.getBounds().getHeight()));
+		setBounds(0,0,b.width, b.height);
+		this.uhr.setLocation((int)(b.width/2 - uhr.getBounds().width/2), (int)(b.height/2 - uhr.getBounds().height/2));
+		this.naechtes.setLocation((int) (b.width/2 - naechtes.getBounds().width/2), (int) (uhr.getBounds().y + uhr.getBounds().height));
 		kartenPositionieren(slider.getValue(), uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
-		this.lblSchlafen.setLocation((int)(b.getCenterX() - lblSchlafen.getBounds().getCenterX()), (int)(b.getHeight() - 300));
-		
+		this.lblSchlafen.setLocation((int)(b.width/2 - lblSchlafen.getBounds().width/2), (int)(b.getHeight() - 300));
+		phone.getDesktopIcon().setLocation((int)(uhr.getBounds().x - phone.getDesktopIcon().getBounds().width), (int)(uhr.getBounds().y - phone.getDesktopIcon().getBounds().height));
 	}
 	
 	public InfoPanel getInfoPanel() {

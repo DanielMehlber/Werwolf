@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Random;
 
 import karten.Kreatur;
@@ -60,10 +61,16 @@ public class Hinweis {
 			state = "contra";
 		}
 		File dir = new File("hinweise/"+state+"/"+count+"/"+k+"/");
+		if(!Files.exists(dir.toPath())) {
+			try {
+				throw new FileNotFoundException(dir.toPath().toAbsolutePath().toString()+" does not exist!");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		File[] files = dir.listFiles();
 		
-		if(files == null)
-			System.err.println("Es gibt keine Datein im ausgewählten ordner");
 		
 		String path = chooseRandom(files);
 		String inhalt = null;

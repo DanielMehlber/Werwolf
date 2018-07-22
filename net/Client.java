@@ -63,7 +63,10 @@ public class Client extends NetzwerkKomponente implements Runnable{
 		byte[] inhalt = formatter.getInhalt(data);
 		switch((int)data[0]) {
 		//Anmeldung bestätigt
-		
+		case -3: {
+			System.exit(0);
+			break;
+		}
 		case 0: {
 			if(!dataGueltig(inhalt)){
 				return;
@@ -130,6 +133,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				hsp.setZeit(stunde, minute);
 			break;
 		}
+		//SpielStatus
 		case 5: {
 			if(!dataGueltig(inhalt)) {
 				return;
@@ -138,6 +142,7 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			getGame().setSpielStatus(status);
 			break;
 		}
+		//Todesmeldung
 		case 6: {
 			if(!dataGueltig(inhalt)){
 				return;
@@ -145,6 +150,14 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			Todesmeldung meldung = (Todesmeldung)formatter.ByteArrayToObject(inhalt);
 			getGame().spielerSterbenLassen(meldung);
 			break;
+		}
+		//Message
+		case 7: {
+			if(!dataGueltig(inhalt)){
+				return;
+			}
+			String mitteilung = (String)formatter.ByteArrayToObject(inhalt);
+			out.SpielAusgabe.info(null, "Mitteilung vom Moderator", mitteilung);
 		}
 		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]+" konnte nicht identifiziert werden!");break;}
 		}

@@ -99,12 +99,20 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(server.getGame().getSpielDaten())));
 				break;
 			}
-			
-			//ZeitRaffer aktivieren, bitte
+			//Zeitraffer
 			case 5: {
-				server.getGame().zeitRaffer();
+				server.getGame().getModerator().zeitRaffer();
 				break;
 			}
+			//Event Ueberspringen
+			case 6: {
+				if(!dataGueltig(inhalt)){
+					return;
+				}
+				server.getGame().eventUeberspringen((String)formatter.ByteArrayToObject(inhalt));
+				break;
+			}
+			
 		}
 	}
 	

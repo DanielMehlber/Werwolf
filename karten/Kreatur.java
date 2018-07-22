@@ -1,6 +1,6 @@
 package karten;
 
 public enum Kreatur{
-	BUERGER, WERWOLF, HEXE, ARMOR, JAEGER, SEHERIN
+	BUERGER, WERWOLF, HEXE, AMOR, JAEGER, SEHERIN
 }
 

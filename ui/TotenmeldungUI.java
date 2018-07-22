@@ -42,7 +42,7 @@ public class TotenmeldungUI extends JInternalFrame {
 		
 		text = new JTextArea();
 		text.setForeground(Color.WHITE);
-		text.setFont(new Font("Franklin Gothic Medium Cond", Font.PLAIN, 18));
+		text.setFont(new Font("Franklin Gothic Medium Cond", Font.PLAIN, 16));
 		text.setLineWrap(true);
 		text.setWrapStyleWord(true);
 		text.setBackground(Color.DARK_GRAY);

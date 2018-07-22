@@ -11,6 +11,7 @@ import net.InetDataFormatter;
 import ui.DorfBeitretenPanel;
 import ui.DorfBeitretenPanel.Status;
 import ui.DorfErstellenPanel;
+import ui.Endbildschirm;
 import ui.GameWindow;
 import ui.HauptMenuPanel;
 import ui.HauptSpielPanel;
@@ -39,7 +40,7 @@ public class Game{
 	
 	private HinweisGen hinweisGenerator =  new HinweisGen(this);
 	
-	private final double MINUTE_IN_SECONDS = 0.4;
+	private final double MINUTE_IN_SECONDS = 0.5;
 	
 	private Thread warten;
 	
@@ -73,6 +74,7 @@ public class Game{
 	
 	
 	public void dorfErstellen(DorfErstellenPanel ui) {
+		out.SpielAusgabe.seperator();
 		dorf_erstellen_panel = ui;
 		moderator = new Moderator(this);
 		//SpielDaten setzen
@@ -88,6 +90,7 @@ public class Game{
 		while(!moderator.getServerBereit()) {System.out.print("");}
 		
 		ui.setStatus(DorfErstellenPanel.Status.WARTEN_AUF_SPIELER);
+		out.SpielAusgabe.seperator();
 		//Spieler erstllen
 		String name = null; 
 		while(!spiel_daten.spielerNameFrei(name)) {
@@ -105,7 +108,9 @@ public class Game{
 		//Warten auf weitere Spieler
 		
 		ui.verbindungsInfoAnzeigen(moderator.get_self_ip(), moderator.get_self_port(), moderator.getExternalIP());
+		
 		warten.start();
+		
 	}
 	
 	/**
@@ -113,6 +118,7 @@ public class Game{
 	 * @param ui Das DorfBeitereten Panel, in dem die Parameter gespeichert sind
 	 * */
 	public void dorfBeitreten(DorfBeitretenPanel ui) {
+		out.SpielAusgabe.seperator();
 		dorf_beitreten_panel = ui;
 		
 		//Verbinden und neuen Spieler erstellen
@@ -133,6 +139,7 @@ public class Game{
 		
 		//Warten auf weitere Spieler
 		ui.setStatus(Status.WARTEN_AUF_SPIELER);
+		
 		warten.start();
 	}
 	
@@ -169,10 +176,11 @@ public class Game{
 	 * @see Client
 	 * */
 	public void spielStarten() {
+		out.SpielAusgabe.seperator();
 		System.out.println("Das Hauptspiel wird gestartet...");
 		Kreatur spieler_kreatur = getSpielDaten().getSpieler(spieler.getSpielerDaten().getName()).getSpielerDaten().getKreatur();
 		if(spieler_kreatur == null) {
-			System.exit(-1);
+			spielStarten();
 		}
 		getSpieler().getSpielerDaten().setKreatur(spieler_kreatur);
 		HauptSpielPanel hauptSpielPanel = new HauptSpielPanel(gameWindow);
@@ -209,7 +217,10 @@ public class Game{
 	
 	public void setSpielDaten(SpielDaten daten) {
 		this.spiel_daten = daten;
-		this.spieler.setSpielerDaten(daten.getSpieler(spieler.getSpielerDaten().getName()).getSpielerDaten());
+		Spieler selbst = daten.getSpieler(spieler.getSpielerDaten().getName());
+		if(selbst == null)
+			return;
+		this.spieler.setSpielerDaten(selbst.getSpielerDaten());
 	}
 	
 	public LauncherWindow getLauncherWindow() {
@@ -237,6 +248,7 @@ public class Game{
 	}
 	
 	public void setSpielStatus(SpielStatusPaket paket) {
+		out.SpielAusgabe.seperator();
 		setPhase(paket.getBeschreibung());
 		setNaechstePhaseBeschreibung(paket.getNextStunde(), paket.getNextMinute(), paket.getNextBeschreibung());
 		switch(paket.getStatus()) {
@@ -248,8 +260,10 @@ public class Game{
 			break;}
 		case MORGEN: {
 			normalize();
-			eventÜberspringen("vorbereitung");
-			naechtlicheGeschehnisseVerarbeiten();
+			if(moderator!=null) {
+				moderator.eventÜberspringen("vorbereitung");
+				moderator.naechtlicheGeschehnisseVerarbeiten();
+			}
 			setUISchlafen(false);
 			lockPhone(false);
 			
@@ -257,7 +271,10 @@ public class Game{
 			break;}
 		case GERICHT: {
 			normalize();
-			getSpielDaten().setAbstimmung(new Abstimmung(getSpielDaten()));
+
+			if(moderator!=null)
+				moderator.abstimmungErstellen();
+			
 			break;}
 		case ABSTIMMUNG: {
 			normalize();
@@ -266,14 +283,23 @@ public class Game{
 			break;}
 		case HINRICHTUNG_NACHMITTAG: {
 			normalize();
-			minuteInSekunden(0.1);
+			
+			if(moderator!=null)
+				moderator.zeitRaffer();
+			
 			lockPhone(false);
+			
 			//Abstimmung beenden
-			getSpielDaten().getAbstimmung().setOffen(false);
+			if(moderator!=null)
+				moderator.abstimmungSchliessen();
+			
 			getGameWindow().getHauptSpielPanel().abstimmungBeiAllenKartenSetzen(false);
-			//Gewinner hinrichten
+			
+			//Hinweis ausgeben
 			zufallsHinweisErzeugen();
-			gerichtsAbstimmungAuswerten();
+			
+			if(moderator!=null)
+				moderator.gerichtsAbstimmungVerarbeiten();
 			
 			break;}
 		case NACHT: {
@@ -283,7 +309,9 @@ public class Game{
 			break;}
 		case WERWOLF: {
 			normalize();
-			getSpielDaten().setAbstimmung(new Abstimmung(spiel_daten));
+			
+			if(moderator != null)
+				moderator.abstimmungErstellen();
 			
 			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
 				lockPhone(false);
@@ -294,13 +322,19 @@ public class Game{
 			break;}
 		case AMOR: {
 			normalize();
-			werwolfAbstimmungVerarbeiten();
+			
+			if(moderator!=null) {
+				moderator.abstimmungSchliessen();
+				moderator.werwolfAbstimmungVerarbeiten();
+			}
+			
 			setUISchlafen(true);
 			
-			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
+			if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.AMOR)) {
 				getGameWindow().getHauptSpielPanel().amorFreischalten(true);
 				setUISchlafen(false);
 			} 
+			
 			break;}
 		case HEXE: {
 			normalize();
@@ -326,32 +360,21 @@ public class Game{
 		
 		case SCHLAFEN: {
 			normalize();
-			zeitRaffer();
+			
+			if(moderator!=null)
+				moderator.zeitRaffer();
+			
 			setUISchlafen(true);
 			break;}
 		}
 	}
 	
-	public void gerichtsAbstimmungAuswerten() {
-		Abstimmung a = getSpielDaten().getAbstimmung();
-		if(a == null) {
-			System.err.println("FEHLER: Es gab keine Abstimmung");
-			return;
-		}
-		Kandidat gewinner = a.getGewinner();
-		if(gewinner == null) {
-			System.err.println("FEHLER: Das Gericht kam zu keinem Ergebnis!");
-			out.SpielAusgabe.info(null, "Gericht", "Das Gericht kam zu keinem Ergebnis. Es wird Niemand hingerichtet!");
-		}
-		String hinzurichtender = gewinner.getName();
-		System.out.println(hinzurichtender+" hat eine Hinrichtung gewonnen!");
-		getSpielDaten().setVerurteilterSpielerName(hinzurichtender);
-		hinrichten();
-	}
+	
 	
 	public void zufallsHinweisErzeugen() {
 		Spieler s = getSpielDaten().getRandomSpieler();
-		hinweisGenerator.hinweis(s.getSpielerDaten().getName(), null);
+		String hinweis = hinweisGenerator.hinweis(s.getSpielerDaten().getName(), null);
+		out.SpielAusgabe.info(null, "PSSSST, ein kleiner Tipp", hinweis);
 	}
 	
 	public void setPhase(String text) {
@@ -378,7 +401,7 @@ public class Game{
 		}
 		
 		//Amorfunktionen beenden
-		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.ARMOR)) {
+		if(spieler.getSpielerDaten().getKreatur().equals(Kreatur.AMOR)) {
 			getGameWindow().getHauptSpielPanel().amorFreischalten(false);
 		} 
 		
@@ -398,21 +421,8 @@ public class Game{
 		}
 	}
 	
-	public void eventÜberspringen(String name) {
-		if(moderator == null)
-			return;
-		ZeitEvent e = moderator.getZeitSystem().getEvent(name);
-		e.setAktion(()->zeitRaffer());
-	}
 	
-	public void zeitRaffer() {
-		if(moderator == null) {
-			InetDataFormatter formatter = spieler.getClient().getFormatter();
-			spieler.getClient().schreiben(new byte[] {(byte)5});
-		}else {
-			moderator.getZeitSystem().setMinuteInSekunden(0.01);
-		}
-	}
+	
 	
 	public void setUISchlafen(boolean b) {
 		getGameWindow().getHauptSpielPanel().setSchlafen(b);
@@ -432,6 +442,7 @@ public class Game{
 			//Überprufen ob der Spieler selbst der Tote ist
 			if(toter.getName().equals(getSpieler().getSpielerDaten().getName())) {
 				System.err.println("DU BIST TOT");
+				getGameWindow().wechseln(new Endbildschirm(getGameWindow(), toter.getUrsache()));
 			}
 			System.out.println(toter.toString());
 		
@@ -447,180 +458,28 @@ public class Game{
 		//spielStandUeberpruefen(); TODO: Entkomment debug
 	}
 	
-	public void liebesPaarPruefen() {
-		ArrayList<Spieler> liebespaar = getSpielDaten().getLiebespaar();
-		if(liebespaar.size() == 2) {
-			eventÜberspringen("amor");
+	public void zeitRafferAnfragen() {
+		if(moderator == null) {
+			InetDataFormatter formatter = getSpieler().getClient().getFormatter();
+			getSpieler().getClient().schreiben(new byte[] {5});
 		}else {
-			liebespaar.clear();
+			moderator.zeitRaffer();
 		}
 	}
 	
-	public void werwolfOpferSetzen() {
-		Kandidat k = getSpielDaten().getAbstimmung().getGewinner();
-		if(k == null) {
-			return;
-		}
-		getSpielDaten().setWerwolfOpfer(k.getName());
-		
-	}
-	
-	/**
-	 * Erstellt eine Todesmeldung der Nacht, schickt sie zu den Spielern
-	 * */
-	public void naechtlicheGeschehnisseVerarbeiten() {
-		liebesPaarPruefen();
-		Todesmeldung meldung = new Todesmeldung();
-		ArrayList<Spieler> tote = getSpielDaten().getToteSpieler();
-		String opfer_name = getSpielDaten().getWerwolfOpferName();
-		
-		if(opfer_name != null) {
-			//Durch Hexe gerettet ? 
-			if(getSpielDaten().getSpieler(opfer_name).getSpielerDaten().isLebendig()) {
-				out.SpielAusgabe.info(null, "Rettung durch Hexe", opfer_name+" wurde von der Hexe gerettet!");
-				System.out.println("DEATH: "+opfer_name+" wurde von der Hexe gerettet");
-			}else {
-			//Oder doch den Werwölfen zum fraß gefallen
-				meldung.addToten(new Toter(opfer_name, Todesursache.WERWOLF, getSpielDaten().getSpieler(opfer_name).getSpielerDaten().getKreatur()));
-				getSpielDaten().setWerwolfOpfer(opfer_name);
-				System.out.println("DEATH: "+opfer_name+" ist den Werwoelfen zum Fraß gefallen");
-			}
-		}
-		
-		
-		
-		//Tod durch Hexe
-		for(Spieler s : tote) {
-			if(!s.getSpielerDaten().getName().equals(opfer_name)) {
-				meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.HEXE, s.getSpielerDaten().getKreatur()));
-				System.out.println("DEATH: "+s.getSpielerDaten().getName()+" fiel der Hexe zum Opfer");
-			}
-			
-		}
-		
-		moeglichesLiebesOpferHinzufuegen(meldung);
-		
-		if(moderator != null) 
-			moderator.todesnachrichtSenden(meldung);
-		
-		spielDatenTeilen();
-		//spielStandUeberpruefen(); TODO: Um Spiel beenden zu können entkommentarisieren		
-	
-	}
-	
-	/**
-	 * Erstellt eine Todesmeldung am Nachmittag und schickt diese zu den Spielern
-	 * @see Game#gerichtsAbstimmungAuswerten()
-	 * */
-	public void hinrichten() {
-		//Verurteilten zur Meldunghinzufügen
-		Todesmeldung meldung = new Todesmeldung();
-		String name = getSpielDaten().getVerurteilterSpielerName();
-		if(name == null) {
-			return;
-		}
-		Spieler verurteilter = getSpielDaten().getSpieler(name);
-		meldung.addToten(new Toter(name, Todesursache.HINRICHTUNG, verurteilter.getSpielerDaten().getKreatur()));
-		
-		moeglichesJaegerZielHinzufuegen(meldung, verurteilter);
-		moeglichesLiebesOpferHinzufuegen(meldung);
-		
-		//Spieler als Tot setzen
-		for(Toter toter : meldung.getTotenListe()) {
-			getSpielDaten().getSpieler(toter.getName()).getSpielerDaten().setLebendig(false);
-		}
-		
-		if(moderator != null) 
-			moderator.todesnachrichtSenden(meldung);
-		
-		//getSpielDaten().setVerurteilterSpielerName(null);
-		spielDatenTeilen();
-	}
-	
-	/**
-	 * Prüft ob es sich beim Spieler um einen Jäger handelt, und fügt das Opfer hinzu
-	 * */
-	public void moeglichesJaegerZielHinzufuegen(Todesmeldung meldung, Spieler s) {
-		if(s.getSpielerDaten().getKreatur().equals(Kreatur.JAEGER)) {
-			String zielName = getSpielDaten().getJaegerZiel();
-			Spieler ziel = getSpielDaten().getSpieler(zielName);
-			meldung.addToten(new Toter(zielName, Todesursache.HINRICHTUNG, ziel.getSpielerDaten().getKreatur()));
-		}
-	}
-	
-	/**
-	 * Prüft ob die Toten teil eines Liebespaares sind, wenn ja, dann wird die Liebe auch noch hinzugefügt
-	 * */
-	public void moeglichesLiebesOpferHinzufuegen(Todesmeldung meldung) {
-		ArrayList<Spieler> liebesopfer = new ArrayList<Spieler>();
-		Todesmeldung meldung_copy = meldung.cloneMeldung();
-		for(Toter t : meldung_copy.getTotenListe()) {
-			Spieler s = getSpielDaten().getSpieler(t.getName());
-			Spieler liebe;
-			if((liebe=getSpielDaten().getLiebe(s.getSpielerDaten().getName()))!=null) {
-				liebesopfer.add(liebe);
-			}
-		}
-		for(Spieler s : liebesopfer) {
-			meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.LIEBE, s.getSpielerDaten().getKreatur()));
-			System.out.println("DEATH: "+s.getSpielerDaten().getName()+" ist ein Opfer der Liebe");
-		}
-	}
-	
-	public void spielStandUeberpruefen() {
-		if(getSpielDaten().getSpielerListe().size() == 2) {
-			if(spiel_daten.isliebesPaar(getSpielDaten().getSpielerListe().get(0).getSpielerDaten().getName(),getSpielDaten().getSpielerListe().get(1).getSpielerDaten().getName())) {
-				out.SpielAusgabe.info(null, "SPIEL BEENDET", "Das Liebespaar hat gewonnen!");
-				beenden();
-			}
-		}
-		
-		if(sindNurWesen()) {
-			out.SpielAusgabe.info(null, "SPIEL BEENDET", "Die Werwoelfe sind alle Tot! Glückwunsch, das Dorf ist gerettet!");
-			beenden();
-		}
-		
-		if(sindNurWerwoelfe()) {
-			out.SpielAusgabe.info(null, "SPIEL BEENDET", "Die Werwölfe haben gewonnen!");
-			beenden();
-		}
-		
-	}
-	
-	private boolean sindNurWerwoelfe() {
-		boolean b = true;
-		for(Spieler s : getSpielDaten().getSpielerListe()) {
-			if(!s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
-				b = false;
-			}
-		}
-		return b;
-	}
-	
-	private boolean sindNurWesen() {
-		boolean b = true;
-		for(Spieler s : getSpielDaten().getSpielerListe()) {
-			if(s.getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF)) {
-				b = false;
-			}
-		}
-		return b;
-	}
-	
-	public void beenden() {
-		if(moderator != null)
-			moderator.getZeitSystem().beenden();
-	}
-	
-	public void werwolfAbstimmungVerarbeiten() {
-		Abstimmung werwolf = getSpielDaten().getAbstimmung();
-		if(werwolf != null) {
-			werwolf.setOffen(false);
-			werwolfOpferSetzen();
+	public void eventUeberspringen(String name) {
+		if(moderator==null) {
+			InetDataFormatter formatter = getSpieler().getClient().getFormatter();
+			getSpieler().getClient().schreiben(formatter.formatieren(6, formatter.ObjectToByteArray(name)));
 		}else {
-			System.err.println("FEHLER: Die Werwolfabstimmung ist null");
+			moderator.eventÜberspringen(name);
 		}
-		spielDatenTeilen();
 	}
+	
+	
+	
+	
+	
+
 	
 }

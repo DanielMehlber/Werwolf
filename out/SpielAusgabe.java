@@ -7,6 +7,8 @@ import javax.swing.SwingUtilities;
 
 public class SpielAusgabe {
 
+	public static String seperator = "#----------------------------------------------------------------------------------#";
+	
 	public static void error(Component parent, String title, String message) {
 		
 		
@@ -28,6 +30,10 @@ public class SpielAusgabe {
 				JOptionPane.showMessageDialog(parent, nachricht, title, JOptionPane.INFORMATION_MESSAGE);      
 	        }
 	    });
+	}
+	
+	public static void seperator() {
+		System.out.println(seperator);
 	}
 	
 	

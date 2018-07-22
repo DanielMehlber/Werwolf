@@ -87,7 +87,6 @@ public class SpielDaten implements Serializable{
 				return spieler_liste.get(i);
 			}
 		}
-		System.out.println("---nicht gefunden---");
 		return null;
 	}
 	
@@ -131,7 +130,7 @@ public class SpielDaten implements Serializable{
 		ArrayList<Spieler> spieler = (ArrayList<Spieler>) spieler_liste.clone();
 		
 		spielerAufteilen(spieler, Kreatur.WERWOLF, this.anzahl_werwoelfe);
-		spielerAufteilen(spieler, Kreatur.ARMOR, this.ANZAHL_AMOR);
+		spielerAufteilen(spieler, Kreatur.AMOR, this.ANZAHL_AMOR);
 		spielerAufteilen(spieler, Kreatur.HEXE, this.ANZAHL_HEXE);
 		spielerAufteilen(spieler, Kreatur.SEHERIN, ANZAHL_SEHERIN);
 		spielerAufteilen(spieler, Kreatur.JAEGER, ANZAHL_JAEGER);
@@ -172,7 +171,7 @@ public class SpielDaten implements Serializable{
 	}
 	
 	public Spieler getRandomSpieler() {
-		Spieler s = spieler_liste.get(new Random().nextInt(spieler_liste.size()+1));
+		Spieler s = spieler_liste.get(new Random().nextInt(spieler_liste.size()));
 		return s;
 	}
 
@@ -228,6 +227,15 @@ public class SpielDaten implements Serializable{
 		
 		werwolf_liste.add(spieler);
 			
+	}
+	
+	public boolean isSpielerAlive(String name) {
+		Spieler s = getSpieler(name);
+		if(s == null)
+			return false;
+		if(!s.getSpielerDaten().isLebendig()) 
+			return false;
+		return true;
 	}
 	
 	public boolean isInLiebesPaar(String name) {

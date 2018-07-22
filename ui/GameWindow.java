@@ -73,7 +73,7 @@ public class GameWindow {
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Werwolf");
 		frame.setBounds(0, 0, 1100, 700);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		//Cursor
 		Toolkit toolkit = Toolkit.getDefaultToolkit();

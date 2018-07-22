@@ -49,7 +49,7 @@ public class HinweisGen {
 		int i = new Random().nextInt(7)+1;
 		while(kreatur != k) {
 			switch(i) {
-			case 1: {kreatur = Kreatur.ARMOR;break;}
+			case 1: {kreatur = Kreatur.AMOR;break;}
 			case 2: {kreatur = Kreatur.BUERGER;break;}
 			case 3: {kreatur = Kreatur.HEXE;break;}
 			case 4: {kreatur = Kreatur.JAEGER;break;}

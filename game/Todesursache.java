@@ -1,5 +1,5 @@
 package game;
 
 public enum Todesursache {
-	HINRICHTUNG, WERWOLF, LIEBE, HEXE
+	HINRICHTUNG, WERWOLF, LIEBE, HEXE, JAEGER
 }
