@@ -433,14 +433,24 @@ public class Moderator extends Server implements Runnable{
 	}
 	
 	public void rauswerfen(String name) {
-		Anschluss a = getAnschlussByName(name);
-		a.schreiben(new byte[] {-3});
-		a.destroy();
-		getAnschlussListe().remove(a);
-		getGame().getSpielDaten().removeSpieler(name);
-		spielDatenTeilen();
-		rufen(formatter.formatieren(8, formatter.ObjectToByteArray(name)));
-		System.out.println(name+" wurde entfernt");
+		System.out.println(name + " wird entfernt...");
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				Anschluss a = getAnschlussByName(name);
+				a.schreiben(new byte[] {-3});
+				a.destroy();
+				System.out.println("Anschluss aufgehoben");
+				getAnschlussListe().remove(a);
+				getGame().getSpielDaten().removeSpieler(name);
+				spielDatenTeilen();
+				rufen(formatter.formatieren(8, formatter.ObjectToByteArray(name)));
+				System.out.println(name+" wurde entfernt");
+			}
+		};
+		Thread th = new Thread(r);
+		th.start();
 	}
 	
 	public Anschluss getAnschlussByName(String name) {

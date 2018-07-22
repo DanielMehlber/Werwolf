@@ -199,27 +199,38 @@ public class GameWindow {
 		spiel.addSeparator();
 		spiel.add(beenden);
 		
-		JSlider s = new JSlider();
-		s.setValue(1);
-		s.setMinimum(1);
-		s.setMaximum(10);
-		s.setSnapToTicks(true);
-		s.setMinorTickSpacing(1);
-		s.setPaintTicks(true);
-		s.setPaintTrack(true);
-		s.setPaintLabels(true);
-		zeit.add(s);
-		s.addChangeListener(new ChangeListener() {
+		JMenuItem xone = new JMenuItem("x1");
+		xone.addActionListener(new ActionListener() {
 			
 			@Override
-			public void stateChanged(ChangeEvent e) {
-				double v = 1/s.getValue();
-				getGame().getModerator().getZeitSystem().setMinuteInSekunden(v);
-				getGame().minuteInSekunden(v);
+			public void actionPerformed(ActionEvent arg0) {
+				getGame().minuteInSekunden(1);
 			}
 		});
+		zeit.add(xone);
+		
+		JMenuItem xtwo = new JMenuItem("x2");
+		xtwo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				getGame().minuteInSekunden(0.5);
+			}
+		});
+		zeit.add(xtwo);
+		
+		JMenuItem xfive = new JMenuItem("x5");
+		xfive.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				getGame().minuteInSekunden(0.2);
+			}
+		});
+		zeit.add(xfive);
 		
 	}
+	
 	
 	public JMenu createSpielerMenu(String name) {
 		JMenu sp = new JMenu(name);

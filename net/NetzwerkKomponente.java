@@ -209,25 +209,17 @@ public abstract class NetzwerkKomponente {
 	 * Zerstört den Anschluss und versucht den Client auszuloggen
 	 * */
 	public void destroy() {
-		int dest = -1;
-		byte[] data = new byte[1];
-		data[0] = (byte)dest;
-		schreiben(data);
+		is_listening = false;
 		try {
 			//nachricht({-1})
 			if(socket!=null) 
 				socket.close();
-			Thread.currentThread().join();
 			
+			System.out.println("Logged out");
+			//Thread.currentThread().join();
 		} catch (IOException e) {
 			out.SpielAusgabe.error(null, "Exit Fehler", "Ein Fehler ist beim schließen der Netzwerkkomponente aufgetreten!");
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
 		}
-		System.out.println("Logged out!");
-		is_listening = false;
 	}
 	
 	

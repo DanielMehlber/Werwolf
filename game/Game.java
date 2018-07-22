@@ -487,8 +487,18 @@ public class Game{
 	}
 	
 	public void spielerRauswerfen(String name) {
-		getGameWindow().getHauptSpielPanel().removeKarte(name);
-		out.SpielAusgabe.info(null, "Info", name+" wurde aus dem Server geworfen");
+		Thread th = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				getGameWindow().updateSpieler();
+				getGameWindow().getHauptSpielPanel().removeKarte(name);
+				out.SpielAusgabe.info(null, "Info", name+" wurde aus dem Server geworfen");
+				System.out.println("Entfernung abgeschlossen");
+			}
+		});
+		
+		th.start();
 	}
 	
 	

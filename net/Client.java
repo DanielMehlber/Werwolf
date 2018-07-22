@@ -158,12 +158,14 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			}
 			String mitteilung = (String)formatter.ByteArrayToObject(inhalt);
 			out.SpielAusgabe.info(null, "Mitteilung vom Moderator", mitteilung);
+			break;
 		}
 		
 		case 8: {
 			if(!dataGueltig(inhalt)){
 				return;
 			}
+			System.out.println("Ein Spieler soll entfernt werden...");
 			String name = (String) formatter.ByteArrayToObject(inhalt);
 			getGame().spielerRauswerfen(name);
 			break;
