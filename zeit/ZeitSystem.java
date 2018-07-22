@@ -18,6 +18,7 @@ public class ZeitSystem{
 	private double minuteInSekunden;
 	private ArrayList<ZeitEvent> events;
 	private Callable fertig;
+	private boolean pause;
 	
 	private boolean naechsteRunde;
 	
@@ -26,6 +27,7 @@ public class ZeitSystem{
 		this.minute = minute;
 		events = new ArrayList<ZeitEvent>();
 		this.naechsteRunde = true;
+		pause = false;
 	}
 	
 	public ZeitSystem(int stunde, int minute, double minuteInSekunden) {
@@ -62,6 +64,7 @@ public class ZeitSystem{
 		addieren(1,0);
 		while((!equalsUhrzeit(end_stunde, end_min))&&naechsteRunde) {
 			try {
+				while(pause) {System.out.print("");}
 				Thread.currentThread().sleep((int)(minuteInSekunden * 1000));
 				addieren(0, 1);
 				eventsAufrufen();
@@ -189,6 +192,14 @@ public class ZeitSystem{
 	
 	public void beenden() {
 		naechsteRunde = false;
+	}
+
+	public boolean isPause() {
+		return pause;
+	}
+
+	public void setPause(boolean pause) {
+		this.pause = pause;
 	}
 
 	

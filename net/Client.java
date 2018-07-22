@@ -159,6 +159,15 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			String mitteilung = (String)formatter.ByteArrayToObject(inhalt);
 			out.SpielAusgabe.info(null, "Mitteilung vom Moderator", mitteilung);
 		}
+		
+		case 8: {
+			if(!dataGueltig(inhalt)){
+				return;
+			}
+			String name = (String) formatter.ByteArrayToObject(inhalt);
+			getGame().spielerRauswerfen(name);
+			break;
+		}
 		default:{System.err.println("Die Nachricht mit dem Prefix "+(int)data[0]+" konnte nicht identifiziert werden!");break;}
 		}
 		

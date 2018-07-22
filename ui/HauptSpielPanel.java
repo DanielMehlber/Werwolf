@@ -3,6 +3,8 @@ package ui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -10,6 +12,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,7 +49,7 @@ public class HauptSpielPanel extends JDesktopPane {
 	private JSlider slider;
 	private ArrayList<Karte> karten_liste;
 	private JLabel lblSchlafen;
-	private JLabel naechtes;
+	private JLabel naechstes;
 	private Phone phone;
 	
 	public HauptSpielPanel(GameWindow window) {
@@ -93,11 +96,11 @@ public class HauptSpielPanel extends JDesktopPane {
 		phone.show();
 		phone.getDesktopIcon().setLocation((int)(getBounds().getWidth()-phone.getBounds().getWidth()), (int)(getBounds().getHeight()-phone.getBounds().getHeight()));
 		
-		naechtes = new JLabel("");
-		naechtes.setForeground(Color.RED);
-		naechtes.setHorizontalAlignment(SwingConstants.CENTER);
-		naechtes.setBounds(353, 380, 422, 14);
-		add(naechtes);
+		naechstes = new JLabel("");
+		naechstes.setForeground(Color.RED);
+		naechstes.setHorizontalAlignment(SwingConstants.CENTER);
+		naechstes.setBounds(353, 380, 422, 14);
+		add(naechstes);
 		
 		uhr = new JLabel();
 		uhr.setText("99:99");
@@ -106,6 +109,21 @@ public class HauptSpielPanel extends JDesktopPane {
 		uhr.setForeground(Color.RED);
 		uhr.setBounds(453, 293, 200, 101);
 		add(uhr);
+		
+		//Uhrfont
+		Font uhr_font = null;
+		try {
+		    //create the font to use. Specify the size!
+		    uhr_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/alarm clock.ttf")).deriveFont(58f);
+		    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		    //register the font
+		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("res/alarm clock.ttf")));
+		} catch (IOException e) {
+		    e.printStackTrace();
+		} catch(FontFormatException e) {
+		    e.printStackTrace();
+		}
+		uhr.setFont(uhr_font);
 		
 		setNaechstePhaseBeschreibung(0, 0, "");
 		
@@ -157,6 +175,13 @@ public class HauptSpielPanel extends JDesktopPane {
 		
 		kartenPositionieren(300, uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
 		infoPanel.setRudel();
+	}
+	
+	public void removeKarte(String name) {
+		Karte k = getKarte(name);
+		karten_liste.remove(k);
+		remove(k);
+		kartenPositionieren(slider.getValue(), uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
 	}
 	
 	public GameWindow getGameWindow() {
@@ -212,7 +237,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		String s = zuZeit(stunde);
 		String m = zuZeit(minute);
 		b = "Um "+s+":"+m+" "+beschreibung;
-		naechtes.setText(b);
+		naechstes.setText(b);
 	}
 	
 	public String zuZeit(int i) {
@@ -322,7 +347,7 @@ public class HauptSpielPanel extends JDesktopPane {
 	public void update(Rectangle b) {
 		setBounds(0,0,b.width, b.height);
 		this.uhr.setLocation((int)(b.width/2 - uhr.getBounds().width/2), (int)(b.height/2 - uhr.getBounds().height/2));
-		this.naechtes.setLocation((int) (b.width/2 - naechtes.getBounds().width/2), (int) (uhr.getBounds().y + uhr.getBounds().height));
+		this.naechstes.setLocation((int) (b.width/2 - naechstes.getBounds().width/2), (int) (uhr.getBounds().y + uhr.getBounds().height));
 		kartenPositionieren(slider.getValue(), uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
 		this.lblSchlafen.setLocation((int)(b.width/2 - lblSchlafen.getBounds().width/2), (int)(b.getHeight() - 300));
 		phone.getDesktopIcon().setLocation((int)(uhr.getBounds().x - phone.getDesktopIcon().getBounds().width), (int)(uhr.getBounds().y - phone.getDesktopIcon().getBounds().height));

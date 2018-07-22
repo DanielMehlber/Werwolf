@@ -1,11 +1,13 @@
 package game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.print.attribute.SetOfIntegerSyntax;
 import javax.swing.JOptionPane;
 
 import karten.Kreatur;
+import net.Anschluss;
 import net.InetDataFormatter;
 import net.Server;
 import zeit.ZeitEvent;
@@ -19,6 +21,7 @@ public class Moderator extends Server implements Runnable{
 	private Game game;
 	private boolean moderiert;
 	private ZeitSystem zeitSystem;
+	
 	
 	public Moderator(Game game) {
 		super(game);
@@ -429,10 +432,47 @@ public class Moderator extends Server implements Runnable{
 		schreiben(new byte[] {-3});
 	}
 	
+	public void rauswerfen(String name) {
+		Anschluss a = getAnschlussByName(name);
+		a.schreiben(new byte[] {-3});
+		a.destroy();
+		getAnschlussListe().remove(a);
+		getGame().getSpielDaten().removeSpieler(name);
+		spielDatenTeilen();
+		rufen(formatter.formatieren(8, formatter.ObjectToByteArray(name)));
+		System.out.println(name+" wurde entfernt");
+	}
 	
+	public Anschluss getAnschlussByName(String name) {
+		for(Anschluss a : getAnschlussListe()) {
+			if(a.getName().equals(name)) {
+				return a;
+			}
+		}
+		return null;
+	}
 	
+	public void pause() {
+		zeitSystem.setPause(true);
+	}
 	
+	public void fortsetzen() {
+		zeitSystem.setPause(false);
+	}
 	
+	public void serverBeenden() {
+		rufen(new byte[] {-3});
+		for(Anschluss a : getAnschlussListe()) {
+			a.destroy();
+		}
+		destroy();
+		try {
+			getServerSocket().close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.exit(0);
+	}
 	
-
 }

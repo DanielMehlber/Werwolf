@@ -18,6 +18,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 	
 	
 	private Server server;
+	private String name;
 	public Anschluss(Server server) {
 		this.server = server;
 		
@@ -52,7 +53,7 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				System.out.println("Eine Anmeldung wurde eingereicht...");
 				SpielerDaten spieler_daten = (SpielerDaten)formatter.ByteArrayToObject(inhalt);
 				SpielDaten spiel_daten = server.getGame().getSpielDaten();
-				
+				setName(spieler_daten.getName());
 				if(!server.getGame().getSpielDaten().spielerNameFrei(spieler_daten.getName())) {
 					System.err.println("Anmeldung abgelehnt. Die UserDaten sind bereits vergeben!");
 					schreiben(formatter.formatieren(0, formatter.ObjectToByteArray(new Boolean(false))));
@@ -132,5 +133,14 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 		System.out.println("Ein Client hat sich verbunden!");
 		
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	
 }

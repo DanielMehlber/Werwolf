@@ -11,12 +11,23 @@ import java.awt.Toolkit;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import game.Game;
+import game.Spieler;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameWindow {
 
@@ -44,12 +55,18 @@ public class GameWindow {
 	private Game game;
 	private HauptSpielPanel hauptSpielPanel;
 	private Ladebildschirm laden;
+	private JMenuBar menuBar;
+	private ArrayList<JMenu> spieler_menus;
+	private JMenu spiel;
+	private JMenu spieler;
+	private JMenu zeit;
 	
 	/**
 	 * Create the application.
 	 */
 	public GameWindow(Game game) {
 		this.game = game;
+		spieler_menus = new ArrayList<JMenu>();
 		initialize();
 	}
 
@@ -88,6 +105,9 @@ public class GameWindow {
 		           frame.getY()), "img");
 		frame.setCursor(c);
 		
+		if(getGame().getModerator() != null) {
+			menu();
+		}
 	}
 	
 	public void wechseln(JLayeredPane panel) {
@@ -133,6 +153,98 @@ public class GameWindow {
 	
 	public JFrame getFrame() {
 		return frame;
+	}
+	
+	public void menu() {
+		menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		spiel = new JMenu("Spiel", false);
+		spieler = new JMenu("Spieler");
+		zeit = new JMenu("Zeit");
+		menuBar.add(spiel);
+		menuBar.add(spieler);
+		menuBar.add(zeit);
+		JMenuItem pause = new JMenuItem("Pause");
+		pause.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getGame().getModerator().pause();
+				
+			}
+		});
+		
+		JMenuItem fortsetzen = new JMenuItem("Fortsetzen");
+		fortsetzen.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getGame().getModerator().fortsetzen();
+				
+			}
+		});
+		
+		JMenuItem beenden = new JMenuItem("Server beenden");
+		beenden.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getGame().getModerator().serverBeenden();
+				
+			}
+		});
+		
+		spiel.add(pause);
+		spiel.add(fortsetzen);
+		spiel.addSeparator();
+		spiel.add(beenden);
+		
+		JSlider s = new JSlider();
+		s.setValue(1);
+		s.setMinimum(1);
+		s.setMaximum(10);
+		s.setSnapToTicks(true);
+		s.setMinorTickSpacing(1);
+		s.setPaintTicks(true);
+		s.setPaintTrack(true);
+		s.setPaintLabels(true);
+		zeit.add(s);
+		s.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				double v = 1/s.getValue();
+				getGame().getModerator().getZeitSystem().setMinuteInSekunden(v);
+				getGame().minuteInSekunden(v);
+			}
+		});
+		
+	}
+	
+	public JMenu createSpielerMenu(String name) {
+		JMenu sp = new JMenu(name);
+		spieler_menus.add(sp);
+		JMenuItem rauswerfen = new JMenuItem("entfernen");
+		rauswerfen.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String name = sp.getText();
+				getGame().getModerator().rauswerfen(name);
+				updateSpieler();
+			}
+		});
+		
+		sp.add(rauswerfen);
+		spieler.add(sp);
+		return sp;
+	}
+	
+	public void updateSpieler() {
+		spieler.removeAll();
+		for(Spieler s : getGame().getSpielDaten().getSpielerListe()) {
+			createSpielerMenu(s.getSpielerDaten().getName());
+		}
 	}
 	
 	

@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import hinweis.Hinweis;
 import hinweis.HinweisGen;
 import karten.Kreatur;
+import net.Anschluss;
 import net.Client;
 import net.InetDataFormatter;
 import ui.DorfBeitretenPanel;
@@ -40,7 +41,7 @@ public class Game{
 	
 	private HinweisGen hinweisGenerator =  new HinweisGen(this);
 	
-	private final double MINUTE_IN_SECONDS = 0.5;
+	private double MINUTE_IN_SECONDS = 1;
 	
 	private Thread warten;
 	
@@ -181,6 +182,12 @@ public class Game{
 		Kreatur spieler_kreatur = getSpielDaten().getSpieler(spieler.getSpielerDaten().getName()).getSpielerDaten().getKreatur();
 		if(spieler_kreatur == null) {
 			spielStarten();
+			try {
+				Thread.currentThread().sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		getSpieler().getSpielerDaten().setKreatur(spieler_kreatur);
 		HauptSpielPanel hauptSpielPanel = new HauptSpielPanel(gameWindow);
@@ -188,8 +195,10 @@ public class Game{
 		gameWindow.wechseln(hauptSpielPanel);
 		gameWindow.setHauptSpielPanel(hauptSpielPanel);
 		gameWindow.getFrame().setResizable(true);
-		if(moderator != null)
+		if(moderator != null) {
+			getGameWindow().updateSpieler();
 			moderator.starten();
+		}
 	}
 	
 	/**
@@ -389,6 +398,7 @@ public class Game{
 		if(moderator != null) {
 			moderator.getZeitSystem().setMinuteInSekunden(s);
 		}
+		this.MINUTE_IN_SECONDS = s;
 	}
 	
 	public void lockPhone(boolean b) {
@@ -476,7 +486,10 @@ public class Game{
 		}
 	}
 	
-	
+	public void spielerRauswerfen(String name) {
+		getGameWindow().getHauptSpielPanel().removeKarte(name);
+		out.SpielAusgabe.info(null, "Info", name+" wurde aus dem Server geworfen");
+	}
 	
 	
 	
