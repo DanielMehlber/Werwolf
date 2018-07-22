@@ -62,6 +62,9 @@ public class Hinweis {
 		File dir = new File("hinweise/"+state+"/"+count+"/"+k+"/");
 		File[] files = dir.listFiles();
 		
+		if(files == null)
+			System.err.println("Es gibt keine Datein im ausgewählten ordner");
+		
 		String path = chooseRandom(files);
 		String inhalt = null;
 		

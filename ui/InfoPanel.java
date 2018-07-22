@@ -2,8 +2,12 @@ package ui;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Cursor;
+
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.SwingConstants;
 
 import game.Spieler;
@@ -11,12 +15,18 @@ import karten.Kreatur;
 
 import javax.swing.JSeparator;
 import java.awt.Button;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
 import java.awt.List;
+import java.awt.Point;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.TextArea;
+import java.awt.Toolkit;
 
 public class InfoPanel extends JPanel {
 	private JLabel lblIdentity;
@@ -27,10 +37,11 @@ public class InfoPanel extends JPanel {
 	private JTextArea jaeger_beschreibung;
 	private JLabel label_2;
 	private JTextArea jaeger_anleitung;
-	private List rudel;
 	private JTextArea txtrDuBistWie;
 	private JLabel label_3;
 	private JLabel lblYouAre;
+	private JLabel lblDeinJagtziel;
+	private JLabel label_4;
 	/**
 	 * Create the panel.
 	 */
@@ -64,14 +75,15 @@ public class InfoPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 				exit.requestFocus();
+				window.getHauptSpielPanel().btnShowInfo.setVisible(true);
 			}
 		});
 		exit.setBounds(420, 10, 70, 22);
 		add(exit);
 		
-		
 		setKreatur(window.getGame().getSpieler().getSpielerDaten().getKreatur());
 		setPlayerName(window.getGame().getSpieler().getSpielerDaten().getName());
+		
 		
 	}
 	
@@ -130,6 +142,13 @@ public class InfoPanel extends JPanel {
 		jaeger_anleitung.setBounds(230, 384, 260, 229);
 		add(jaeger_anleitung);
 		jaeger_anleitung.setEditable(false);
+		
+		lblDeinJagtziel = new JLabel("Dein Jagtziel: ");
+		lblDeinJagtziel.setFont(new Font("Lucida Console", Font.PLAIN, 20));
+		lblDeinJagtziel.setForeground(Color.RED);
+		lblDeinJagtziel.setBounds(36, 641, 419, 37);
+		add(lblDeinJagtziel);
+		setJagtziel(">>Niemand<<");
 	}
 	
 	public void seherin() {
@@ -149,9 +168,19 @@ public class InfoPanel extends JPanel {
 		label.setIcon(new ImageIcon(InfoPanel.class.getResource("/res/seherin.jpg")));
 		label.setBounds(46, 133, 398, 142);
 		add(label);
+		
+		label_4 = new JLabel("");
+		label_4.setIcon(new ImageIcon(InfoPanel.class.getResource("/res/eye-gif.gif")));
+		label_4.setBounds(49, 551, 395, 201);
+		add(label_4);
 	}
 	
 	public void werwolf() {
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(InfoPanel.class.getResource("/res/werwolf_gif.gif")));
+		label.setBounds(10, 595, 346, 164);
+		add(label);
 		JLabel ww_pic = new JLabel("");
 		ww_pic.setIcon(new ImageIcon(InfoPanel.class.getResource("/res/werwolf_info.png")));
 		ww_pic.setBounds(20, 158, 200, 200);
@@ -179,18 +208,15 @@ public class InfoPanel extends JPanel {
 		add(ww_anleitung);
 		ww_anleitung.setEditable(false);
 		
-		rudel = new List();
-		rudel.setForeground(Color.RED);
-		rudel.setBackground(Color.LIGHT_GRAY);
-		rudel.setFont(new Font("Dialog", Font.PLAIN, 21));
-		rudel.setBounds(10, 590, 434, 141);
-		add(rudel);
-		rudel.add("Dein Rudel:");
-		setRudel();
 	}
 	
 	public void hexe() {
 		lblIdentity.setText("a.k.a. Adella, die Hexe");
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(InfoPanel.class.getResource("/res/witch_gif.gif")));
+		label.setBounds(281, 128, 165, 95);
+		add(label);
 		JLabel hexe_pic = new JLabel("");
 		hexe_pic.setIcon(new ImageIcon(InfoPanel.class.getResource("/res/AdellaHexe.png")));
 		hexe_pic.setBounds(10, 128, 165, 95);
@@ -271,16 +297,18 @@ public class InfoPanel extends JPanel {
 	}
 	
 	public void setRudel() {
-		if(rudel == null) {
+		if(!window.getGame().getSpieler().getSpielerDaten().getKreatur().equals(Kreatur.WERWOLF))
 			return;
-		}
 		for(int i = 0 ; i < window.getGame().getSpielDaten().getWerwolf_liste().size(); i++) {
 			Spieler ww = window.getGame().getSpielDaten().getWerwolf_liste().get(i);
 			String name = ww.getSpielerDaten().getName();
-			rudel.add(name);
 			Karte ww_karte = window.getHauptSpielPanel().getKarte(name);
 			ww_karte.enttarnen(Kreatur.WERWOLF);
 		}
 		
+	}
+	
+	public void setJagtziel(String name) {
+		lblDeinJagtziel.setText("Dein Jagtziel: "+name);
 	}
 }

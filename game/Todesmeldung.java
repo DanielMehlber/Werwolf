@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Beinhaltet Tote
  * */
-public class Todesmeldung implements Serializable{
+public class Todesmeldung implements Serializable, Cloneable{
 	
 	private ArrayList<Toter> tote;
 	public Todesmeldung() {
@@ -29,6 +29,17 @@ public class Todesmeldung implements Serializable{
 			}
 		}
 		return false;
+	}
+	
+	public Todesmeldung cloneMeldung() {
+		Todesmeldung meldung2 = null;
+		try {
+			meldung2 =  (Todesmeldung) clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return meldung2;
 	}
 
 }

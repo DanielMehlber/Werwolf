@@ -170,7 +170,11 @@ public class Game{
 	 * */
 	public void spielStarten() {
 		System.out.println("Das Hauptspiel wird gestartet...");
-		getSpieler().getSpielerDaten().setKreatur(getSpielDaten().getSpieler(getSpieler().getSpielerDaten().getName()).getSpielerDaten().getKreatur());
+		Kreatur spieler_kreatur = getSpielDaten().getSpieler(spieler.getSpielerDaten().getName()).getSpielerDaten().getKreatur();
+		if(spieler_kreatur == null) {
+			System.exit(-1);
+		}
+		getSpieler().getSpielerDaten().setKreatur(spieler_kreatur);
 		HauptSpielPanel hauptSpielPanel = new HauptSpielPanel(gameWindow);
 		hauptSpielPanel.kartenErstellen();
 		gameWindow.wechseln(hauptSpielPanel);
@@ -429,7 +433,8 @@ public class Game{
 			if(toter.getName().equals(getSpieler().getSpielerDaten().getName())) {
 				System.err.println("DU BIST TOT");
 			}
-			
+			System.out.println(toter.toString());
+		
 			//Tote in der UI umsetzen
 			getGameWindow().getHauptSpielPanel().addTotenmeldung(toter.getName(), toter.getText(), toter.getIdentityText());
 			getGameWindow().getHauptSpielPanel().spielerToeten(toter.getName());
@@ -473,10 +478,12 @@ public class Game{
 			//Durch Hexe gerettet ? 
 			if(getSpielDaten().getSpieler(opfer_name).getSpielerDaten().isLebendig()) {
 				out.SpielAusgabe.info(null, "Rettung durch Hexe", opfer_name+" wurde von der Hexe gerettet!");
+				System.out.println("DEATH: "+opfer_name+" wurde von der Hexe gerettet");
 			}else {
 			//Oder doch den Werwölfen zum fraß gefallen
 				meldung.addToten(new Toter(opfer_name, Todesursache.WERWOLF, getSpielDaten().getSpieler(opfer_name).getSpielerDaten().getKreatur()));
 				getSpielDaten().setWerwolfOpfer(opfer_name);
+				System.out.println("DEATH: "+opfer_name+" ist den Werwoelfen zum Fraß gefallen");
 			}
 		}
 		
@@ -486,6 +493,7 @@ public class Game{
 		for(Spieler s : tote) {
 			if(!s.getSpielerDaten().getName().equals(opfer_name)) {
 				meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.HEXE, s.getSpielerDaten().getKreatur()));
+				System.out.println("DEATH: "+s.getSpielerDaten().getName()+" fiel der Hexe zum Opfer");
 			}
 			
 		}
@@ -525,7 +533,7 @@ public class Game{
 		if(moderator != null) 
 			moderator.todesnachrichtSenden(meldung);
 		
-		getSpielDaten().setVerurteilterSpielerName(null);
+		//getSpielDaten().setVerurteilterSpielerName(null);
 		spielDatenTeilen();
 	}
 	
@@ -544,12 +552,18 @@ public class Game{
 	 * Prüft ob die Toten teil eines Liebespaares sind, wenn ja, dann wird die Liebe auch noch hinzugefügt
 	 * */
 	public void moeglichesLiebesOpferHinzufuegen(Todesmeldung meldung) {
-		for(Toter t : meldung.getTotenListe()) {
+		ArrayList<Spieler> liebesopfer = new ArrayList<Spieler>();
+		Todesmeldung meldung_copy = meldung.cloneMeldung();
+		for(Toter t : meldung_copy.getTotenListe()) {
 			Spieler s = getSpielDaten().getSpieler(t.getName());
 			Spieler liebe;
 			if((liebe=getSpielDaten().getLiebe(s.getSpielerDaten().getName()))!=null) {
-				meldung.addToten(new Toter(liebe.getSpielerDaten().getName(), Todesursache.LIEBE, liebe.getSpielerDaten().getKreatur()));
+				liebesopfer.add(liebe);
 			}
+		}
+		for(Spieler s : liebesopfer) {
+			meldung.addToten(new Toter(s.getSpielerDaten().getName(), Todesursache.LIEBE, s.getSpielerDaten().getKreatur()));
+			System.out.println("DEATH: "+s.getSpielerDaten().getName()+" ist ein Opfer der Liebe");
 		}
 	}
 	

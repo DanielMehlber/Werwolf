@@ -66,6 +66,7 @@ public class Ladebildschirm extends JLayeredPane {
 		txtrDsterwaldEineKleiner.setBackground(new Color(0, 0, 0, 0));
 		txtrDsterwaldEineKleiner.setBounds(139, 83, 816, 478);
 		add(txtrDsterwaldEineKleiner);
+		txtrDsterwaldEineKleiner.setOpaque(false);
 		
 		label = new JLabel("");
 		label.setIcon(new ImageIcon(Ladebildschirm.class.getResource("/res/Ladebildschirm.jpg")));

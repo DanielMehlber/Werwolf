@@ -47,6 +47,7 @@ public class TotenmeldungUI extends JInternalFrame {
 		text.setWrapStyleWord(true);
 		text.setBackground(Color.DARK_GRAY);
 		text.setBounds(10, 256, 368, 233);
+		text.setEditable(false);
 		getContentPane().add(text);
 
 	}

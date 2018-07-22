@@ -130,58 +130,14 @@ public class SpielDaten implements Serializable{
 		
 		ArrayList<Spieler> spieler = (ArrayList<Spieler>) spieler_liste.clone();
 		
-		for(int i = 0; i < spieler.size(); i++) {
-			boolean gezogen = false;
-			Spieler s = spieler.get(i);
-			while(!gezogen) {
-				int zahl = new Random().nextInt(6);
-				switch(zahl) {
-				case BUERGER: {
-					if(buerger > 0) {
-						s.getSpielerDaten().setKreatur(Kreatur.BUERGER);
-						buerger -= 1;
-						gezogen = true;
-					}
-					break;}
-				case AMOR: {
-					if(amor > 0) {
-						s.getSpielerDaten().setKreatur(Kreatur.ARMOR);
-						amor -= 1;
-						gezogen = true;
-					}
-					break;}
-				case HEXE: {
-					if(hexe > 0) {
-						s.getSpielerDaten().setKreatur(Kreatur.HEXE);
-						hexe -= 1;
-						gezogen = true;
-					}
-					break;}
-				case WERWOLF: {
-					if(werwoelfe > 0) {
-						s.getSpielerDaten().setKreatur(Kreatur.WERWOLF);
-						werwoelfe -= 1;
-						addWerwolf(s);
-						gezogen = true;
-					}
-					break;}
-				case SEHERIN: {
-					if(seherin > 0) {
-						s.getSpielerDaten().setKreatur(Kreatur.SEHERIN);
-						seherin -= 1;
-						gezogen = true;
-					}
-					break;}
-				case JAEGER: {
-					if(jaeger > 0) {
-						s.getSpielerDaten().setKreatur(Kreatur.JAEGER);
-						jaeger -= 1;
-						gezogen = true;
-					}
-					break;}
-				}
-			}
-		}
+		spielerAufteilen(spieler, Kreatur.WERWOLF, this.anzahl_werwoelfe);
+		spielerAufteilen(spieler, Kreatur.ARMOR, this.ANZAHL_AMOR);
+		spielerAufteilen(spieler, Kreatur.HEXE, this.ANZAHL_HEXE);
+		spielerAufteilen(spieler, Kreatur.SEHERIN, ANZAHL_SEHERIN);
+		spielerAufteilen(spieler, Kreatur.JAEGER, ANZAHL_JAEGER);
+		spielerAufteilen(spieler, Kreatur.BUERGER, anzahl_buerger);
+		
+		
 		System.out.println("Rollenverteilung abgeschlossen");
 	}
 	
@@ -192,6 +148,27 @@ public class SpielDaten implements Serializable{
 		if(!isInLiebesPaar(two))
 			b = false;
 		return b;
+	}
+	
+	public void spielerAufteilen(ArrayList<Spieler> frei, Kreatur kreatur, int anzahl) {
+		if(frei.size() == 0) {
+			return;
+		}
+		System.out.println(anzahl+" "+kreatur.name()+" werden aufgeteilt auf "+frei.size()+" Spieler");
+		Random ran = new Random();
+		for(int i = 0; i < anzahl; i++) {
+			if(frei.size() == 0) {
+				return;
+			}
+			int index = ran.nextInt(frei.size());
+			Spieler s = frei.get(index);
+			frei.remove(s);
+			getSpieler(s.getSpielerDaten().getName()).getSpielerDaten().setKreatur(kreatur);
+			
+			if(kreatur.equals(Kreatur.WERWOLF)) {
+				getWerwolf_liste().add(s);
+			}
+		}
 	}
 	
 	public Spieler getRandomSpieler() {

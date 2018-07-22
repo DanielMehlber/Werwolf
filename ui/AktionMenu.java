@@ -263,6 +263,7 @@ public class AktionMenu extends JPopupMenu {
 	public void jagt_ziel() {
 		String name = karte.getName();
 		karte.getHauptSpielPanel().getGameWindow().getGame().getSpielDaten().setJaegerZiel(name);
+		karte.getHauptSpielPanel().getInfoPanel().setJagtziel(name);
 	}
 	
 

@@ -2,14 +2,21 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
 import game.Game;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class GameWindow {
 
@@ -67,6 +74,19 @@ public class GameWindow {
 		frame.setTitle("Werwolf");
 		frame.setBounds(0, 0, 1100, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//Cursor
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = null;
+		try {
+			image = ImageIO.read(new File("res/claw_cursor.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Cursor c = toolkit.createCustomCursor(image , new Point(frame.getX(), 
+		           frame.getY()), "img");
+		frame.setCursor(c);
 		
 	}
 	

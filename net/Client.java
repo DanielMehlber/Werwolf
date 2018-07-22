@@ -12,6 +12,7 @@ import game.SpielStatus;
 import game.SpielStatusPaket;
 import game.Spieler;
 import game.Todesmeldung;
+import karten.Kreatur;
 import ui.HauptMenuPanel;
 import ui.HauptSpielPanel;
 import ui.DorfBeitretenPanel.Status;
@@ -95,13 +96,6 @@ public class Client extends NetzwerkKomponente implements Runnable{
 				game.getDorfBeitretenPanel().aktualisiereVerbundeneSpieler();
 			else if(game.getDorfErstellenPanel() != null)
 				game.getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
-			
-			/*
-			Spieler selbst = game.getSpieler();
-			Spieler s = daten.getSpieler(selbst.getSpielerDaten().getName());
-			selbst.getSpielerDaten().setKreatur(s.getSpielerDaten().getKreatur());
-			System.out.println("GLÜCKWUNSCH!: Du bist ein/e "+selbst.getSpielerDaten().getKreatur().name());
-			*/
 			
 			break;
 			

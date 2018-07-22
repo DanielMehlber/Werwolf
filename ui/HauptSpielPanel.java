@@ -3,6 +3,7 @@ package ui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -63,6 +64,12 @@ public class HauptSpielPanel extends JDesktopPane {
 		setBounds(window.frame.getBounds());
 		setLayout(null);
 		
+		//Cursor
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("icons/handwriting.gif");
+		Cursor c = toolkit.createCustomCursor(image , new Point(this.getX(), 
+		           this.getY()), "img");
+		setCursor(c);
 		
 		lblSchlafen = new JLabel("...Du schl\u00E4fst ...");
 		lblSchlafen.setFont(new Font("Impact", Font.PLAIN, 63));
@@ -71,13 +78,13 @@ public class HauptSpielPanel extends JDesktopPane {
 		lblSchlafen.setBounds(-14, 536, 1200, 101);
 		add(lblSchlafen);
 		lblSchlafen.setVisible(false);
-		add(infoPanel);
 		
 		btnShowInfo = new JButton("");
 		btnShowInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				infoPanel.setVisible(true);
 				infoPanel.show();
+				btnShowInfo.setVisible(false);
 			}
 		});
 		btnShowInfo.setIcon(new ImageIcon(HauptSpielPanel.class.getResource("/res/lexicon_icon.png")));
@@ -89,6 +96,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		phone.setLocation(176, 49);
 		add(phone);
 		phone.show();
+		phone.getDesktopIcon().setLocation((int)(getBounds().getWidth()-phone.getBounds().getWidth()), (int)(getBounds().getHeight()-phone.getBounds().getHeight()));
 		
 		naechtes = new JLabel("");
 		naechtes.setForeground(Color.RED);
@@ -128,7 +136,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		infoPanel.setBounds(0, 11, 500, 771);
 		infoPanel.setVisible(true);
 		infoPanel.show();
-		
+		add(infoPanel);
 		
 	}
 	
@@ -152,6 +160,7 @@ public class HauptSpielPanel extends JDesktopPane {
 		}
 		
 		kartenPositionieren(300, uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
+		infoPanel.setRudel();
 	}
 	
 	public GameWindow getGameWindow() {
@@ -305,7 +314,7 @@ public class HauptSpielPanel extends JDesktopPane {
 	
 	public void addTotenmeldung(String name, String txt, String id) {
 		TotenmeldungUI tm = new TotenmeldungUI();
-		tm.setName(name);
+		tm.setSpielerName(name);
 		tm.setText(txt, id);
 		add(tm);
 		tm.show();
@@ -318,5 +327,10 @@ public class HauptSpielPanel extends JDesktopPane {
 		this.naechtes.setLocation((int) (b.getCenterX() - naechtes.getBounds().getCenterX()), (int) (b.getCenterY() - naechtes.getBounds().getCenterY()-uhr.getBounds().getHeight()));
 		kartenPositionieren(slider.getValue(), uhr.getBounds().x + uhr.getBounds().width/2, uhr.getBounds().y + uhr.getBounds().height / 2);
 		this.lblSchlafen.setLocation((int)(b.getCenterX() - lblSchlafen.getBounds().getCenterX()), (int)(b.getHeight() - 300));
+		
+	}
+	
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
 	}
 }
