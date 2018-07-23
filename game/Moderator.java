@@ -170,6 +170,7 @@ public class Moderator extends Server implements Runnable{
 	public void abstimmungErstellen() {
 		game.getSpielDaten().setAbstimmung(new Abstimmung(game.getSpielDaten()));
 		game.spielDatenTeilen();
+		System.out.println("VOTE-SERVER: Eine Abstimmung wurde erstellt");
 	}
 	
 	public void abstimmungSchliessen() {
@@ -178,6 +179,7 @@ public class Moderator extends Server implements Runnable{
 			return;
 		abstimmung.setOffen(false);
 		game.spielDatenTeilen();
+		System.out.println("VOTE-SERVER: Die Abstimmung wurde geschlossen");
 	}
 	
 	public void abstimmungsErgebnisseLoeschen() {
@@ -185,6 +187,7 @@ public class Moderator extends Server implements Runnable{
 		game.getSpielDaten().setWerwolfOpfer(null);
 		game.getSpielDaten().setVerurteilterSpielerName(null);
 		game.spielDatenTeilen();
+		System.out.println("VOTE-SERVER: Die Ergebnisse der Abstimmung wurden gelöscht");
 	}
 	
 	/**
@@ -194,7 +197,7 @@ public class Moderator extends Server implements Runnable{
 		Abstimmung werwolf = game.getSpielDaten().getAbstimmung();
 		werwolfOpferSetzen(werwolf);
 		game.spielDatenTeilen();
-		
+		System.out.println("MODERATOR: Die Abstimmung der Werwölfe wurde verarbeitet");
 	}
 
 	/**
@@ -226,6 +229,7 @@ public class Moderator extends Server implements Runnable{
 		System.out.println(hinzurichtender+" hat eine Hinrichtung gewonnen!");
 		game.getSpielDaten().setVerurteilterSpielerName(hinzurichtender);
 		hinrichtungDurchführen();
+		System.out.println("MODERATOR: Die Abstimmung wird ausgewertet und die Hinrichtung vollzogen");
 	}
 	
 	/**
@@ -253,6 +257,7 @@ public class Moderator extends Server implements Runnable{
 		spielDatenTeilen();
 		todesnachrichtSenden(meldung);
 		//getSpielDaten().setVerurteilterSpielerName(null);
+		System.out.println("MODERATOR: Die Hinrichtung wurde durchgeführt");
 	}
 	
 	/**

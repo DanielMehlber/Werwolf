@@ -100,6 +100,9 @@ public class Client extends NetzwerkKomponente implements Runnable{
 			else if(game.getDorfErstellenPanel() != null)
 				game.getDorfErstellenPanel().aktualisiereVerbundeneSpieler();
 			
+			if(game.getSpielDaten().getAbstimmung()!=null) {
+				System.out.println("  >>In den Spieldaten ist eine Abstimmung");
+			}
 			break;
 			
 		}
