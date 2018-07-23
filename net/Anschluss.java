@@ -96,7 +96,6 @@ public class Anschluss extends NetzwerkKomponente implements Runnable{
 				if(!dataGueltig(inhalt)){
 					return;
 				}
-				server.getGame().setSpielDaten((SpielDaten)formatter.ByteArrayToObject(inhalt));
 				server.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(server.getGame().getSpielDaten())));
 				break;
 			}

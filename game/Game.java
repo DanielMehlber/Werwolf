@@ -439,8 +439,12 @@ public class Game{
 	}
 	
 	public void spielDatenTeilen() {
+		InetDataFormatter formatter = getSpieler().getClient().getFormatter();
 		System.out.println("Spieldaten werden geteilt ...");
-		getSpieler().getClient().schreiben(getSpieler().getClient().getFormatter().formatieren(4, getSpieler().getClient().getFormatter().ObjectToByteArray(spiel_daten)));
+		if(moderator == null)
+			getSpieler().getClient().schreiben(getSpieler().getClient().getFormatter().formatieren(4, getSpieler().getClient().getFormatter().ObjectToByteArray(spiel_daten)));
+		else
+			moderator.rufen(formatter.formatieren(1, formatter.ObjectToByteArray(getSpielDaten())));
 	}
 	
 	
